@@ -123,6 +123,81 @@ class CreateFuturesOrderResponse(BaseModel):
     model_config = ConfigDict(use_enum_values=True)
 
 
+class CancelFuturesOrderResponse(BaseModel):
+    """合约撤销订单响应模型 - 根据实际API响应"""
+    time: str = Field(..., description="订单生成时的时间戳")
+    updateTime: str = Field(..., description="订单上次更新的时间戳")
+    orderId: str = Field(..., description="订单ID")
+    clientOrderId: str = Field(..., description="用户定义的订单ID")
+    symbol: str = Field(..., description="交易对")
+    price: str = Field(..., description="订单价格")
+    leverage: str = Field(..., description="订单杠杆")
+    origQty: str = Field(..., description="订单数量")
+    executedQty: str = Field(..., description="订单已执行数量")
+    avgPrice: str = Field(..., description="平均交易价格")
+    marginLocked: str = Field(..., description="该订单锁定的保证金")
+    type: OrderType = Field(..., description="订单类型（LIMIT和STOP）")
+    side: OrderSide = Field(..., description="订单方向")
+    timeInForce: TimeInForce = Field(..., description="时效单类型")
+    status: OrderStatus = Field(..., description="订单状态")
+    priceType: str = Field(..., description="价格类型（INPUT、OPPONENT、QUEUE、OVER、MARKET）")
+    
+    model_config = ConfigDict(use_enum_values=True)
+
+
+class QueryFuturesOrderResponse(BaseModel):
+    """合约查询订单响应模型 - 根据实际API响应"""
+    time: str = Field(..., description="订单生成时的时间戳")
+    updateTime: str = Field(..., description="订单上次更新的时间戳")
+    orderId: str = Field(..., description="订单ID")
+    clientOrderId: str = Field(..., description="用户定义的订单ID")
+    symbol: str = Field(..., description="交易对")
+    price: str = Field(..., description="订单价格")
+    leverage: str = Field(..., description="订单杠杆")
+    origQty: str = Field(..., description="订单数量")
+    executedQty: str = Field(..., description="订单已执行数量")
+    avgPrice: str = Field(..., description="平均交易价格")
+    marginLocked: str = Field(..., description="该订单锁定的保证金")
+    type: OrderType = Field(..., description="订单类型（LIMIT和STOP）")
+    side: OrderSide = Field(..., description="订单方向")
+    timeInForce: TimeInForce = Field(..., description="时效单类型")
+    status: OrderStatus = Field(..., description="订单状态")
+    priceType: str = Field(..., description="价格类型（INPUT、OPPONENT、QUEUE、OVER、MARKET）")
+    
+    model_config = ConfigDict(use_enum_values=True)
+
+
+class FuturesOpenOrderResponse(BaseModel):
+    """合约挂单响应模型 - 根据实际API响应"""
+    time: str = Field(..., description="订单生成时的时间戳")
+    updateTime: str = Field(..., description="订单上次更新的时间戳")
+    orderId: str = Field(..., description="订单ID")
+    clientOrderId: str = Field(..., description="用户定义的订单ID")
+    symbol: str = Field(..., description="交易对")
+    price: str = Field(..., description="订单价格")
+    leverage: str = Field(..., description="订单杠杆")
+    origQty: str = Field(..., description="订单数量")
+    executedQty: str = Field(..., description="订单已执行数量")
+    avgPrice: str = Field(..., description="平均交易价格")
+    marginLocked: str = Field(..., description="该订单锁定的保证金")
+    type: OrderType = Field(..., description="订单类型（LIMIT和STOP）")
+    side: OrderSide = Field(..., description="订单方向")
+    timeInForce: TimeInForce = Field(..., description="时效单类型")
+    status: OrderStatus = Field(..., description="订单状态")
+    priceType: str = Field(..., description="价格类型（INPUT、OPPONENT、QUEUE、OVER、MARKET）")
+    
+    model_config = ConfigDict(use_enum_values=True)
+
+
+class CancelAllOrdersResponse(BaseModel):
+    """撤销全部订单响应模型 - 根据实际API响应"""
+    code: int = Field(..., description="响应代码")
+    message: str = Field(..., description="响应消息")
+    timestamp: int = Field(..., description="时间戳")
+    
+    model_config = ConfigDict()
+
+
 class OrderResponse(BaseModel):
     """查询订单响应模型 - 查询挂单、订单状态时返回"""
     symbol: str = Field(..., description="交易对")

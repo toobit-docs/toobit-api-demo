@@ -14,7 +14,8 @@ from .exceptions import TooBitException, raise_toobit_exception
 from .models import (
     OrderRequest, OrderResponse, CreateOrderResponse, CancelOrderRequest, CancelOrderResponse,
     OrderQueryRequest, AccountInfo, ExchangeInfo, Ticker24hr, OrderBook, Kline, OrderSide, OrderType,
-    CreateFuturesOrderResponse
+    CreateFuturesOrderResponse, CancelFuturesOrderResponse, QueryFuturesOrderResponse,
+    FuturesOpenOrderResponse, CancelAllOrdersResponse
 )
 
 
@@ -383,7 +384,7 @@ class TooBitClient:
         response = self._make_request('POST', '/api/v1/futures/batchOrders', params, signed=True)
         return response
     
-    def get_futures_order(self, symbol: str, order_id: Optional[str] = None, client_order_id: Optional[str] = None) -> OrderResponse:
+    def get_futures_order(self, symbol: str, order_id: Optional[str] = None, client_order_id: Optional[str] = None) -> QueryFuturesOrderResponse:
         """查询合约订单 (USER_DATA)"""
         params = {'symbol': symbol}
         if order_id:
@@ -392,9 +393,9 @@ class TooBitClient:
             params['origClientOrderId'] = client_order_id
         
         response = self._make_request('GET', '/api/v1/futures/order', params, signed=True)
-        return OrderResponse(**response)
+        return QueryFuturesOrderResponse(**response)
     
-    def cancel_futures_order(self, symbol: str, order_id: Optional[str] = None, client_order_id: Optional[str] = None) -> CancelOrderResponse:
+    def cancel_futures_order(self, symbol: str, order_id: Optional[str] = None, client_order_id: Optional[str] = None) -> QueryFuturesOrderResponse:
         """撤销合约订单 (TRADE)"""
         params = {'symbol': symbol}
         if order_id:
@@ -403,16 +404,16 @@ class TooBitClient:
             params['origClientOrderId'] = client_order_id
         
         response = self._make_request('DELETE', '/api/v1/futures/order', params, signed=True)
-        return CancelOrderResponse(**response)
+        return QueryFuturesOrderResponse(**response)
     
-    def get_futures_open_orders(self, symbol: Optional[str] = None) -> list:
+    def get_futures_open_orders(self, symbol: Optional[str] = None) -> list[FuturesOpenOrderResponse]:
         """查看当前全部挂单 (USER_DATA)"""
         params = {}
         if symbol:
             params['symbol'] = symbol
         
         response = self._make_request('GET', '/api/v1/futures/openOrders', params, signed=True)
-        return response
+        return [FuturesOpenOrderResponse(**order) for order in response]
     
     def get_futures_positions(self, symbol: Optional[str] = None) -> list:
         """查询当前持仓 (USER_DATA)"""
@@ -533,11 +534,11 @@ class TooBitClient:
         response = self._make_request('GET', '/api/v1/account/balanceFlow', params, signed=True)
         return response
     
-    def cancel_all_orders(self, symbol: str) -> list:
+    def cancel_all_orders(self, symbol: str) -> CancelAllOrdersResponse:
         """撤销全部订单 (TRADE)"""
         params = {'symbol': symbol}
-        response = self._make_request('DELETE', '/api/v1/futures/order', params, signed=True)
-        return response
+        response = self._make_request('DELETE', '/api/v1/futures/batchOrders', params, signed=True)
+        return CancelAllOrdersResponse(**response)
     
     # ==================== 便捷方法 ====================
     

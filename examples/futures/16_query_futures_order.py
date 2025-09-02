@@ -1,54 +1,41 @@
 """
-TooBit 合约API SDK - 合约下单示例 (14)
-合约下单 (需要API密钥和签名)
-接口: POST /api/v1/futures/order
+TooBit 合约API SDK - 查询订单示例 (16)
+查询合约订单 (需要API密钥和签名)
+接口: GET /api/v1/futures/order
 """
 from open_api_sdk import TooBitClient, TooBitConfig
-from open_api_sdk.models import OrderRequest, OrderSide, OrderType, TimeInForce, CreateFuturesOrderResponse
+from open_api_sdk.models import QueryFuturesOrderResponse
 
-def create_futures_order():
-    """合约下单"""
-    print("=== TooBit 合约API 合约下单 ===\n")
+def query_futures_order():
+    """查询合约订单"""
+    print("=== TooBit 合约API 查询订单 ===\n")
     try:
         config = TooBitConfig.from_env()
         client = TooBitClient(config)
         
-        # 订单参数
+        # 查询订单参数
         symbol = "BTC-SWAP-USDT"  # 交易对
-        side = OrderSide.BUY_OPEN  # 买卖方向: BUY_OPEN, SELL_OPEN, BUY_CLOSE, SELL_CLOSE
-        order_type = OrderType.LIMIT  # 订单类型: LIMIT, MARKET
-        quantity = "10"  # 数量
-        price = "50000"  # 价格 (市价单不需要)
-        time_in_force = TimeInForce.GTC  # 时效: GTC, IOC, FOK
+        order_id = "2030785555818714880"  # 订单ID (可选)
         client_order_id = "test_order_006"  # 客户端订单ID (可选)
         
-        print("🔄 正在创建合约订单...")
+        print("🔄 正在查询合约订单...")
         print(f"   交易对: {symbol}")
-        print(f"   买卖方向: {side.value}")
-        print(f"   订单类型: {order_type.value}")
-        print(f"   数量: {quantity}")
-        print(f"   价格: {price}")
-        print(f"   时效: {time_in_force.value}")
-        print(f"   客户端订单ID: {client_order_id}")
+        if order_id:
+            print(f"   订单ID: {order_id}")
+        if client_order_id:
+            print(f"   客户端订单ID: {client_order_id}")
         print()
-        print("⚠️  注意: 这是真实的交易操作，请谨慎使用!")
+        print("⚠️  注意: 这是真实的账户查询操作，请谨慎使用!")
         print("⚠️  建议先在测试环境中验证")
         print()
         
-        # 创建订单请求
-        order_request = OrderRequest(
+        response = client.get_futures_order(
             symbol=symbol,
-            side=side,
-            type=order_type,
-            quantity=quantity,
-            price=price,
-            timeInForce=time_in_force,
-            newClientOrderId=client_order_id
+            order_id=order_id,
+            client_order_id=client_order_id
         )
         
-        response = client.create_futures_order(order_request)
-        
-        print("✅ 合约订单创建成功!")
+        print("✅ 合约订单查询成功!")
         print()
         
         # 显示订单信息
@@ -86,35 +73,40 @@ def create_futures_order():
         if hasattr(response, 'priceType'):
             print(f"   🏷️  价格类型: {response.priceType}")
         
-        print("\n🎉 合约订单创建完成!")
+        print("\n🎉 合约订单查询完成!")
         return response
         
     except Exception as e:
-        print(f"❌ 合约订单创建失败: {e}")
+        print(f"❌ 合约订单查询失败: {e}")
         return None
     finally:
         client.close()
 
 if __name__ == "__main__":
-    print("=== TooBit 合约API SDK 合约下单示例 ===\n")
+    print("=== TooBit 合约API SDK 查询订单示例 ===\n")
     print("💡 这个示例需要API密钥，请确保配置正确")
-    print("💡 这是真实的交易操作，请谨慎使用!")
+    print("💡 这是真实的账户查询操作，请谨慎使用!")
     print()
     print("📚 接口信息:")
-    print("   - 接口: POST /api/v1/futures/order")
-    print("   - 鉴权: 需要签名 (TRADE)")
-    print("   - 功能: 创建合约订单")
-    print("   - 支持: 限价单、市价单")
+    print("   - 接口: GET /api/v1/futures/order")
+    print("   - 鉴权: 需要签名 (USER_DATA)")
+    print("   - 功能: 查询合约订单")
+    print("   - 参数: symbol(必需), orderId(可选), origClientOrderId(可选)")
     print()
-    print("📈 合约方向类型说明:")
-    print("   - BUY_OPEN: 买入开仓 (做多)")
-    print("   - SELL_OPEN: 卖出开仓 (做空)")
-    print("   - BUY_CLOSE: 买入平仓 (平空)")
-    print("   - SELL_CLOSE: 卖出平仓 (平多)")
+    print("💡 查询说明:")
+    print("   - 可以通过订单ID查询")
+    print("   - 可以通过客户端订单ID查询")
+    print("   - 返回订单的详细信息")
+    print("   - 包括订单状态、执行情况等")
+    print()
+    print("📈 订单状态说明:")
+    print("   - NEW: 新订单")
+    print("   - PARTIALLY_FILLED: 部分成交")
+    print("   - FILLED: 完全成交")
+    print("   - CANCELED: 已取消")
+    print("   - REJECTED: 已拒绝")
     print()
     print("⚠️  重要提醒:")
-    print("   - 请确保账户余额充足")
-    print("   - 请仔细核对订单参数")
-    print("   - 订单创建后不可撤销")
+    print("   - 请确保订单ID或客户端订单ID正确")
     print("   - 建议先在测试环境中验证")
-    create_futures_order()
+    query_futures_order()

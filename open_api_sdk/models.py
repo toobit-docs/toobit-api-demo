@@ -9,8 +9,15 @@ from enum import Enum
 
 class OrderSide(str, Enum):
     """订单方向"""
+    # 现货交易方向
     BUY = "BUY"
     SELL = "SELL"
+    
+    # 合约交易方向
+    BUY_OPEN = "BUY_OPEN"      # 买入开仓 (做多)
+    SELL_OPEN = "SELL_OPEN"    # 卖出开仓 (做空)
+    BUY_CLOSE = "BUY_CLOSE"    # 买入平仓 (平空)
+    SELL_CLOSE = "SELL_CLOSE"  # 卖出平仓 (平多)
 
 
 class OrderType(str, Enum):
@@ -91,7 +98,29 @@ class CreateOrderResponse(BaseModel):
     type: OrderType = Field(..., description="订单类型")
     side: OrderSide = Field(..., description="订单方向")
     
-    model_config = ConfigDict(use_enum_values=True, populate_by_name=True)
+    model_config = ConfigDict(use_enum_values=True)
+
+
+class FuturesOrderResponse(BaseModel):
+    """合约下单响应模型 - 根据实际API响应"""
+    time: str = Field(..., description="订单生成时的时间戳")
+    updateTime: str = Field(..., description="订单上次更新的时间戳")
+    orderId: str = Field(..., description="订单ID")
+    clientOrderId: str = Field(..., description="用户定义的订单ID")
+    symbol: str = Field(..., description="交易对")
+    price: str = Field(..., description="订单价格")
+    leverage: str = Field(..., description="订单杠杆")
+    origQty: str = Field(..., description="订单数量")
+    executedQty: str = Field(..., description="订单已执行数量")
+    avgPrice: str = Field(..., description="平均交易价格")
+    marginLocked: str = Field(..., description="该订单锁定的保证金")
+    type: OrderType = Field(..., description="订单类型（LIMIT和STOP）")
+    side: OrderSide = Field(..., description="订单方向")
+    timeInForce: TimeInForce = Field(..., description="时效单类型")
+    status: OrderStatus = Field(..., description="订单状态")
+    priceType: str = Field(..., description="价格类型（INPUT、OPPONENT、QUEUE、OVER、MARKET）")
+    
+    model_config = ConfigDict(use_enum_values=True)
 
 
 class OrderResponse(BaseModel):
@@ -147,11 +176,11 @@ class CancelOrderResponse(BaseModel):
 class OrderQueryRequest(BaseModel):
     """查询订单请求模型"""
     symbol: str = Field(..., description="交易对")
-    order_id: Optional[int] = Field(None, description="订单ID", alias="orderId")
-    orig_client_order_id: Optional[str] = Field(None, description="原始客户端订单ID", alias="origClientOrderId")
-    recv_window: Optional[int] = Field(None, description="接收窗口", alias="recvWindow")
+    orderId: Optional[int] = Field(None, description="订单ID")
+    origClientOrderId: Optional[str] = Field(None, description="原始客户端订单ID")
+    recvWindow: Optional[int] = Field(None, description="接收窗口")
     
-    model_config = ConfigDict(populate_by_name=True)
+    model_config = ConfigDict()
 
 
 class Trade(BaseModel):
@@ -160,94 +189,81 @@ class Trade(BaseModel):
     price: float = Field(..., description="成交价格")
     qty: float = Field(..., description="成交数量")
     commission: float = Field(..., description="手续费")
-    commission_asset: str = Field(..., description="手续费资产", alias="commissionAsset")
+    commissionAsset: str = Field(..., description="手续费资产")
     time: int = Field(..., description="成交时间")
-    is_buyer: bool = Field(..., description="是否买方", alias="isBuyer")
-    is_maker: bool = Field(..., description="是否挂单方", alias="isMaker")
-    is_best_match: bool = Field(..., description="是否最佳匹配", alias="isBestMatch")
+    isBuyer: bool = Field(..., description="是否买方")
+    isMaker: bool = Field(..., description="是否挂单方")
+    isBestMatch: bool = Field(..., description="是否最佳匹配")
     
-    model_config = ConfigDict(populate_by_name=True)
+    model_config = ConfigDict()
 
 
 class AccountInfo(BaseModel):
     """账户信息模型"""
-    maker_commission: int = Field(..., description="挂单手续费", alias="makerCommission")
-    taker_commission: int = Field(..., description="吃单手续费", alias="takerCommission")
-    buyer_commission: int = Field(..., description="买方手续费", alias="buyerCommission")
-    seller_commission: int = Field(..., description="卖方手续费", alias="sellerCommission")
-    can_trade: bool = Field(..., description="是否可以交易", alias="canTrade")
-    can_withdraw: bool = Field(..., description="是否可以提现", alias="canWithdraw")
-    can_deposit: bool = Field(..., description="是否可以充值", alias="canDeposit")
-    update_time: int = Field(..., description="更新时间", alias="updateTime")
-    account_type: str = Field(..., description="账户类型", alias="accountType")
+    makerCommission: int = Field(..., description="挂单手续费")
+    takerCommission: int = Field(..., description="吃单手续费")
+    buyerCommission: int = Field(..., description="买方手续费")
+    sellerCommission: int = Field(..., description="卖方手续费")
+    canTrade: bool = Field(..., description="是否可以交易")
+    canWithdraw: bool = Field(..., description="是否可以提现")
+    canDeposit: bool = Field(..., description="是否可以充值")
+    updateTime: int = Field(..., description="更新时间")
+    accountType: str = Field(..., description="账户类型")
     balances: List[Dict[str, Any]] = Field(..., description="余额列表")
     
-    model_config = ConfigDict(populate_by_name=True)
+    model_config = ConfigDict()
 
 
 class ExchangeInfo(BaseModel):
     """交易所信息模型"""
     timezone: Optional[str] = Field(None, description="时区")
-    server_time: Optional[int] = Field(None, description="服务器时间", alias="serverTime")
-    rate_limits: Optional[List[Dict[str, Any]]] = Field(default_factory=list, description="速率限制", alias="rateLimits")
-    broker_filters: Optional[List[Dict[str, Any]]] = Field(default_factory=list, description="交易所过滤器", alias="brokerFilters")
+    serverTime: Optional[int] = Field(None, description="服务器时间")
+    rateLimits: Optional[List[Dict[str, Any]]] = Field(default_factory=list, description="速率限制")
+    brokerFilters: Optional[List[Dict[str, Any]]] = Field(default_factory=list, description="交易所过滤器")
     symbols: Optional[List[Dict[str, Any]]] = Field(default_factory=list, description="交易对列表")
     
-    model_config = ConfigDict(populate_by_name=True)
+    model_config = ConfigDict()
 
 
 class Ticker24hr(BaseModel):
     """24小时价格变动模型"""
-    symbol: str = Field(..., description="交易对")
-    price_change: float = Field(..., description="价格变动", alias="priceChange")
-    price_change_percent: float = Field(..., description="价格变动百分比", alias="priceChangePercent")
-    weighted_avg_price: float = Field(..., description="加权平均价格", alias="weightedAvgPrice")
-    prev_close_price: float = Field(..., description="前收盘价", alias="prevClosePrice")
-    last_price: float = Field(..., description="最新价格", alias="lastPrice")
-    last_qty: float = Field(..., description="最新成交量", alias="lastQty")
-    bid_price: float = Field(..., description="买一价", alias="bidPrice")
-    ask_price: float = Field(..., description="卖一价", alias="askPrice")
-    open_price: float = Field(..., description="开盘价", alias="openPrice")
-    high_price: float = Field(..., description="最高价", alias="highPrice")
-    low_price: float = Field(..., description="最低价", alias="lowPrice")
-    volume: float = Field(..., description="成交量")
-    quote_volume: float = Field(..., description="成交额", alias="quoteVolume")
-    open_time: int = Field(..., description="开盘时间", alias="openTime")
-    close_time: int = Field(..., description="收盘时间", alias="closeTime")
-    first_id: Optional[int] = Field(None, description="首笔成交ID", alias="firstId")
-    last_id: Optional[int] = Field(None, description="末笔成交ID", alias="lastId")
-    count: int = Field(..., description="成交笔数")
+    t: int = Field(..., description="时间")
+    a: str = Field(..., description="最高卖价")
+    b: str = Field(..., description="最高买价")
+    s: str = Field(..., description="交易对")
+    c: str = Field(..., description="最新成交价")
+    o: str = Field(..., description="开盘价")
+    h: str = Field(..., description="最高价")
+    l: str = Field(..., description="最低价")
+    v: str = Field(..., description="成交量")
+    qv: str = Field(..., description="成交额")
+    pc: str = Field(..., description="24小时价格变动")
+    pcp: str = Field(..., description="24小时价格变动百分比")
     
-    model_config = ConfigDict(populate_by_name=True)
-
-
-class DepthEntry(BaseModel):
-    """深度条目模型"""
-    price: float = Field(..., description="价格")
-    quantity: float = Field(..., description="数量")
+    model_config = ConfigDict()
 
 
 class OrderBook(BaseModel):
     """订单簿模型"""
-    last_update_id: Optional[int] = Field(None, description="最后更新ID", alias="lastUpdateId")
-    bids: Optional[List[List[float]]] = Field(default_factory=list, description="买单 [价格, 数量]")
-    asks: Optional[List[List[float]]] = Field(default_factory=list, description="卖单 [价格, 数量]")
+    t: Optional[int] = Field(None, description="最后更新ID")
+    b: Optional[List[List[float]]] = Field(default_factory=list, description="买单 [价格, 数量]")
+    a: Optional[List[List[float]]] = Field(default_factory=list, description="卖单 [价格, 数量]")
     
-    model_config = ConfigDict(populate_by_name=True)
+    model_config = ConfigDict()
 
 
 class Kline(BaseModel):
     """K线模型"""
-    open_time: int = Field(..., description="开盘时间", alias="openTime")
+    openTime: int = Field(..., description="开盘时间")
     open: float = Field(..., description="开盘价")
     high: float = Field(..., description="最高价")
     low: float = Field(..., description="最低价")
     close: float = Field(..., description="收盘价")
     volume: float = Field(..., description="成交量")
-    close_time: int = Field(..., description="收盘时间", alias="closeTime")
-    quote_asset_volume: float = Field(..., description="成交额", alias="quoteAssetVolume")
-    number_of_trades: int = Field(..., description="成交笔数", alias="numberOfTrades")
-    taker_buy_base_asset_volume: float = Field(..., description="主动买入成交量", alias="takerBuyBaseAssetVolume")
-    taker_buy_quote_asset_volume: float = Field(..., description="主动买入成交额", alias="takerBuyQuoteAssetVolume")
+    closeTime: int = Field(..., description="收盘时间")
+    quoteAssetVolume: float = Field(..., description="成交额")
+    numberOfTrades: int = Field(..., description="成交笔数")
+    takerBuyBaseAssetVolume: float = Field(..., description="主动买入成交量")
+    takerBuyQuoteAssetVolume: float = Field(..., description="主动买入成交额")
     
-    model_config = ConfigDict(populate_by_name=True) 
+    model_config = ConfigDict() 

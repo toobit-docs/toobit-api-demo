@@ -8,7 +8,7 @@ from .exceptions import TooBitException, APIError, ConfigurationError, Authentic
 from .models import (
     OrderRequest, CreateOrderResponse, OrderResponse, CancelOrderRequest, CancelOrderResponse,
     OrderQueryRequest, Trade, AccountInfo, ExchangeInfo, Ticker24hr, 
-    OrderBook, Kline, OrderSide, OrderType, TimeInForce, OrderStatus
+    OrderBook, Kline, OrderSide, OrderType, TimeInForce, OrderStatus, FuturesOrderResponse
 )
 
 __version__ = "1.0.0"
@@ -24,7 +24,6 @@ __all__ = [
     "ValidationError",
     "NetworkError",
     "OrderRequest",
-    "CreateOrderResponse",
     "OrderResponse",
     "CancelOrderRequest",
     "CancelOrderResponse",
@@ -38,5 +37,6 @@ __all__ = [
     "OrderSide",
     "OrderType",
     "TimeInForce",
-    "OrderStatus"
+    "OrderStatus",
+    "FuturesOrderResponse"
 ] 

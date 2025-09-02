@@ -1,0 +1,21 @@
+# TooBit API 配置示例
+# 请复制此文件为 .env 并填入你的实际API密钥
+
+# API 密钥 (必需)
+TOOBIT_API_KEY=your_api_key_here
+TOOBIT_API_SECRET=your_api_secret_here
+
+# API 基础URL (可选，默认使用官方地址)
+TOOBIT_BASE_URL=https://api.toobit.com
+
+# 请求超时时间，单位：秒 (可选，默认30秒)
+TOOBIT_TIMEOUT=30
+
+# 接收窗口时间，单位：毫秒 (可选，默认5000毫秒，最大60000毫秒)
+TOOBIT_RECV_WINDOW=5000
+
+# 最大重试次数 (可选，默认3次)
+TOOBIT_MAX_RETRIES=3
+
+# 重试延迟时间，单位：秒 (可选，默认1.0秒)
+TOOBIT_RETRY_DELAY=1.0 

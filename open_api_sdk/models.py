@@ -101,7 +101,7 @@ class CreateOrderResponse(BaseModel):
     model_config = ConfigDict(use_enum_values=True)
 
 
-class FuturesOrderResponse(BaseModel):
+class CreateFuturesOrderResponse(BaseModel):
     """合约下单响应模型 - 根据实际API响应"""
     time: str = Field(..., description="订单生成时的时间戳")
     updateTime: str = Field(..., description="订单上次更新的时间戳")

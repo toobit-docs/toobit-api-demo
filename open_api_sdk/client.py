@@ -13,7 +13,8 @@ from .config import TooBitConfig
 from .exceptions import TooBitException, raise_toobit_exception
 from .models import (
     OrderRequest, OrderResponse, CreateOrderResponse, CancelOrderRequest, CancelOrderResponse,
-    OrderQueryRequest, AccountInfo, ExchangeInfo, Ticker24hr, OrderBook, Kline, OrderSide, OrderType
+    OrderQueryRequest, AccountInfo, ExchangeInfo, Ticker24hr, OrderBook, Kline, OrderSide, OrderType,
+    CreateFuturesOrderResponse
 )
 
 
@@ -374,7 +375,7 @@ class TooBitClient:
         """合约下单 (TRADE)"""
         params = order_request.model_dump(exclude_none=True, by_alias=True)
         response = self._make_request('POST', '/api/v1/futures/order', params, signed=True)
-        return OrderResponse(**response)
+        return CreateFuturesOrderResponse(**response)
     
     def batch_create_futures_orders(self, orders: list) -> list:
         """合约批量下单 (TRADE)"""

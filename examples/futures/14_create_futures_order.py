@@ -3,6 +3,7 @@ TooBit 合约API SDK - 合约下单示例 (14)
 合约下单 (需要API密钥和签名)
 接口: POST /api/v1/futures/order
 """
+import uuid
 from open_api_sdk import TooBitClient, TooBitConfig
 from open_api_sdk.models import OrderRequest, OrderSide, OrderType, TimeInForce, CreateFuturesOrderResponse
 
@@ -20,7 +21,7 @@ def create_futures_order():
         quantity = "10"  # 数量
         price = "50000"  # 价格 (市价单不需要)
         time_in_force = TimeInForce.GTC  # 时效: GTC, IOC, FOK
-        client_order_id = "test_order_006"  # 客户端订单ID (可选)
+        client_order_id = f"order_{uuid.uuid4().hex[:8]}"  # 客户端订单ID (使用UUID生成)
         
         print("🔄 正在创建合约订单...")
         print(f"   交易对: {symbol}")

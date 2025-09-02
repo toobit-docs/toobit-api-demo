@@ -13,17 +13,27 @@ def query_futures_order():
         config = TooBitConfig.from_env()
         client = TooBitClient(config)
         
-        # 查询订单参数
-        symbol = "BTC-SWAP-USDT"  # 交易对
-        order_id = "2030785555818714880"  # 订单ID (可选)
-        client_order_id = "test_order_006"  # 客户端订单ID (可选)
+        # 先查询挂单列表
+        print("🔄 正在查询挂单列表...")
+        open_orders = client.get_futures_open_orders()
         
-        print("🔄 正在查询合约订单...")
+        if not open_orders or len(open_orders) == 0:
+            print("   ℹ️  当前没有挂单，无法查询订单详情")
+            return None
+        
+        print(f"✅ 获取到 {len(open_orders)} 个挂单")
+        print()
+        
+        # 选择第一个挂单进行查询
+        first_order = open_orders[0]
+        symbol = first_order.symbol
+        order_id = first_order.orderId
+        client_order_id = first_order.clientOrderId
+        
+        print("🔄 正在查询合约订单详情...")
         print(f"   交易对: {symbol}")
-        if order_id:
-            print(f"   订单ID: {order_id}")
-        if client_order_id:
-            print(f"   客户端订单ID: {client_order_id}")
+        print(f"   订单ID: {order_id}")
+        print(f"   客户端订单ID: {client_order_id}")
         print()
         print("⚠️  注意: 这是真实的账户查询操作，请谨慎使用!")
         print("⚠️  建议先在测试环境中验证")

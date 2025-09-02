@@ -198,6 +198,24 @@ class CancelAllOrdersResponse(BaseModel):
     model_config = ConfigDict()
 
 
+class BatchCancelOrderResult(BaseModel):
+    """批量撤单结果项模型"""
+    orderId: str = Field(..., description="订单ID")
+    code: int = Field(..., description="撤单结果代码")
+    
+    model_config = ConfigDict()
+
+
+class BatchCancelOrdersResponse(BaseModel):
+    """批量撤销订单响应模型 - 根据实际API响应"""
+    code: int = Field(..., description="响应代码")
+    message: str = Field(..., description="响应消息")
+    timestamp: int = Field(..., description="时间戳")
+    result: list[BatchCancelOrderResult] = Field(default=[], description="撤单结果列表，空数组表示全部成功")
+    
+    model_config = ConfigDict()
+
+
 class OrderResponse(BaseModel):
     """查询订单响应模型 - 查询挂单、订单状态时返回"""
     symbol: str = Field(..., description="交易对")

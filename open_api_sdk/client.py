@@ -15,7 +15,7 @@ from .models import (
     OrderRequest, OrderResponse, CreateOrderResponse, CancelOrderRequest, CancelOrderResponse,
     OrderQueryRequest, AccountInfo, ExchangeInfo, Ticker24hr, OrderBook, Kline, OrderSide, OrderType,
     CreateFuturesOrderResponse, CancelFuturesOrderResponse, QueryFuturesOrderResponse,
-    FuturesOpenOrderResponse, CancelAllOrdersResponse
+    FuturesOpenOrderResponse, CancelAllOrdersResponse, BatchCancelOrderResult, BatchCancelOrdersResponse
 )
 
 
@@ -539,6 +539,15 @@ class TooBitClient:
         params = {'symbol': symbol}
         response = self._make_request('DELETE', '/api/v1/futures/batchOrders', params, signed=True)
         return CancelAllOrdersResponse(**response)
+    
+    def batch_cancel_orders(self, symbol: str, order_ids: list[str]) -> BatchCancelOrdersResponse:
+        """批量撤销订单 (TRADE)"""
+        params = {
+            'symbol': symbol,
+            'orderIds': ','.join(order_ids)
+        }
+        response = self._make_request('DELETE', '/api/v1/futures/batchOrders', params, signed=True)
+        return BatchCancelOrdersResponse(**response)
     
     # ==================== 便捷方法 ====================
     

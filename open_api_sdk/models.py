@@ -291,22 +291,6 @@ class Trade(BaseModel):
     model_config = ConfigDict()
 
 
-class AccountInfo(BaseModel):
-    """账户信息模型"""
-    makerCommission: int = Field(..., description="挂单手续费")
-    takerCommission: int = Field(..., description="吃单手续费")
-    buyerCommission: int = Field(..., description="买方手续费")
-    sellerCommission: int = Field(..., description="卖方手续费")
-    canTrade: bool = Field(..., description="是否可以交易")
-    canWithdraw: bool = Field(..., description="是否可以提现")
-    canDeposit: bool = Field(..., description="是否可以充值")
-    updateTime: int = Field(..., description="更新时间")
-    accountType: str = Field(..., description="账户类型")
-    balances: List[Dict[str, Any]] = Field(..., description="余额列表")
-    
-    model_config = ConfigDict()
-
-
 class ExchangeInfo(BaseModel):
     """交易所信息模型"""
     timezone: Optional[str] = Field(None, description="时区")

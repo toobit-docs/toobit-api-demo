@@ -7,7 +7,7 @@ from .config import TooBitConfig
 from .exceptions import TooBitException, APIError, ConfigurationError, AuthenticationError, OrderError, RateLimitError, ValidationError, NetworkError
 from .models import (
     OrderRequest, CreateOrderResponse, OrderResponse, CancelOrderRequest, CancelOrderResponse,
-    OrderQueryRequest, Trade, AccountInfo, ExchangeInfo, Ticker24hr, 
+    OrderQueryRequest, Trade, ExchangeInfo, Ticker24hr,
     OrderBook, Kline, OrderSide, OrderType, TimeInForce, OrderStatus, 
     CreateFuturesOrderResponse, CancelFuturesOrderResponse, QueryFuturesOrderResponse,
     FuturesOpenOrderResponse, CancelAllOrdersResponse, BatchCancelOrderResult, BatchCancelOrdersResponse

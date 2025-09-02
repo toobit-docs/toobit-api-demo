@@ -13,7 +13,7 @@ from .config import TooBitConfig
 from .exceptions import TooBitException, raise_toobit_exception
 from .models import (
     OrderRequest, OrderResponse, CreateOrderResponse, CancelOrderRequest, CancelOrderResponse,
-    OrderQueryRequest, AccountInfo, ExchangeInfo, Ticker24hr, OrderBook, Kline, OrderSide, OrderType,
+    OrderQueryRequest, ExchangeInfo, Ticker24hr, OrderBook, Kline, OrderSide, OrderType,
     CreateFuturesOrderResponse, CancelFuturesOrderResponse, QueryFuturesOrderResponse,
     FuturesOpenOrderResponse, CancelAllOrdersResponse, BatchCancelOrderResult, BatchCancelOrdersResponse
 )
@@ -216,12 +216,10 @@ class TooBitClient:
         if symbol:
             params['symbol'] = symbol
         
-        response = self._make_request('GET', '/api/v1/ticker/24hr', params)
+        response = self._make_request('GET', '/quote/v1/ticker/24hr', params)
         
-        if symbol:
-            return Ticker24hr(**response)
-        else:
-            return [Ticker24hr(**item) for item in response]
+        return [Ticker24hr(**item) for item in response]
+
     
     def get_price(self, symbol: Optional[str] = None) -> Union[Dict[str, str], list]:
         """获取最新价格"""
@@ -293,13 +291,9 @@ class TooBitClient:
         if end_time:
             params['endTime'] = end_time
         
-        response = self._make_request('GET', '/api/v1/spot/allOrders', params, signed=True)
+        response = self._make_request('GET', '/api/v1/spot/tradeOrders', params, signed=True)
         return [OrderResponse(**item) for item in response]
-    
-    def get_account_info(self) -> AccountInfo:
-        """获取现货账户信息"""
-        response = self._make_request('GET', '/api/v1/spot/account', signed=True)
-        return AccountInfo(**response)
+
     
     def get_trade_history(
         self, 
@@ -321,7 +315,7 @@ class TooBitClient:
         if end_time:
             params['endTime'] = end_time
         
-        response = self._make_request('GET', '/api/v1/spot/myTrades', params, signed=True)
+        response = self._make_request('GET', '/api/v1/account/trades', params, signed=True)
         return response
     
     # ==================== 合约接口 ====================

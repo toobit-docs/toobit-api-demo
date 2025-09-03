@@ -183,85 +183,7 @@ class TooBitClient:
             print(f"请求失败: {error_msg}")
             raise TooBitException(error_msg)
     
-    # ==================== 公开接口 ====================
-    
-    def ping(self) -> bool:
-        """测试服务器连通性"""
-        try:
-            response = self._make_request('GET', '/api/v1/ping')
-            return True
-        except:
-            return False
-    
-    def get_server_time(self) -> int:
-        """获取服务器时间"""
-        response = self._make_request('GET', '/api/v1/time')
-        return response['serverTime']
-    
-    def get_exchange_info(self) -> ExchangeInfo:
-        """获取交易规则和交易对信息"""
-        response = self._make_request('GET', '/api/v1/exchangeInfo', signed=False)
-        return ExchangeInfo(**response)
-    
-    def get_order_book(self, symbol: str, limit: int = 100) -> OrderBook:
-        """获取深度信息"""
-        params = {'symbol': symbol, 'limit': limit}
-        response = self._make_request('GET', '/api/v1/depth', params)
-        return OrderBook(**response)
-    
-    def get_recent_trades(self, symbol: str, limit: int = 500) -> list:
-        """获取最近成交"""
-        params = {'symbol': symbol, 'limit': limit}
-        response = self._make_request('GET', '/api/v1/trades', params)
-        return response
-    
-    def get_klines(
-        self, 
-        symbol: str, 
-        interval: str, 
-        limit: int = 500,
-        start_time: Optional[int] = None,
-        end_time: Optional[int] = None
-    ) -> list:
-        """获取K线数据"""
-        params = {
-            'symbol': symbol,
-            'interval': interval,
-            'limit': limit
-        }
-        if start_time:
-            params['startTime'] = start_time
-        if end_time:
-            params['endTime'] = end_time
-        
-        response = self._make_request('GET', '/api/v1/klines', params)
-        return response
-    
-    def get_24hr_ticker(self, symbol: Optional[str] = None) -> Union[Ticker24hr, list]:
-        """获取24小时价格变动情况"""
-        params = {}
-        if symbol:
-            params['symbol'] = symbol
-        
-        response = self._make_request('GET', '/quote/v1/ticker/24hr', params)
-        
-        return [Ticker24hr(**item) for item in response]
-
-    
-    def get_price(self, symbol: Optional[str] = None) -> Union[Dict[str, str], list]:
-        """获取最新价格"""
-        params = {}
-        if symbol:
-            params['symbol'] = symbol
-        
-        response = self._make_request('GET', '/api/v1/ticker/price', params)
-        return response
-    
-    def get_best_order_book(self, symbol: str) -> Dict[str, Any]:
-        """获取当前最优挂单"""
-        params = {'symbol': symbol}
-        response = self._make_request('GET', '/api/v1/ticker/bookTicker', params)
-        return response
+    # ==================== 现货签名接口 ====================
     
     # ==================== 现货签名接口 ====================
     
@@ -386,11 +308,6 @@ class TooBitClient:
     
     # ==================== 合约接口 ====================
     
-    def get_sub_accounts(self) -> list:
-        """查询子账户 (USER_DATA)"""
-        response = self._make_request('GET', '/api/v1/subAccount/list', signed=True)
-        return response
-    
     def transfer_between_accounts(
         self,
         from_account_type: str,
@@ -408,41 +325,13 @@ class TooBitClient:
         response = self._make_request('POST', '/api/v1/subAccount/transfer', params, signed=True)
         return response
     
-    def change_margin_mode(self, symbol: str, margin_mode: str) -> Dict[str, Any]:
-        """变换逐全仓模式 (TRADE)"""
-        params = {
-            'symbol': symbol,
-            'marginMode': margin_mode
-        }
-        response = self._make_request('POST', '/api/v1/futures/marginMode', params, signed=True)
-        return response
-    
-    def adjust_leverage(self, symbol: str, leverage: int) -> Dict[str, Any]:
-        """调整开仓杠杆 (TRADE)"""
-        params = {
-            'symbol': symbol,
-            'leverage': leverage
-        }
-        response = self._make_request('POST', '/api/v1/futures/leverage', params, signed=True)
-        return response
-    
-    def get_leverage_and_margin_mode(self, symbol: str) -> Dict[str, Any]:
-        """查询杠杆倍数和仓位模式 (USER_DATA)"""
-        params = {'symbol': symbol}
-        response = self._make_request('GET', '/api/v1/futures/leverage', params, signed=True)
-        return response
-    
     def create_futures_order(self, order_request: OrderRequest) -> OrderResponse:
         """合约下单 (TRADE)"""
         params = order_request.model_dump(exclude_none=True, by_alias=True)
         response = self._make_request('POST', '/api/v1/futures/order', params, signed=True)
         return CreateFuturesOrderResponse(**response)
     
-    def batch_create_futures_orders(self, orders: list) -> list:
-        """合约批量下单 (TRADE)"""
-        params = {'orders': orders}
-        response = self._make_request('POST', '/api/v1/futures/batchOrders', params, signed=True)
-        return response
+
     
     def get_futures_order(self, symbol: str, order_id: Optional[str] = None, client_order_id: Optional[str] = None) -> QueryFuturesOrderResponse:
         """查询合约订单 (USER_DATA)"""
@@ -475,105 +364,11 @@ class TooBitClient:
         response = self._make_request('GET', '/api/v1/futures/openOrders', params, signed=True)
         return [FuturesOpenOrderResponse(**order) for order in response]
     
-    def get_futures_positions(self, symbol: Optional[str] = None) -> list:
-        """查询当前持仓 (USER_DATA)"""
-        params = {}
-        if symbol:
-            params['symbol'] = symbol
-        
-        response = self._make_request('GET', '/api/v1/futures/position', params, signed=True)
-        return response
+
     
-    def get_futures_all_orders(
-        self, 
-        symbol: str, 
-        order_id: Optional[int] = None,
-        start_time: Optional[int] = None,
-        end_time: Optional[int] = None,
-        limit: int = 500
-    ) -> list:
-        """查询历史订单 (USER_DATA)"""
-        params = {
-            'symbol': symbol,
-            'limit': limit
-        }
-        if order_id:
-            params['orderId'] = order_id
-        if start_time:
-            params['startTime'] = start_time
-        if end_time:
-            params['endTime'] = end_time
-        
-        response = self._make_request('GET', '/api/v1/futures/allOrders', params, signed=True)
-        return response
+
     
-    def get_futures_account_balance(self) -> list:
-        """账户余额 (USER_DATA)"""
-        response = self._make_request('GET', '/api/v1/futures/account', signed=True)
-        return response
-    
-    def adjust_isolated_margin(self, symbol: str, amount: str, type: str) -> Dict[str, Any]:
-        """调整逐仓保证金 (TRADE)"""
-        params = {
-            'symbol': symbol,
-            'amount': amount,
-            'type': type
-        }
-        response = self._make_request('POST', '/api/v1/futures/margin', params, signed=True)
-        return response
-    
-    def get_futures_trade_history(
-        self, 
-        symbol: str, 
-        limit: int = 500,
-        from_id: Optional[int] = None,
-        start_time: Optional[int] = None,
-        end_time: Optional[int] = None
-    ) -> list:
-        """账户成交历史 (USER_DATA)"""
-        params = {
-            'symbol': symbol,
-            'limit': limit
-        }
-        if from_id:
-            params['fromId'] = from_id
-        if start_time:
-            params['startTime'] = start_time
-        if end_time:
-            params['endTime'] = end_time
-        
-        response = self._make_request('GET', '/api/v1/futures/myTrades', params, signed=True)
-        return response
-    
-    def get_futures_account_flow(
-        self,
-        symbol: Optional[str] = None,
-        start_time: Optional[int] = None,
-        end_time: Optional[int] = None,
-        limit: int = 100
-    ) -> list:
-        """查询合约账户流水 (USER_DATA)"""
-        params = {'limit': limit}
-        if symbol:
-            params['symbol'] = symbol
-        if start_time:
-            params['startTime'] = start_time
-        if end_time:
-            params['endTime'] = end_time
-        
-        response = self._make_request('GET', '/api/v1/futures/account/flow', params, signed=True)
-        return response
-    
-    def get_user_fee_rate(self, symbol: str) -> Dict[str, Any]:
-        """用户手续费率 (USER_DATA)"""
-        params = {'symbol': symbol}
-        response = self._make_request('GET', '/api/v1/futures/fee', params, signed=True)
-        return response
-    
-    def get_today_pnl(self) -> Dict[str, Any]:
-        """获取今日盈亏 (USER_DATA)"""
-        response = self._make_request('GET', '/api/v1/futures/todayPnl', signed=True)
-        return response
+
     
     def get_transfer_history(
         self,
@@ -609,66 +404,7 @@ class TooBitClient:
         response = self._make_request('DELETE', '/api/v1/futures/batchOrders', params, signed=True)
         return BatchCancelOrdersResponse(**response)
     
-    # ==================== 便捷方法 ====================
-    
-    def buy_limit(self, symbol: str, quantity: float, price: float, **kwargs) -> OrderResponse:
-        """限价买入"""
-        order_request = OrderRequest(
-            symbol=symbol,
-            side=OrderSide.BUY,
-            type=OrderType.LIMIT,
-            quantity=quantity,
-            price=price,
-            **kwargs
-        )
-        return self.create_order(order_request)
-    
-    def sell_limit(self, symbol: str, quantity: float, price: float, **kwargs) -> OrderResponse:
-        """限价卖出"""
-        order_request = OrderRequest(
-            symbol=symbol,
-            side=OrderSide.SELL,
-            type=OrderType.LIMIT,
-            quantity=quantity,
-            price=price,
-            **kwargs
-        )
-        return self.create_order(order_request)
-    
-    def buy_market(self, symbol: str, quantity: float, **kwargs) -> OrderResponse:
-        """市价买入"""
-        order_request = OrderRequest(
-            symbol=symbol,
-            side=OrderSide.BUY,
-            type=OrderType.MARKET,
-            quantity=quantity,
-            **kwargs
-        )
-        return self.create_order(order_request)
-    
-    def sell_market(self, symbol: str, quantity: float, **kwargs) -> OrderResponse:
-        """市价卖出"""
-        order_request = OrderRequest(
-            symbol=symbol,
-            side=OrderSide.SELL,
-            type=OrderType.MARKET,
-            quantity=quantity,
-            **kwargs
-        )
-        return self.create_order(order_request)
-    
-    def cancel_order_by_id(self, symbol: str, order_id: int) -> CancelOrderResponse:
-        """通过订单ID取消订单"""
-        cancel_request = CancelOrderRequest(symbol=symbol, order_id=order_id)
-        return self.cancel_order(cancel_request)
-    
-    def get_balance(self, asset: str) -> Optional[Dict[str, Any]]:
-        """获取指定资产余额"""
-        account_info = self.get_account_info()
-        for balance in account_info.balances:
-            if balance['asset'] == asset:
-                return balance
-        return None
+
     
     def close(self):
         """关闭客户端"""

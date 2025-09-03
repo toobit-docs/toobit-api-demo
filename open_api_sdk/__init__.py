@@ -17,7 +17,7 @@ from .models import (
     QueryFuturesTradeHistoryRequest, FuturesTrade, QueryFuturesAccountFlowRequest, FuturesAccountFlow,
     QueryFuturesUserFeeRateRequest, FuturesUserFeeRate, ChangeMarginTypeRequest, ChangeMarginTypeResponse,
     FuturesTodayPnL, MarginType, AdjustLeverageRequest, AdjustLeverageResponse, QueryLeverageRequest, AccountLeverage,
-    SpotBalance, SpotAccountInfo, SpotSubAccount
+    SpotBalance, SpotAccountInfo, SpotSubAccount, ApiKeyType
 )
 
 __version__ = "1.0.0"
@@ -81,5 +81,6 @@ __all__ = [
     "AccountLeverage",
     "SpotBalance",
     "SpotAccountInfo",
-    "SpotSubAccount"
+    "SpotSubAccount",
+    "ApiKeyType"
 ] 

@@ -79,24 +79,29 @@ def batch_create_orders():
         
         # 显示响应结果
         print("📋 批量下单结果:")
-        if hasattr(response, 'code'):
-            print(f"   📊 响应代码: {response.code}")
-        if hasattr(response, 'message'):
-            print(f"   💬 响应消息: {response.message}")
-        if hasattr(response, 'timestamp'):
-            print(f"   🕐 时间戳: {response.timestamp}")
+        print(f"   📊 响应代码: {response.code}")
         
-        if hasattr(response, 'result') and response.result:
+        if response.result:
             print(f"   📊 订单创建结果 (共{len(response.result)}个订单):")
             for i, order_result in enumerate(response.result, 1):
                 print(f"     - 订单 {i}:")
-                print(f"       交易对: {order_result.symbol}")
-                print(f"       订单ID: {order_result.order_id}")
-                print(f"       客户端订单ID: {order_result.client_order_id}")
-                print(f"       状态: {order_result.status}")
-                print(f"       价格: {order_result.price}")
-                print(f"       数量: {order_result.orig_qty}")
-                print(f"       已执行数量: {order_result.executed_qty}")
+                print(f"       结果代码: {order_result.code}")
+                
+                if order_result.code == 0 and order_result.order:
+                    # 成功的情况
+                    order = order_result.order
+                    print(f"       ✅ 创建成功")
+                    print(f"       交易对: {order.symbol}")
+                    print(f"       订单ID: {order.order_id}")
+                    print(f"       客户端订单ID: {order.client_order_id}")
+                    print(f"       状态: {order.status}")
+                    print(f"       价格: {order.price}")
+                    print(f"       数量: {order.orig_qty}")
+                    print(f"       已执行数量: {order.executed_qty}")
+                else:
+                    # 失败的情况
+                    print(f"       ❌ 创建失败")
+                    print(f"       错误消息: {order_result.msg}")
                 print()
         
         print("\n🎉 批量创建订单完成!")

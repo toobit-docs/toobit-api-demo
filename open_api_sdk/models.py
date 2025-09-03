@@ -214,12 +214,19 @@ class BatchCancelOrdersResponse(BaseModel):
     model_config = ConfigDict()
 
 
+class BatchOrderResult(BaseModel):
+    """批量订单结果模型"""
+    code: int = Field(..., description="订单结果代码")
+    msg: str = Field(None, description="错误消息")
+    order: CreateOrderResponse = Field(None, description="成功创建的订单信息")
+    
+    model_config = ConfigDict()
+
+
 class BatchCreateOrderResponse(BaseModel):
     """批量创建订单响应模型 - 根据实际API响应"""
     code: int = Field(..., description="响应代码")
-    message: str = Field(..., description="响应消息")
-    timestamp: int = Field(..., description="时间戳")
-    result: list[CreateOrderResponse] = Field(..., description="创建订单结果列表")
+    result: list[BatchOrderResult] = Field(..., description="批量订单结果列表")
     
     model_config = ConfigDict()
 

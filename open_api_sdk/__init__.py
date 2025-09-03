@@ -53,6 +53,7 @@ __all__ = [
     "CancelAllOrdersResponse",
     "BatchCancelOrderResult",
     "BatchCancelOrdersResponse",
+    "BatchOrderResult",
     "BatchCreateOrderResponse",
     "CancelOpenOrdersResponse",
     "FuturesOrderRequest",

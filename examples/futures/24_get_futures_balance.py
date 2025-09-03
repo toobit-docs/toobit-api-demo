@@ -1,43 +1,43 @@
 #!/usr/bin/env python3
 """
-TooBit API 合约查询账户余额示例 (24号)
-查询合约账户余额信息
+TooBit API Futures Query Account Balance Example (24 Number)
+Query Futures Account Balance information
 """
 
 from open_api_sdk import TooBitClient, TooBitConfig
 
 def get_futures_balance():
-    """查询合约账户余额示例"""
-    print("=== TooBit API 合约查询账户余额示例 ===\n")
+    """Query Futures Account Balance Example"""
+    print("=== TooBit API Futures Query Account Balance Example ===\n")
     
-    # 初始化配置
+    # Initialize configuration
     config = TooBitConfig.from_env()
     client = TooBitClient(config)
     
     try:
-        print("🔍 查询合约账户余额测试:")
+        print("🔍 Query Futures Account Balance Test:")
         print()
         print("   API: GET /api/v1/futures/balance")
-        print("   说明: 查询合约账户所有资产的余额信息")
+        print("   Description: Query Futures Account All Asset of Balance information")
         print()
         
         balances = client.get_futures_balance()
-        print(f"   返回资产数量: {len(balances)}")
+        print(f"   Return Asset Quantity: {len(balances)}")
         print()
         
         for balance in balances:
-            print(f"   📊 资产: {balance.asset}")
-            print(f"      总余额: {balance.balance}")
-            print(f"      可用保证金: {balance.availableBalance}")
-            print(f"      仓位保证金: {balance.positionMargin}")
-            print(f"      委托保证金: {balance.orderMargin}")
-            print(f"      全仓未实现盈亏: {balance.crossUnRealizedPnl}")
+            print(f"   📊 Asset: {balance.asset}")
+            print(f"      Total Balance: {balance.balance}")
+            print(f"      Available Balance: {balance.availableBalance}")
+            print(f"      Position Margin: {balance.positionMargin}")
+            print(f"      Order Margin: {balance.orderMargin}")
+            print(f"      Cross Unrealized PnL: {balance.crossUnRealizedPnl}")
             print()
         
-        print("🎉 查询合约账户余额测试完成!")
+        print("🎉 Query Futures Account Balance Test Complete!")
         
     except Exception as e:
-        print(f"❌ 查询合约账户余额测试失败: {e}")
+        print(f"❌ Query Futures Account Balance Test Failed: {e}")
     
     finally:
         client.close()

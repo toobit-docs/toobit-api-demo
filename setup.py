@@ -1,5 +1,5 @@
 """
-TooBit API SDK 安装配置
+TooBit API SDK Installation Configuration
 """
 
 from setuptools import setup, find_packages
@@ -15,7 +15,7 @@ setup(
     version="1.0.0",
     author="Your Name",
     author_email="your.email@example.com",
-    description="TooBit加密货币交易所API SDK",
+    description="TooBit Cryptocurrency Trading All API SDK",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/yourusername/toobit-api-sdk",

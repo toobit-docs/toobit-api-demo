@@ -1,60 +1,60 @@
 """
-TooBit 合约API SDK - 获取深度信息示例
-获取订单簿深度信息 (无需API密钥)
+TooBit Futures API SDK - Get Depth Information Example
+Get Order Book Depth Information (No need API Key)
 """
 
 from open_api_sdk import TooBitClient, TooBitConfig
 
 
 def get_order_book():
-    """获取订单簿深度信息"""
-    print("=== TooBit 合约API 获取深度信息 ===\n")
+    """Get Order Book Depth Information"""
+    print("=== TooBit Futures API Get Depth Information ===\n")
     
     try:
-        # 创建配置 (无需API密钥)
+        # Create Configuration (No need API Key)
         config = TooBitConfig(
             api_key="test_key",
             api_secret="test_secret"
         )
         
-        # 创建客户端
+        # Create Client
         client = TooBitClient(config)
         
         symbol = "BTCUSDT"
-        limit = 10  # 深度档数
+        limit = 10  # Depth levels
         
-        print(f"🔄 正在获取 {symbol} 的深度信息 (深度: {limit})...")
+        print(f"🔄 Getting {symbol} Depth Information (Depth: {limit})...")
         
-        # 获取订单簿深度
+        # Get Order Book Depth
         response = client.get_order_book(symbol, limit)
         
-        print("✅ 深度信息获取成功!")
+        print("✅ Depth Information Get Success!")
         
-        # 显示基本信息
+        # Display basic information
         if hasattr(response, 'symbol'):
-            print(f"   交易对: {response.symbol}")
+            print(f"   Trading Pair: {response.symbol}")
         
-        # 显示买单深度
+        # Display Buy Order Depth
         if hasattr(response, 'b') and response.b:
-            print(f"\n📈 买单深度 (前{min(limit, len(response.b))}档):")
+            print(f"\n📈 Buy Order Depth (Top {min(limit, len(response.b))} levels):")
             for i, bid in enumerate(response.b[:limit]):
                 price = float(bid[0])
                 quantity = float(bid[1])
-                print(f"   {i+1:2d}. 价格: {price:>10.2f} | 数量: {quantity:>10.4f}")
+                print(f"   {i+1:2d}. Price: {price:>10.2f} | Quantity: {quantity:>10.4f}")
         
-        # 显示卖单深度
+        # Display Sell Order Depth
         if hasattr(response, 'a') and response.a:
-            print(f"\n📉 卖单深度 (前{min(limit, len(response.a))}档):")
+            print(f"\n📉 Sell Order Depth (Top {min(limit, len(response.a))} levels):")
             for i, ask in enumerate(response.a[:limit]):
                 price = float(ask[0])
                 quantity = float(ask[1])
-                print(f"   {i+1:2d}. 价格: {price:>10.2f} | 数量: {quantity:>10.4f}")
+                print(f"   {i+1:2d}. Price: {price:>10.2f} | Quantity: {quantity:>10.4f}")
         
-        print("\n🎉 深度信息获取完成!")
+        print("\n🎉 Depth Information Get Complete!")
         return response
         
     except Exception as e:
-        print(f"❌ 获取深度信息失败: {e}")
+        print(f"❌ Get Depth Information Failed: {e}")
         return None
     
     finally:
@@ -62,8 +62,8 @@ def get_order_book():
 
 
 if __name__ == "__main__":
-    print("=== TooBit 合约API SDK 获取深度信息示例 ===\n")
-    print("💡 这个示例无需API密钥，可以直接运行")
+    print("=== TooBit Futures API SDK Get Depth Information Example ===\n")
+    print("💡 This example does not need API key, can run directly")
     
-    # 运行示例
+    # Run Example
     get_order_book()

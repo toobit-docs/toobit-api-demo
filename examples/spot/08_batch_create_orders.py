@@ -1,22 +1,22 @@
 """
-TooBit API SDK - 批量创建订单接口示例 (08)
-批量创建多个订单 (需要API密钥)
+TooBit API SDK - Batch Create Order API Example (08)
+Batch Create Multiple Items Order (Requires API key)
 """
 import uuid
 from open_api_sdk import TooBitClient, TooBitConfig
 from open_api_sdk.models import OrderRequest, OrderSide, OrderType, TimeInForce
 
 def batch_create_orders():
-    """批量创建订单"""
-    print("=== TooBit API 批量创建订单 ===\n")
+    """Batch Create Order"""
+    print("=== TooBit API Batch Create Order ===\n")
     try:
         config = TooBitConfig.from_env()
         client = TooBitClient(config)
         
-        # 创建多个订单请求
+        # Create multiple items order request
         orders = []
         
-        # 订单1: 限价买入
+        # Order1: Limit priceBuy
         order1 = OrderRequest(
             symbol="BTCUSDT",
             side=OrderSide.BUY,
@@ -28,7 +28,7 @@ def batch_create_orders():
         )
         orders.append(order1)
         
-        # 订单2: 限价卖出
+        # Order2: Limit priceSell
         order2 = OrderRequest(
             symbol="BTCUSDT",
             side=OrderSide.SELL,
@@ -40,7 +40,7 @@ def batch_create_orders():
         )
         orders.append(order2)
         
-        # # 订单3: 市价买入
+        # # Order3: Market buy
         order3 = OrderRequest(
             symbol="BTCUSDT",
             side=OrderSide.BUY,
@@ -51,95 +51,95 @@ def batch_create_orders():
         )
         orders.append(order3)
         
-        print("🔄 正在批量创建订单...")
-        print(f"   订单数量: {len(orders)}")
+        print("🔄 Getting Batch Create Order...")
+        print(f"   Order quantity: {len(orders)}")
         print()
         
-        # 显示订单详情
+        # DisplayOrderDetails
         for i, order in enumerate(orders, 1):
-            print(f"   订单 {i}:")
-            print(f"     交易对: {order.symbol}")
-            print(f"     方向: {order.side}")
-            print(f"     类型: {order.type}")
-            print(f"     数量: {order.quantity}")
+            print(f"   Order {i}:")
+            print(f"     Trading pair: {order.symbol}")
+            print(f"     Side: {order.side}")
+            print(f"     Type: {order.type}")
+            print(f"     Quantity: {order.quantity}")
             if order.price:
-                print(f"     价格: {order.price}")
-            print(f"     客户端订单ID: {order.new_client_order_id}")
+                print(f"     Price: {order.price}")
+            print(f"     Client Order ID: {order.new_client_order_id}")
             print()
         
-        print("⚠️  注意: 这是真实的交易操作，请谨慎使用!")
-        print("⚠️  建议先在测试环境中验证")
+        print("⚠️  Note: This is a real trading operation, please use with caution!")
+        print("⚠️  It is recommended to verify in the test environment first")
         print()
         
-        # 调用批量下单接口
+        # Call Batch Create Order API
         response = client.batch_create_orders(orders)
         
-        print("✅ 批量下单成功!")
+        print("✅ Batch Create Order Success!")
         print()
         
-        # 显示响应结果
-        print("📋 批量下单结果:")
-        print(f"   📊 响应代码: {response.code}")
+        # Display Response Result
+        print("📋 Batch Create Order Result:")
+        print(f"   📊 Response Code: {response.code}")
         
         if response.result:
-            print(f"   📊 订单创建结果 (共{len(response.result)}个订单):")
+            print(f"   📊 Order Create Result (Total {len(response.result)} items Order):")
             for i, order_result in enumerate(response.result, 1):
-                print(f"     - 订单 {i}:")
-                print(f"       结果代码: {order_result.code}")
+                print(f"     - Order {i}:")
+                print(f"       ResultCode: {order_result.code}")
                 
                 if order_result.code == 0 and order_result.order:
-                    # 成功的情况
+                    # Success case
                     order = order_result.order
-                    print(f"       ✅ 创建成功")
-                    print(f"       交易对: {order.symbol}")
-                    print(f"       订单ID: {order.order_id}")
-                    print(f"       客户端订单ID: {order.client_order_id}")
-                    print(f"       状态: {order.status}")
-                    print(f"       价格: {order.price}")
-                    print(f"       数量: {order.orig_qty}")
-                    print(f"       已执行数量: {order.executed_qty}")
+                    print(f"       ✅ Create Success")
+                    print(f"       Trading pair: {order.symbol}")
+                    print(f"       Order ID: {order.order_id}")
+                    print(f"       Client Order ID: {order.client_order_id}")
+                    print(f"       Status: {order.status}")
+                    print(f"       Price: {order.price}")
+                    print(f"       Quantity: {order.orig_qty}")
+                    print(f"       Executed quantity: {order.executed_qty}")
                 else:
-                    # 失败的情况
-                    print(f"       ❌ 创建失败")
-                    print(f"       错误消息: {order_result.msg}")
+                    # Failed case
+                    print(f"       ❌ Create Failed")
+                    print(f"       Error Message: {order_result.msg}")
                 print()
         
-        print("\n🎉 批量创建订单完成!")
+        print("\n🎉 Batch Create Order Complete!")
         return response
         
     except Exception as e:
-        print(f"❌ 批量创建订单失败: {e}")
+        print(f"❌ Batch Create Order Failed: {e}")
         return None
     finally:
         client.close()
 
 if __name__ == "__main__":
-    print("=== TooBit API SDK 批量创建订单示例 ===\n")
-    print("💡 这个示例需要API密钥，请确保配置正确")
-    print("💡 这是真实的交易操作，请谨慎使用!")
+    print("=== TooBit API SDK Batch Create Order Example ===\n")
+    print("💡 This example requires API key, please ensure correct configuration")
+    print("💡 This is a real trading operation, please use with caution!")
     print()
-    print("📚 接口信息:")
-    print("   - 接口: POST /api/v1/spot/batchOrders")
-    print("   - 鉴权: 需要签名 (TRADE)")
-    print("   - 功能: 批量创建多个订单")
-    print("   - 参数: 订单数组直接放在request body中")
+    print("📚 API Information:")
+    print("   - API: POST /api/v1/spot/batchOrders")
+    print("   - Auth: Requires signature (TRADE)")
+    print("   - Function: Batch Create Multiple items Order")
+    print("   - Parameters: Order array directly placed in request body")
     print()
-    print("💡 批量下单说明:")
-    print("   - 支持同时创建多个不同类型的订单")
-    print("   - 每个订单都有唯一的客户端订单ID")
-    print("   - 返回每个订单的创建结果")
-    print("   - 部分成功部分失败是正常情况")
+    print("💡 Batch Create Order Description:")
+    print("   - Support creating multiple different types of orders simultaneously")
+    print("   - Each order has a unique client order ID")
+    print("   - Return Each items Order of Create Result")
+    print("   - Partial Success Partial Failed Is normal")
     print()
-    print("📈 响应结果说明:")
-    print("   - code: 200 表示请求成功")
-    print("   - result: 包含每个订单的创建结果")
-    print("   - 每个结果包含订单ID、状态等信息")
+    print("📈 Response Result Description:")
+    print("   - code: 200 Represents Request Success")
+    print("   - result: Contains Each items Order of Create Result")
+    print("   - Each items Result Contains Order ID、Status Etc Information")
     print()
-    print("⚠️  重要提醒:")
-    print("   - 此操作不可逆")
-    print("   - 将创建3个测试订单")
-    print("   - 请确保账户有足够资金")
-    print("   - 建议先在测试环境中验证")
+    print("⚠️  Important reminder:")
+    print("   - This Operation Irreversible")
+    print("   - Will Create 3 items Test Order")
+    print("   - Please ensure account has sufficient funds")
+    print("   - It is recommended to verify in the test environment first")
     print()
     
     batch_create_orders()

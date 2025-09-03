@@ -1,82 +1,82 @@
 """
-TooBit API SDK - 查询订单接口示例 (07)
-查询订单状态 (需要API密钥)
+TooBit API SDK - Query Order API Example (07)
+Query Order Status (Requires API key)
 """
 from open_api_sdk import TooBitClient, TooBitConfig
 
 def get_order():
-    """查询订单"""
-    print("=== TooBit API 查询订单 ===\n")
+    """Query Order"""
+    print("=== TooBit API Query Order ===\n")
     try:
         config = TooBitConfig.from_env()
         client = TooBitClient(config)
         
-        # 先查询挂单列表
-        print("🔄 正在查询挂单列表...")
+        # First query open orders list
+        print("🔄 Getting query open orders list...")
         open_orders = client.get_open_orders()
         
         if not open_orders or len(open_orders) == 0:
-            print("   ℹ️  当前没有挂单，无法查询订单详情")
+            print("   ℹ️  Currently no open orders, unable to query order details")
             return None
         
-        print(f"✅ 获取到 {len(open_orders)} 个挂单")
+        print(f"✅ Get to {len(open_orders)} items open orders")
         print()
         
-        # 选择第一个挂单进行查询
+        # Select first items open orders perform query
         first_order = open_orders[0]
         symbol = first_order.symbol
         order_id = first_order.order_id
         
-        print("🔄 正在查询订单详情...")
-        print(f"   交易对: {symbol}")
-        print(f"   订单ID: {order_id}")
+        print("🔄 Getting query order details...")
+        print(f"   Trading pair: {symbol}")
+        print(f"   Order ID: {order_id}")
         print()
-        print("⚠️  注意: 这是真实的账户查询操作，请谨慎使用!")
-        print("⚠️  建议先在测试环境中验证")
+        print("⚠️  Note: This is a real account query operation, please use with caution!")
+        print("⚠️  It is recommended to verify in the test environment first")
         print()
         
-        # 调用查询订单接口
+        # Call query order API
         from open_api_sdk.models import OrderQueryRequest
         query_request = OrderQueryRequest(symbol=symbol, orderId=int(order_id))
         order_response = client.get_order(query_request)
         
-        print("✅ 订单查询成功!")
+        print("✅ Order query success!")
         print()
         
-        # 显示订单信息
-        print("📋 订单信息:")
-        print(f"   订单ID: {order_response.order_id}")
-        print(f"   客户端订单ID: {order_response.client_order_id}")
-        print(f"   交易对: {order_response.symbol}")
-        print(f"   状态: {order_response.status}")
-        print(f"   类型: {order_response.type}")
-        print(f"   方向: {order_response.side}")
-        print(f"   数量: {order_response.orig_qty}")
-        print(f"   价格: {order_response.price}")
-        print(f"   已执行数量: {order_response.executed_qty}")
+        # Display order information
+        print("📋 Order information:")
+        print(f"   Order ID: {order_response.order_id}")
+        print(f"   Client Order ID: {order_response.client_order_id}")
+        print(f"   Trading pair: {order_response.symbol}")
+        print(f"   Status: {order_response.status}")
+        print(f"   Type: {order_response.type}")
+        print(f"   Side: {order_response.side}")
+        print(f"   Quantity: {order_response.orig_qty}")
+        print(f"   Price: {order_response.price}")
+        print(f"   Executed quantity: {order_response.executed_qty}")
         
-        print("\n🎉 查询订单完成!")
+        print("\n🎉 Query order complete!")
         return order_response
         
     except Exception as e:
-        print(f"❌ 查询订单失败: {e}")
+        print(f"❌ Query order failed: {e}")
         return None
     finally:
         client.close()
 
 if __name__ == "__main__":
-    print("=== TooBit API SDK 查询订单示例 ===\n")
-    print("💡 这个示例需要API密钥，请确保配置正确")
-    print("💡 这是真实的账户查询操作，请谨慎使用!")
+    print("=== TooBit API SDK Query Order Example ===\n")
+    print("💡 This example requires API key, please ensure correct configuration")
+    print("💡 This is a real account query operation, please use with caution!")
     print()
-    print("📚 接口信息:")
-    print("   - 接口: GET /api/v1/spot/order")
-    print("   - 鉴权: 需要签名 (USER_DATA)")
-    print("   - 功能: 查询订单状态")
-    print("   - 参数: symbol, orderId")
+    print("📚 API Information:")
+    print("   - API: GET /api/v1/spot/order")
+    print("   - Auth: Requires signature (USER_DATA)")
+    print("   - Function: Query order status")
+    print("   - Parameters: symbol, orderId")
     print()
-    print("⚠️  重要提醒:")
-    print("   - 建议先在测试环境中验证")
+    print("⚠️  Important reminder:")
+    print("   - It is recommended to verify in the test environment first")
     print()
     
     get_order()

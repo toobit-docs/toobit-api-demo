@@ -1,29 +1,29 @@
 #!/usr/bin/env python3
 """
-TooBit API 合约设置持仓止盈止损示例 (22号)
-设置持仓的止盈止损价格
+TooBit API Futures SetPositionTake ProfitStop LossExample (22Number)
+SetPositionofTake ProfitStop LossPrice
 """
 
 from open_api_sdk import TooBitClient, TooBitConfig, SetPositionTradingStopRequest
 
 def set_position_trading_stop():
-    """设置持仓止盈止损示例"""
-    print("=== TooBit API 合约设置持仓止盈止损示例 ===\n")
+    """SetPositionTake ProfitStop LossExample"""
+    print("=== TooBit API Futures SetPositionTake ProfitStop LossExample ===\n")
     
-    # 初始化配置
+    # Initialize configuration
     config = TooBitConfig.from_env()
     client = TooBitClient(config)
     
     try:
-        print("🔍 设置持仓止盈止损测试:")
+        print("🔍 Set Position Take Profit Stop Loss Test:")
         print()
         
-        # 示例1: 设置多头持仓的止盈止损
-        print("📊 示例1: 设置多头持仓的止盈止损")
-        print("   参数: symbol='BTC-SWAP-USDT', side='LONG'")
-        print("   止损价格: 16000, 止盈价格: 18000")
+        # Example1: SetMultipleHeaderPositionofTake ProfitStop Loss
+        print("📊 Example 1: Set Long Position of Take Profit Stop Loss")
+        print("   Parameters: symbol='BTC-SWAP-USDT', side='LONG'")
+        print("   Stop LossPrice: 16000, Take ProfitPrice: 18000")
         print("   API: POST /api/v1/futures/position/trading-stop")
-        print("   说明: 为BTC-SWAP-USDT的多头持仓设置止盈止损")
+        print("   Description: For BTC-SWAP-USDT of Long Position Set Take Profit Stop Loss")
         print()
         
         request1 = SetPositionTradingStopRequest(
@@ -34,20 +34,20 @@ def set_position_trading_stop():
         )
         
         response1 = client.set_position_trading_stop(request1)
-        print(f"   交易对: {response1.symbol}")
-        print(f"   仓位方向: {response1.side}")
-        print(f"   止盈价格: {response1.takeProfit}")
-        print(f"   止损价格: {response1.stopLoss}")
-        print(f"   止盈触发类型: {response1.tpTriggerBy}")
-        print(f"   止损触发类型: {response1.slTriggerBy}")
+        print(f"   Trading pair: {response1.symbol}")
+        print(f"   Position Side: {response1.side}")
+        print(f"   Take Profit Price: {response1.takeProfit}")
+        print(f"   Stop Loss Price: {response1.stopLoss}")
+        print(f"   Take Profit Trigger Type: {response1.tpTriggerBy}")
+        print(f"   Stop Loss Trigger Type: {response1.slTriggerBy}")
         print()
         
-        # 示例2: 只设置止损价格
-        print("📊 示例2: 只设置止损价格")
-        print("   参数: symbol='ETH-SWAP-USDT', side='SHORT'")
-        print("   止损价格: 2000")
+        # Example2: OnlySetStop LossPrice
+        print("📊 Example 2: Only Set Stop Loss Price")
+        print("   Parameters: symbol='ETH-SWAP-USDT', side='SHORT'")
+        print("   Stop LossPrice: 2000")
         print("   API: POST /api/v1/futures/position/trading-stop")
-        print("   说明: 为ETH-SWAP-USDT的空头持仓只设置止损")
+        print("   Description: For ETH-SWAP-USDT of Short Position Only Set Stop Loss")
         print()
         
         request2 = SetPositionTradingStopRequest(
@@ -57,20 +57,20 @@ def set_position_trading_stop():
         )
         
         response2 = client.set_position_trading_stop(request2)
-        print(f"   交易对: {response2.symbol}")
-        print(f"   仓位方向: {response2.side}")
-        print(f"   止盈价格: {response2.takeProfit}")
-        print(f"   止损价格: {response2.stopLoss}")
-        print(f"   止盈触发类型: {response2.tpTriggerBy}")
-        print(f"   止损触发类型: {response2.slTriggerBy}")
+        print(f"   Trading pair: {response2.symbol}")
+        print(f"   PositionSide: {response2.side}")
+        print(f"   Take ProfitPrice: {response2.takeProfit}")
+        print(f"   Stop LossPrice: {response2.stopLoss}")
+        print(f"   Take ProfitTriggerType: {response2.tpTriggerBy}")
+        print(f"   Stop LossTriggerType: {response2.slTriggerBy}")
         print()
         
-        # 示例3: 只设置止盈价格
-        print("📊 示例3: 只设置止盈价格")
-        print("   参数: symbol='BTC-SWAP-USDT', side='LONG'")
-        print("   止盈价格: 19000")
+        # Example3: OnlySetTake ProfitPrice
+        print("📊 Example 3: Only Set Take Profit Price")
+        print("   Parameters: symbol='BTC-SWAP-USDT', side='LONG'")
+        print("   Take ProfitPrice: 19000")
         print("   API: POST /api/v1/futures/position/trading-stop")
-        print("   说明: 为BTC-SWAP-USDT的多头持仓只设置止盈")
+        print("   Description: For BTC-SWAP-USDT of Long Position Only Set Take Profit")
         print()
         
         request3 = SetPositionTradingStopRequest(
@@ -80,21 +80,21 @@ def set_position_trading_stop():
         )
         
         response3 = client.set_position_trading_stop(request3)
-        print(f"   交易对: {response3.symbol}")
-        print(f"   仓位方向: {response3.side}")
-        print(f"   止盈价格: {response3.takeProfit}")
-        print(f"   止损价格: {response3.stopLoss}")
-        print(f"   止盈触发类型: {response3.tpTriggerBy}")
-        print(f"   止损触发类型: {response3.slTriggerBy}")
+        print(f"   Trading pair: {response3.symbol}")
+        print(f"   PositionSide: {response3.side}")
+        print(f"   Take ProfitPrice: {response3.takeProfit}")
+        print(f"   Stop LossPrice: {response3.stopLoss}")
+        print(f"   Take ProfitTriggerType: {response3.tpTriggerBy}")
+        print(f"   Stop LossTriggerType: {response3.slTriggerBy}")
         print()
         
-        # 示例4: 设置带类型的止盈止损
-        print("📊 示例4: 设置带类型的止盈止损")
-        print("   参数: symbol='BTC-SWAP-USDT', side='LONG'")
-        print("   止损价格: 15000, 止盈价格: 20000")
-        print("   触发类型: MARK_PRICE(标记价格), CONTRACT_PRICE(合约最新价)")
+        # Example4: SetWithTypeofTake ProfitStop Loss
+        print("📊 Example 4: Set With Type of Take Profit Stop Loss")
+        print("   Parameters: symbol='BTC-SWAP-USDT', side='LONG'")
+        print("   Stop LossPrice: 15000, Take ProfitPrice: 20000")
+        print("   TriggerType: MARK_PRICE(Mark Price), CONTRACT_PRICE(Futures Latest Price)")
         print("   API: POST /api/v1/futures/position/trading-stop")
-        print("   说明: 为BTC-SWAP-USDT的多头持仓设置带触发类型的止盈止损")
+        print("   Description: For BTC-SWAP-USDT of Long Position Set With Trigger Type of Take Profit Stop Loss")
         print()
         
         request4 = SetPositionTradingStopRequest(
@@ -107,18 +107,18 @@ def set_position_trading_stop():
         )
         
         response4 = client.set_position_trading_stop(request4)
-        print(f"   交易对: {response4.symbol}")
-        print(f"   仓位方向: {response4.side}")
-        print(f"   止盈价格: {response4.takeProfit}")
-        print(f"   止损价格: {response4.stopLoss}")
-        print(f"   止盈触发类型: {response4.tpTriggerBy}")
-        print(f"   止损触发类型: {response4.slTriggerBy}")
+        print(f"   Trading pair: {response4.symbol}")
+        print(f"   PositionSide: {response4.side}")
+        print(f"   Take ProfitPrice: {response4.takeProfit}")
+        print(f"   Stop LossPrice: {response4.stopLoss}")
+        print(f"   Take ProfitTriggerType: {response4.tpTriggerBy}")
+        print(f"   Stop LossTriggerType: {response4.slTriggerBy}")
         print()
         
-        print("🎉 设置持仓止盈止损测试完成!")
+        print("🎉 Set Position Take Profit Stop Loss Test Complete!")
         
     except Exception as e:
-        print(f"❌ 设置持仓止盈止损测试失败: {e}")
+        print(f"❌ Set Position Take Profit Stop Loss Test Failed: {e}")
     
     finally:
         client.close()

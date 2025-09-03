@@ -1,25 +1,25 @@
 #!/usr/bin/env python3
 """
-TooBit API 合约批量下单示例 (15号)
-批量创建多个合约订单
+TooBit API Futures Batch Create Order Example (15 Number)
+Batch Create Multiple Items Futures Order
 """
 
 import uuid
 from open_api_sdk import TooBitClient, TooBitConfig, FuturesOrderRequest, OrderSide, OrderType
 
 def batch_create_futures_orders():
-    """合约批量下单示例"""
-    print("=== TooBit API 合约批量下单示例 ===\n")
+    """Futures Batch Create Order Example"""
+    print("=== TooBit API Futures Batch Create Order Example ===\n")
     
-    # 初始化配置
+    # Initialize configuration
     config = TooBitConfig.from_env()
     client = TooBitClient(config)
     
     try:
-        print("🔍 合约批量下单测试:")
+        print("🔍 Futures Batch Create Order Test:")
         print()
         
-        # 创建多个合约订单请求
+        # Create Multiple Items Futures Order Request
         orders = [
             FuturesOrderRequest(
                 newClientOrderId=f"pl2023010712345678900_{uuid.uuid4().hex[:8]}",
@@ -50,52 +50,52 @@ def batch_create_futures_orders():
             )
         ]
         
-        print("📊 批量下单参数:")
+        print("📊 Batch Create Order Parameters:")
         for i, order in enumerate(orders, 1):
-            print(f"   订单{i}:")
-            print(f"     客户端订单ID: {order.newClientOrderId}")
-            print(f"     交易对: {order.symbol}")
-            print(f"     方向: {order.side}")
-            print(f"     类型: {order.type}")
-            print(f"     价格: {order.price}")
-            print(f"     数量: {order.quantity}")
-            print(f"     价格类型: {order.priceType}")
+            print(f"   Order{i}:")
+            print(f"     Client Order ID: {order.newClientOrderId}")
+            print(f"     Trading pair: {order.symbol}")
+            print(f"     Side: {order.side}")
+            print(f"     Type: {order.type}")
+            print(f"     Price: {order.price}")
+            print(f"     Quantity: {order.quantity}")
+            print(f"     Price type: {order.priceType}")
             print()
         
-        # 调用合约批量下单接口
+        # Call Futures Batch Create Order API
         response = client.batch_create_futures_orders(orders)
         
-        print("📊 批量下单响应:")
-        print(f"   响应代码: {response.code}")
-        print(f"   结果数量: {len(response.result)}")
+        print("📊 Batch Create Order Response:")
+        print(f"   Response Code: {response.code}")
+        print(f"   Result Quantity: {len(response.result)}")
         print()
         
-        # 显示每个订单的结果
+        # Display Each Items Order of Result
         for i, result in enumerate(response.result, 1):
-            print(f"   订单{i}结果:")
-            print(f"     代码: {result.code}")
+            print(f"   Order{i}Result:")
+            print(f"     Code: {result.code}")
             
             if result.code == 200:
-                print("     ✅ 下单成功")
+                print("     ✅ Create Order Success")
                 if result.order:
                     order = result.order
-                    print(f"     订单ID: {order.orderId}")
-                    print(f"     客户端订单ID: {order.clientOrderId}")
-                    print(f"     交易对: {order.symbol}")
-                    print(f"     价格: {order.price}")
-                    print(f"     数量: {order.origQty}")
-                    print(f"     状态: {order.status}")
-                    print(f"     时间: {order.time}")
+                    print(f"     Order ID: {order.orderId}")
+                    print(f"     Client Order ID: {order.clientOrderId}")
+                    print(f"     Trading pair: {order.symbol}")
+                    print(f"     Price: {order.price}")
+                    print(f"     Quantity: {order.origQty}")
+                    print(f"     Status: {order.status}")
+                    print(f"     Time: {order.time}")
             else:
-                print("     ❌ 下单失败")
+                print("     ❌ Create Order Failed")
                 if result.msg:
-                    print(f"     失败原因: {result.msg}")
+                    print(f"     Failed reason: {result.msg}")
             print()
         
-        print("🎉 合约批量下单测试完成!")
+        print("🎉 Futures Batch Create Order Test Complete!")
         
     except Exception as e:
-        print(f"❌ 合约批量下单测试失败: {e}")
+        print(f"❌ Futures Batch Create Order Test Failed: {e}")
     
     finally:
         client.close()

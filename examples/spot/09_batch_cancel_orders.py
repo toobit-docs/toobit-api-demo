@@ -1,136 +1,136 @@
 """
-TooBit API SDK - 批量撤销订单接口示例 (09)
-批量撤销多个订单 (需要API密钥)
+TooBit API SDK - Batch Cancel Order API Example (09)
+Batch Cancel Multiple Items Order (Requires API key)
 """
 from open_api_sdk import TooBitClient, TooBitConfig
 from open_api_sdk.models import BatchCancelOrdersResponse, BatchCancelOrderResult
 
 def batch_cancel_orders():
-    """批量撤销订单"""
-    print("=== TooBit API 批量撤销订单 ===\n")
+    """Batch Cancel Order"""
+    print("=== TooBit API Batch Cancel Order ===\n")
     try:
         config = TooBitConfig.from_env()
         client = TooBitClient(config)
         
-        # 先查询挂单列表
-        print("🔄 正在查询挂单列表...")
+        # First Query Open Orders List
+        print("🔄 Getting Query Open Orders List...")
         open_orders = client.get_open_orders()
         
         if not open_orders or len(open_orders) == 0:
-            print("   ℹ️  当前没有挂单，无需撤单")
+            print("   ℹ️  Currently no Open Orders, no need to cancel")
             return None
         
-        print(f"✅ 获取到 {len(open_orders)} 个挂单")
+        print(f"✅ Get To {len(open_orders)} items Open Orders")
         print()
         
-        # 选择前几个挂单进行批量撤单（最多5个）
+        # Select first few open orders to perform batch cancel (maximum 5 orders)
         max_orders = min(5, len(open_orders))
         orders_to_cancel = open_orders[:max_orders]
         order_ids = [order.order_id for order in orders_to_cancel]
         symbol = orders_to_cancel[0].symbol if orders_to_cancel else "BTCUSDT"
         
-        print("🔄 正在批量撤销订单...")
-        print(f"   交易对: {symbol}")
-        print(f"   订单ID列表: {order_ids}")
-        print(f"   订单数量: {len(order_ids)}")
+        print("🔄 Getting Batch Cancel Order...")
+        print(f"   Trading pair: {symbol}")
+        print(f"   Order ID List: {order_ids}")
+        print(f"   Order quantity: {len(order_ids)}")
         print()
         
-        # 显示要撤销的订单详情
+        # Display order details to cancel
         for i, order in enumerate(orders_to_cancel, 1):
-            print(f"   订单 {i}:")
-            print(f"     订单ID: {order.order_id}")
-            print(f"     客户端订单ID: {order.client_order_id}")
-            print(f"     交易对: {order.symbol}")
-            print(f"     方向: {order.side}")
-            print(f"     类型: {order.type}")
-            print(f"     价格: {order.price}")
-            print(f"     数量: {order.orig_qty}")
+            print(f"   Order {i}:")
+            print(f"     Order ID: {order.order_id}")
+            print(f"     Client Order ID: {order.client_order_id}")
+            print(f"     Trading pair: {order.symbol}")
+            print(f"     Side: {order.side}")
+            print(f"     Type: {order.type}")
+            print(f"     Price: {order.price}")
+            print(f"     Quantity: {order.orig_qty}")
             print()
         
-        print("⚠️  注意: 这是真实的交易操作，请谨慎使用!")
-        print("⚠️  建议先在测试环境中验证")
+        print("⚠️  Note: This is a real trading operation, please use with caution!")
+        print("⚠️  It is recommended to verify in the test environment first")
         print()
         
-        # 调用现货批量撤单接口
+        # Call Spot Batch Cancel order API
         response = client.batch_cancel_spot_orders(order_ids)
         
-        print("✅ 批量撤单请求成功!")
+        print("✅ Batch Cancel order Request Success!")
         print()
         
-        # 显示批量撤单结果
-        print("📋 批量撤单结果:")
+        # Display Batch Cancel order Result
+        print("📋 Batch Cancel order Result:")
         if hasattr(response, 'code'):
-            print(f"   📊 响应代码: {response.code}")
+            print(f"   📊 Response Code: {response.code}")
         if hasattr(response, 'message'):
-            print(f"   💬 响应消息: {response.message}")
+            print(f"   💬 Response Message: {response.message}")
         if hasattr(response, 'timestamp'):
-            print(f"   🕐 时间戳: {response.timestamp}")
+            print(f"   🕐 Time Timestamp: {response.timestamp}")
         
         if hasattr(response, 'result'):
             if response.result and len(response.result) > 0:
-                print(f"   📊 撤单结果详情 (共{len(response.result)}个订单):")
+                print(f"   📊 Cancel order Result Details (Total {len(response.result)} items Order):")
                 success_count = 0
                 failed_count = 0
                 
                 for i, result in enumerate(response.result):
-                    status = "成功" if result.code == 200 else "失败"
+                    status = "Success" if result.code == 200 else "Failed"
                     if result.code == 200:
                         success_count += 1
                     else:
                         failed_count += 1
-                    print(f"     - 订单 {result.orderId}: {status} (代码: {result.code})")
-                    # 常见错误代码解释
+                    print(f"     - Order {result.orderId}: {status} (Code: {result.code})")
+                    # Common error code explanation
                     if result.code == -2013:
-                        print("       ℹ️  错误: 订单不存在")
+                        print("       ℹ️  Error: Order does not exist")
                     elif result.code == -2011:
-                        print("       ℹ️  错误: 取消订单被拒绝")
+                        print("       ℹ️  Error: Cancel order rejected")
                     elif result.code == -1142:
-                        print("       ℹ️  错误: 订单已被取消")
+                        print("       ℹ️  Error: Order already canceled")
             else:
-                print("   ✅ 所有订单撤销成功 (result为空数组表示全部成功)")
+                print("   ✅ All Order Cancel Success (result For Empty Array Represents All Success)")
         
-        # 检查整体响应状态
+        # Check overall response status
         if hasattr(response, 'code') and response.code == 200:
-            print("\n   ✅ 批量撤单操作完成")
+            print("\n   ✅ Batch Cancel order Operation Complete")
         else:
-            print("\n   ⚠️  批量撤单操作可能未完全成功")
+            print("\n   ⚠️  Batch cancel order operation may not be completely successful")
         
         return response
         
     except Exception as e:
-        print(f"❌ 批量撤销订单失败: {e}")
+        print(f"❌ Batch Cancel Order Failed: {e}")
         return None
     finally:
         client.close()
 
 if __name__ == "__main__":
-    print("=== TooBit API SDK 批量撤销订单示例 ===\n")
-    print("💡 这个示例需要API密钥，请确保配置正确")
-    print("💡 这是真实的交易操作，请谨慎使用!")
+    print("=== TooBit API SDK Batch Cancel Order Example ===\n")
+    print("💡 This example requires API key, please ensure correct configuration")
+    print("💡 This is a real trading operation, please use with caution!")
     print()
-    print("📚 接口信息:")
-    print("   - 接口: DELETE /api/v1/spot/cancelOrderByIds")
-    print("   - 鉴权: 需要签名 (TRADE)")
-    print("   - 功能: 批量撤销指定订单")
-    print("   - 参数: orderIds")
+    print("📚 API Information:")
+    print("   - API: DELETE /api/v1/spot/cancelOrderByIds")
+    print("   - Auth: Requires signature (TRADE)")
+    print("   - Function: Batch Cancel Specified Order")
+    print("   - Parameters: orderIds")
     print()
-    print("💡 批量撤单说明:")
-    print("   - 先查询当前挂单列表")
-    print("   - 选择前5个挂单进行批量撤单")
-    print("   - 使用实际存在的订单ID")
-    print("   - 返回每个订单的撤单结果")
-    print("   - 部分成功部分失败是正常情况")
+    print("💡 Batch Cancel order Description:")
+    print("   - First Query Current Open Orders List")
+    print("   - Select Before 5 items Open Orders Perform Batch Cancel order")
+    print("   - Use actually existing order IDs")
+    print("   - Return Each items Order of Cancel order Result")
+    print("   - Partial Success Partial Failed Is normal")
     print()
-    print("📈 响应结果说明:")
-    print("   - code: 200 表示请求成功")
-    print("   - result: 空数组表示全部撤单成功")
-    print("   - result: 包含结果表示部分或全部失败")
-    print("   - 每个结果包含 orderId 和 code")
+    print("📈 Response Result Description:")
+    print("   - code: 200 Represents Request Success")
+    print("   - result: Empty Array Represents All Cancel order Success")
+    print("   - result: Contains Result Represents Partial Or All Failed")
+    print("   - Each items Result Contains orderId And code")
     print()
-    print("⚠️  重要提醒:")
-    print("   - 此操作不可逆")
-    print("   - 将撤销当前挂单列表中的前5个订单")
-    print("   - 基于实际挂单进行操作，确保订单存在")
+    print("⚠️  Important reminder:")
+    print("   - This Operation Irreversible")
+    print("   - Will Cancel Current Open Orders List In of Before 5 items Order")
+    print("   - Based on actual open orders to perform operation, ensure orders exist")
     print()
     
     batch_cancel_orders()

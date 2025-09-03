@@ -1,5 +1,5 @@
 """
-TooBit API SDK - 一个功能完整的加密货币交易所API客户端库
+TooBit API SDK - A complete cryptocurrency trading API client library
 """
 
 from .client import TooBitClient

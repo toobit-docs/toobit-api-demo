@@ -1,75 +1,75 @@
 """
-TooBit API SDK - 查看当前挂单接口示例 (02)
-查看当前挂单 (需要API密钥)
+TooBit API SDK - View Current Open Orders API Example (02)
+View Current Open Orders (Requires API key)
 """
 from open_api_sdk import TooBitClient, TooBitConfig
 
 def get_open_orders():
-    """查看当前挂单"""
-    print("=== TooBit API 查看当前挂单 ===\n")
+    """View Current Open Orders"""
+    print("=== TooBit API View Current Open Orders ===\n")
     try:
         config = TooBitConfig.from_env()
         client = TooBitClient(config)
         
-        symbol = "BTCUSDT"  # 交易对 (可选，不传则查询所有交易对的挂单)
+        symbol = "BTCUSDT"  # Trading pair (Optional, if not passed query all trading pairs of open orders)
         
-        print("🔄 正在查看当前挂单...")
+        print("🔄 Getting view current open orders...")
         if symbol:
-            print(f"   交易对: {symbol}")
+            print(f"   Trading pair: {symbol}")
         else:
-            print("   交易对: 全部")
+            print("   Trading pair: All")
         print()
-        print("⚠️  注意: 这是真实的账户查询操作，请谨慎使用!")
-        print("⚠️  建议先在测试环境中验证")
+        print("⚠️  Note: This is a real account query operation, please use with caution!")
+        print("⚠️  It is recommended to verify in the test environment first")
         print()
         
-        # 调用查看挂单接口
+        # Call view open orders API
         open_orders = client.get_open_orders(symbol)
         
-        print("✅ 挂单查询成功!")
+        print("✅ Open orders query success!")
         print()
         
-        # 显示挂单信息
+        # Display open orders information
         if open_orders and len(open_orders) > 0:
-            print(f"📊 当前挂单信息 (共{len(open_orders)}个):")
+            print(f"📊 Current open orders information (Total {len(open_orders)} items):")
             for i, order in enumerate(open_orders):
-                print(f"\n   挂单 {i+1}:")
-                print(f"     🆔 订单ID: {order.order_id}")
-                print(f"     🔑 客户端订单ID: {order.client_order_id}")
-                print(f"     📊 交易对: {order.symbol}")
-                print(f"     💰 价格: {order.price}")
-                print(f"     📊 数量: {order.orig_qty}")
-                print(f"     ✅ 已执行数量: {order.executed_qty}")
-                print(f"     🔧 订单类型: {order.type}")
-                print(f"     📈 买卖方向: {order.side}")
-                print(f"     📈 订单状态: {order.status}")
-                print(f"     ⏰ 时效: {order.time_in_force}")
-                print(f"     🕐 交易时间: {order.time}")
+                print(f"\n   Open order {i+1}:")
+                print(f"     🆔 Order ID: {order.order_id}")
+                print(f"     🔑 Client Order ID: {order.client_order_id}")
+                print(f"     📊 Trading pair: {order.symbol}")
+                print(f"     💰 Price: {order.price}")
+                print(f"     📊 Quantity: {order.orig_qty}")
+                print(f"     ✅ Executed quantity: {order.executed_qty}")
+                print(f"     🔧 Order type: {order.type}")
+                print(f"     📈 Buy/Sell side: {order.side}")
+                print(f"     📈 Order status: {order.status}")
+                print(f"     ⏰ Time in force: {order.time_in_force}")
+                print(f"     🕐 Trade Time: {order.time}")
         else:
-            print("   ℹ️  当前没有挂单")
+            print("   ℹ️  Currently no open orders")
         
-        print("\n🎉 查看挂单完成!")
+        print("\n🎉 View open orders complete!")
         return open_orders
         
     except Exception as e:
-        print(f"❌ 查看挂单失败: {e}")
+        print(f"❌ View open orders failed: {e}")
         return None
     finally:
         client.close()
 
 if __name__ == "__main__":
-    print("=== TooBit API SDK 查看当前挂单示例 ===\n")
-    print("💡 这个示例需要API密钥，请确保配置正确")
-    print("💡 这是真实的账户查询操作，请谨慎使用!")
+    print("=== TooBit API SDK View Current Open Orders Example ===\n")
+    print("💡 This example requires API key, please ensure correct configuration")
+    print("💡 This is a real account query operation, please use with caution!")
     print()
-    print("📚 接口信息:")
-    print("   - 接口: GET /api/v1/spot/openOrders")
-    print("   - 鉴权: 需要签名 (USER_DATA)")
-    print("   - 功能: 查看当前挂单")
-    print("   - 参数: symbol(可选)")
+    print("📚 API Information:")
+    print("   - API: GET /api/v1/spot/openOrders")
+    print("   - Auth: Requires signature (USER_DATA)")
+    print("   - Function: View current open orders")
+    print("   - Parameters: symbol (Optional)")
     print()
-    print("⚠️  重要提醒:")
-    print("   - 建议先在测试环境中验证")
+    print("⚠️  Important reminder:")
+    print("   - It is recommended to verify in the test environment first")
     print()
     
     get_open_orders()

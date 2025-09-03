@@ -1,31 +1,31 @@
 """
-TooBit 合约API SDK - 获取划转历史示例 (13)
-获取划转历史记录 (需要API密钥和签名)
-接口: GET /api/v1/futures/transfer/history
+TooBit Futures API SDK - Get Transfer History Example (13)
+Get Transfer History Record (Requires API key and signature)
+API: GET /api/v1/futures/transfer/history
 """
 from open_api_sdk import TooBitClient, TooBitConfig
 
 def get_transfer_history():
-    """获取划转历史"""
-    print("=== TooBit 合约API 获取划转历史 ===\n")
+    """Get Transfer History"""
+    print("=== TooBit Futures API Get Transfer History ===\n")
     try:
         config = TooBitConfig.from_env()
         client = TooBitClient(config)
         
-        # 查询参数
-        asset = "USDT"  # 资产类型 (可选)
-        from_account_type = "MAIN"  # 源账户类型 (可选)
-        to_account_type = "FUTURES"  # 目标账户类型 (可选)
-        limit = 10  # 返回数量限制
+        # Query Parameters
+        asset = "USDT"  # Asset type (Optional)
+        from_account_type = "MAIN"  # Source account type (Optional)
+        to_account_type = "FUTURES"  # Target account type (Optional)
+        limit = 10  # Return quantity limit
         
-        print("🔄 正在获取划转历史...")
-        print(f"   资产类型: {asset}")
-        print(f"   源账户类型: {from_account_type}")
-        print(f"   目标账户类型: {to_account_type}")
-        print(f"   返回数量: {limit}")
+        print("🔄 Getting Transfer History...")
+        print(f"   Asset type: {asset}")
+        print(f"   Source account type: {from_account_type}")
+        print(f"   Target account type: {to_account_type}")
+        print(f"   Return quantity: {limit}")
         print()
-        print("⚠️  注意: 这是真实的账户查询操作，请谨慎使用!")
-        print("⚠️  建议先在测试环境中验证")
+        print("⚠️  Note: This is a real account query operation, please use with caution!")
+        print("⚠️  It is recommended to verify in the test environment first")
         print()
         
         response = client.get_transfer_history(
@@ -35,60 +35,60 @@ def get_transfer_history():
             limit=limit
         )
         
-        print("✅ 划转历史获取成功!")
+        print("✅ Transfer history retrieved successfully!")
         print()
         
-        # 根据实际API返回体结构处理响应
+        # Process response based on actual API return body structure
         if response and len(response) > 0:
-            print(f"📊 划转历史记录 (共{len(response)}条):")
+            print(f"📊 Transfer history records (Total {len(response)} records):")
             for i, record in enumerate(response):
-                print(f"\n   记录 {i+1}:")
+                print(f"\n   Record {i+1}:")
                 if 'id' in record:
-                    print(f"     🆔 流水ID: {record['id']}")
+                    print(f"     🆔 Flow ID: {record['id']}")
                 if 'accountId' in record:
-                    print(f"     👤 账户ID: {record['accountId']}")
+                    print(f"     👤 Account ID: {record['accountId']}")
                 if 'coin' in record:
-                    print(f"     🪙 币种: {record['coin']}")
+                    print(f"     🪙 Coin type: {record['coin']}")
                 if 'coinName' in record:
-                    print(f"     📝 币种名称: {record['coinName']}")
+                    print(f"     📝 Coin Type Name: {record['coinName']}")
                 if 'flowTypeValue' in record:
-                    print(f"     🔢 流水类型值: {record['flowTypeValue']}")
+                    print(f"     🔢 Flow Type Value: {record['flowTypeValue']}")
                 if 'flowType' in record:
-                    print(f"     📋 流水类型: {record['flowType']}")
+                    print(f"     📋 Flow Type: {record['flowType']}")
                 if 'flowName' in record:
-                    print(f"     📖 流水说明: {record['flowName']}")
+                    print(f"     📖 Flow Description: {record['flowName']}")
                 if 'change' in record:
-                    print(f"     📊 变动值: {record['change']}")
+                    print(f"     📊 Change Value: {record['change']}")
                 if 'total' in record:
-                    print(f"     💰 变动后总资产: {record['total']}")
+                    print(f"     💰 Total Assets After Change: {record['total']}")
                 if 'created' in record:
-                    print(f"     ⏰ 创建时间: {record['created']}")
+                    print(f"     ⏰ Create Time: {record['created']}")
         else:
-            print("   ℹ️  未获取到划转历史数据")
+            print("   ℹ️  No transfer history data retrieved")
         
-        print("\n🎉 划转历史获取完成!")
+        print("\n🎉 Transfer history retrieval completed!")
         return response
         
     except Exception as e:
-        print(f"❌ 获取划转历史失败: {e}")
+        print(f"❌ Get Transfer History Failed: {e}")
         return None
     finally:
         client.close()
 
 if __name__ == "__main__":
-    print("=== TooBit 合约API SDK 获取划转历史示例 ===\n")
-    print("💡 这个示例需要API密钥，请确保配置正确")
-    print("💡 这是真实的账户查询操作，请谨慎使用!")
+    print("=== TooBit Futures API SDK Get Transfer History Example ===\n")
+    print("💡 This example requires API key, please ensure correct configuration")
+    print("💡 This is a real account query operation, please use with caution!")
     print()
-    print("📚 接口信息:")
-    print("   - 接口: GET /api/v1/account/balanceFlow")
-    print("   - 鉴权: 需要签名 (USER_DATA)")
-    print("   - 功能: 查询账户划转历史记录")
-    print("   - 参数: asset(可选), fromAccountType(可选), toAccountType(可选), limit")
+    print("📚 API Information:")
+    print("   - API: GET /api/v1/account/balanceFlow")
+    print("   - Auth: Requires signature (USER_DATA)")
+    print("   - Function: Query Account Transfer history records")
+    print("   - Parameters: asset(Optional), from Account Type(Optional), to Account Type(Optional), limit")
     print()
-    print("💡 查询说明:")
-    print("   - 可以按资产类型筛选")
-    print("   - 可以按账户类型筛选")
-    print("   - 支持分页查询")
-    print("   - 返回最近的划转记录")
+    print("💡 Query description:")
+    print("   - Can filter by asset type")
+    print("   - Can filter by account type")
+    print("   - Supports paginated query")
+    print("   - Return most recent transfer records")
     get_transfer_history()

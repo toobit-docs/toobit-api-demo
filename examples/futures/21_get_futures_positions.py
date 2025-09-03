@@ -1,110 +1,110 @@
 #!/usr/bin/env python3
 """
-TooBit API 合约查询当前持仓示例 (21号)
-查询当前持仓信息，支持按交易对和方向筛选
+TooBit API Futures QueryCurrentPositionExample (21Number)
+Query current position information, supports filtering by trading pair and side
 """
 
 from open_api_sdk import TooBitClient, TooBitConfig
 
 def get_futures_positions():
-    """查询当前持仓示例"""
-    print("=== TooBit API 合约查询当前持仓示例 ===\n")
+    """QueryCurrentPositionExample"""
+    print("=== TooBit API Futures QueryCurrentPositionExample ===\n")
     
-    # 初始化配置
+    # Initialize configuration
     config = TooBitConfig.from_env()
     client = TooBitClient(config)
     
     try:
-        print("🔍 查询当前持仓测试:")
+        print("🔍 Query Current Position Test:")
         print()
         
-        # 示例1: 查询所有持仓
-        print("📊 示例1: 查询所有持仓")
-        print("   参数: 无")
+        # Example1: QueryAllPosition
+        print("📊 Example 1: Query All Position")
+        print("   Parameters: None")
         print("   API: GET /api/v1/futures/positions")
-        print("   说明: 查询账户下所有合约持仓")
+        print("   Description: Query all futures positions under account")
         print()
         
         response1 = client.get_futures_positions()
-        print(f"   响应数量: {len(response1)} 个持仓")
+        print(f"   Response Quantity: {len(response1)} items Position")
         if response1:
-            print("   持仓列表:")
+            print("   Position List:")
             for i, position in enumerate(response1, 1):
-                print(f"     持仓{i}: {position.symbol} - {position.side}")
+                print(f"     Position {i}: {position.symbol} - {position.side}")
         print()
         
-        # 示例2: 查询指定交易对的持仓
-        print("📊 示例2: 查询指定交易对的持仓")
-        print("   参数: symbol='BTC-SWAP-USDT'")
+        # Example2: QuerySpecifiedTrading pairofPosition
+        print("📊 Example 2: Query Specified Trading pair of Position")
+        print("   Parameters: symbol='BTC-SWAP-USDT'")
         print("   API: GET /api/v1/futures/positions?symbol=BTC-SWAP-USDT")
-        print("   说明: 查询BTC-SWAP-USDT交易对的所有持仓")
+        print("   Description: Query BTC-SWAP-USDT Trading pair of All Position")
         print()
         
         response2 = client.get_futures_positions(symbol='BTC-SWAP-USDT')
-        print(f"   响应数量: {len(response2)} 个持仓")
+        print(f"   Response Quantity: {len(response2)} items Position")
         if response2:
-            print("   持仓详情:")
+            print("   Position Details:")
             for position in response2:
-                print(f"     交易对: {position.symbol}")
-                print(f"     方向: {position.side}")
-                print(f"     数量: {position.position} 张")
-                print(f"     可平仓: {position.available} 张")
-                print(f"     杠杆: {position.leverage}x")
-                print(f"     平均价格: {position.avgPrice}")
-                print(f"     最新价格: {position.lastPrice}")
-                print(f"     标记价格: {position.markPrice}")
-                print(f"     未实现盈亏: {position.unrealizedPnL}")
-                print(f"     已实现盈亏: {position.realizedPnL}")
-                print(f"     保证金: {position.margin}")
-                print(f"     保证金率: {position.marginRate}")
-                print(f"     强制平仓价: {position.flp}")
+                print(f"     Trading pair: {position.symbol}")
+                print(f"     Side: {position.side}")
+                print(f"     Quantity: {position.position} Contract")
+                print(f"     Available to close: {position.available} Contract")
+                print(f"     Leverage: {position.leverage}x")
+                print(f"     Average price: {position.avgPrice}")
+                print(f"     Latest price: {position.lastPrice}")
+                print(f"     Mark price: {position.markPrice}")
+                print(f"     Unrealized PnL: {position.unrealizedPnL}")
+                print(f"     Realized PnL: {position.realizedPnL}")
+                print(f"     Margin: {position.margin}")
+                print(f"     MarginRate: {position.marginRate}")
+                print(f"     Forced close price: {position.flp}")
                 print()
         
-        # 示例3: 查询指定交易对和方向的持仓
-        print("📊 示例3: 查询指定交易对和方向的持仓")
-        print("   参数: symbol='BTC-SWAP-USDT', side='LONG'")
+        # Example3: QuerySpecifiedTrading pairAndSideofPosition
+        print("📊 Example 3: Query Specified Trading pair And Side of Position")
+        print("   Parameters: symbol='BTC-SWAP-USDT', side='LONG'")
         print("   API: GET /api/v1/futures/positions?symbol=BTC-SWAP-USDT&side=LONG")
-        print("   说明: 查询BTC-SWAP-USDT交易对的多头持仓")
+        print("   Description: Query BTC-SWAP-USDT Trading pair of Long Position")
         print()
         
         response3 = client.get_futures_positions(symbol='BTC-SWAP-USDT', side='LONG')
-        print(f"   响应数量: {len(response3)} 个持仓")
+        print(f"   Response Quantity: {len(response3)} items Position")
         if response3:
-            print("   多头持仓详情:")
+            print("   Long Position Details:")
             for position in response3:
-                print(f"     交易对: {position.symbol}")
-                print(f"     方向: {position.side}")
-                print(f"     数量: {position.position} 张")
-                print(f"     可平仓: {position.available} 张")
-                print(f"     杠杆: {position.leverage}x")
-                print(f"     平均价格: {position.avgPrice}")
-                print(f"     最新价格: {position.lastPrice}")
-                print(f"     未实现盈亏: {position.unrealizedPnL}")
-                print(f"     已实现盈亏: {position.realizedPnL}")
-                print(f"     保证金: {position.margin}")
-                print(f"     保证金率: {position.marginRate}")
-                print(f"     强制平仓价: {position.flp}")
+                print(f"     Trading pair: {position.symbol}")
+                print(f"     Side: {position.side}")
+                print(f"     Quantity: {position.position} Contract")
+                print(f"     Available to close: {position.available} Contract")
+                print(f"     Leverage: {position.leverage}x")
+                print(f"     Average price: {position.avgPrice}")
+                print(f"     Latest price: {position.lastPrice}")
+                print(f"     Unrealized PnL: {position.unrealizedPnL}")
+                print(f"     Realized PnL: {position.realizedPnL}")
+                print(f"     Margin: {position.margin}")
+                print(f"     MarginRate: {position.marginRate}")
+                print(f"     Forced close price: {position.flp}")
                 print()
         
-        # 示例4: 查询指定方向的持仓
-        print("📊 示例4: 查询指定方向的持仓")
-        print("   参数: side='SHORT'")
+        # Example4: QuerySpecifiedSideofPosition
+        print("📊 Example 4: Query Specified Side of Position")
+        print("   Parameters: side='SHORT'")
         print("   API: GET /api/v1/futures/positions?side=SHORT")
-        print("   说明: 查询所有空头持仓")
+        print("   Description: Query All Short Position")
         print()
         
         response4 = client.get_futures_positions(side='SHORT')
-        print(f"   响应数量: {len(response4)} 个持仓")
+        print(f"   Response Quantity: {len(response4)} items Position")
         if response4:
-            print("   空头持仓列表:")
+            print("   Short Position List:")
             for position in response4:
-                print(f"     {position.symbol} - {position.side} - {position.position} 张")
+                print(f"     {position.symbol} - {position.side} - {position.position} Contract")
         print()
         
-        print("🎉 查询当前持仓测试完成!")
+        print("🎉 Query Current Position Test Complete!")
         
     except Exception as e:
-        print(f"❌ 查询当前持仓测试失败: {e}")
+        print(f"❌ Query Current Position Test Failed: {e}")
     
     finally:
         client.close()

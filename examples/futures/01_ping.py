@@ -1,38 +1,38 @@
 """
-TooBit 合约API SDK - PING测试接口示例
-测试服务器连通性 (无需API密钥)
+TooBit Futures API SDK - PING Test API Example
+Test Server Connectivity (No need API Key)
 """
 
 from open_api_sdk import TooBitClient, TooBitConfig
 
 
 def ping_test():
-    """测试服务器连通性"""
-    print("=== TooBit 合约API PING测试 ===\n")
+    """Test Server Connectivity"""
+    print("=== TooBit Futures API PING Test ===\n")
     
     try:
-        # 创建配置 (无需API密钥)
+        # Create Configuration (No need API Key)
         config = TooBitConfig(
             api_key="test_key",
             api_secret="test_secret"
         )
         
-        # 创建客户端
+        # Create Client
         client = TooBitClient(config)
         
-        print("🔄 正在测试服务器连通性...")
+        print("🔄 Getting Test Server Connectivity...")
         
-        # 调用PING接口
+        # Call PING API
         response = client.ping()
         
-        print("✅ 服务器连通性测试成功!")
-        print(f"   响应: {response}")
-        print("\n🎉 PING测试完成!")
+        print("✅ Server Connectivity Test Success!")
+        print(f"   Response: {response}")
+        print("\n🎉 PING Test Complete!")
         
         return True
         
     except Exception as e:
-        print(f"❌ 服务器连通性测试失败: {e}")
+        print(f"❌ Server Connectivity Test Failed: {e}")
         return False
     
     finally:
@@ -40,8 +40,8 @@ def ping_test():
 
 
 if __name__ == "__main__":
-    print("=== TooBit 合约API SDK PING测试示例 ===\n")
-    print("💡 这个示例无需API密钥，可以直接运行")
+    print("=== TooBit Futures API SDK PING Test Example ===\n")
+    print("💡 This example does not need API key, can run directly")
     
-    # 运行示例
+    # Run Example
     ping_test()

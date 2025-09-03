@@ -1,12 +1,12 @@
 """
-TooBit API 异常处理模块
+TooBit API Exception handling module
 """
 
 from typing import Optional, Dict, Any
 
 
 class TooBitException(Exception):
-    """TooBit API 基础异常类"""
+    """TooBit API base exception class"""
     
     def __init__(self, message: str, code: Optional[int] = None, response: Optional[Dict[str, Any]] = None):
         self.message = message
@@ -16,223 +16,223 @@ class TooBitException(Exception):
 
 
 class ConfigurationError(TooBitException):
-    """配置错误"""
+    """ConfigurationError"""
     pass
 
 
 class AuthenticationError(TooBitException):
-    """认证错误"""
+    """Authentication error"""
     pass
 
 
 class APIError(TooBitException):
-    """API调用错误"""
+    """API call error"""
     pass
 
 
 class RateLimitError(TooBitException):
-    """速率限制错误"""
+    """Rate limit error"""
     pass
 
 
 class ValidationError(TooBitException):
-    """参数验证错误"""
+    """Parameter validation error"""
     pass
 
 
 class NetworkError(TooBitException):
-    """网络错误"""
+    """Network error"""
     pass
 
 
 class OrderError(TooBitException):
-    """订单相关错误"""
+    """Order related error"""
     pass
 
 
-# TooBit 特定错误码映射
+# TooBit specific error code mapping
 ERROR_CODE_MAP = {
-    -1000: "未知错误",
-    -1001: "内部错误",
-    -1002: "服务不可用",
-    -1003: "超时",
-    -1004: "请求被拒绝",
-    -1006: "异常响应",
-    -1007: "请求超时",
-    -1008: "无效请求",
-    -1009: "无效新订单",
-    -1010: "无效取消订单",
-    -1011: "无效订单",
-    -1012: "无效交易对",
-    -1013: "无效数量",
-    -1014: "无效价格",
-    -1015: "无效时间",
-    -1016: "无效签名",
-    -1017: "无效时间戳",
-    -1018: "无效请求大小",
-    -1019: "无效请求",
-    -1020: "无效请求",
-    -1021: "无效请求",
-    -1022: "无效请求",
-    -1023: "无效请求",
-    -1024: "无效请求",
-    -1025: "无效请求",
-    -1026: "无效请求",
-    -1027: "无效请求",
-    -1028: "无效请求",
-    -1029: "无效请求",
-    -1030: "无效请求",
-    -1031: "无效请求",
-    -1032: "无效请求",
-    -1033: "无效请求",
-    -1034: "无效请求",
-    -1035: "无效请求",
-    -1036: "无效请求",
-    -1037: "无效请求",
-    -1038: "无效请求",
-    -1039: "无效请求",
-    -1040: "无效请求",
-    -1041: "无效请求",
-    -1042: "无效请求",
-    -1043: "无效请求",
-    -1044: "无效请求",
-    -1045: "无效请求",
-    -1046: "无效请求",
-    -1047: "无效请求",
-    -1048: "无效请求",
-    -1049: "无效请求",
-    -1050: "无效请求",
-    -1051: "无效请求",
-    -1052: "无效请求",
-    -1053: "无效请求",
-    -1054: "无效请求",
-    -1055: "无效请求",
-    -1056: "无效请求",
-    -1057: "无效请求",
-    -1058: "无效请求",
-    -1059: "无效请求",
-    -1060: "无效请求",
-    -1061: "无效请求",
-    -1062: "无效请求",
-    -1063: "无效请求",
-    -1064: "无效请求",
-    -1065: "无效请求",
-    -1066: "无效请求",
-    -1067: "无效请求",
-    -1068: "无效请求",
-    -1069: "无效请求",
-    -1070: "无效请求",
-    -1071: "无效请求",
-    -1072: "无效请求",
-    -1073: "无效请求",
-    -1074: "无效请求",
-    -1075: "无效请求",
-    -1076: "无效请求",
-    -1077: "无效请求",
-    -1078: "无效请求",
-    -1079: "无效请求",
-    -1080: "无效请求",
-    -1081: "无效请求",
-    -1082: "无效请求",
-    -1083: "无效请求",
-    -1084: "无效请求",
-    -1085: "无效请求",
-    -1086: "无效请求",
-    -1087: "无效请求",
-    -1088: "无效请求",
-    -1089: "无效请求",
-    -1090: "无效请求",
-    -1091: "无效请求",
-    -1092: "无效请求",
-    -1093: "无效请求",
-    -1094: "无效请求",
-    -1095: "无效请求",
-    -1096: "无效请求",
-    -1097: "无效请求",
-    -1098: "无效请求",
-    -1099: "无效请求",
-    -1100: "无效请求",
-    -1101: "无效请求",
-    -1102: "无效请求",
-    -1103: "无效请求",
-    -1104: "无效请求",
-    -1105: "无效请求",
-    -1106: "无效请求",
-    -1107: "无效请求",
-    -1108: "无效请求",
-    -1109: "无效请求",
-    -1110: "无效请求",
-    -1111: "无效请求",
-    -1112: "无效请求",
-    -1113: "无效请求",
-    -1114: "无效请求",
-    -1115: "无效请求",
-    -1116: "无效请求",
-    -1117: "无效请求",
-    -1118: "无效请求",
-    -1119: "无效请求",
-    -1120: "无效请求",
-    -1121: "无效请求",
-    -1122: "无效请求",
-    -1123: "无效请求",
-    -1124: "无效请求",
-    -1125: "无效请求",
-    -1126: "无效请求",
-    -1127: "无效请求",
-    -1128: "无效请求",
-    -1129: "无效请求",
-    -1130: "无效请求",
-    -1131: "无效请求",
-    -1132: "无效请求",
-    -1133: "无效请求",
-    -1134: "无效请求",
-    -1135: "无效请求",
-    -1136: "无效请求",
-    -1137: "无效请求",
-    -1138: "无效请求",
-    -1139: "无效请求",
-    -1140: "无效请求",
-    -1141: "无效请求",
-    -1142: "无效请求",
-    -1143: "订单未找到",
-    -1144: "订单已锁定",
-    -1145: "订单不支持取消",
-    -1146: "订单创建超时",
-    -1147: "订单取消超时",
-    -1193: "订单数量限制",
-    -1194: "禁止市价单",
-    -1195: "限价单价格太低",
-    -1196: "限价单价格太高",
-    -1197: "限价单买入价格太高",
-    -1198: "限价单卖出价格太低",
-    -1199: "订单买入数量太少",
-    -1200: "订单买入数量太多",
-    -1201: "限价单卖出价格太高",
-    -1202: "订单卖出数量太少",
-    -1203: "订单卖出数量太多",
-    -1206: "订单金额太大",
-    -2010: "新订单被拒绝",
-    -2011: "取消订单被拒绝",
-    -2013: "订单不存在",
-    -2014: "API密钥格式无效",
-    -2015: "API密钥被拒绝",
-    -2016: "无交易窗口",
+    -1000: "Unknown error",
+    -1001: "Internal error",
+    -1002: "Service unavailable",
+    -1003: "Timeout",
+    -1004: "Request rejected",
+    -1006: "Exception response",
+    -1007: "Request Timeout",
+    -1008: "Invalid request",
+    -1009: "Invalid new order",
+    -1010: "Invalid cancel order",
+    -1011: "Invalid order",
+    -1012: "Invalid trading pair",
+    -1013: "Invalid quantity",
+    -1014: "Invalid price",
+    -1015: "Invalid time",
+    -1016: "Invalid signature",
+    -1017: "Invalid time Timestamp",
+    -1018: "Invalid request size",
+    -1019: "Invalid request",
+    -1020: "Invalid request",
+    -1021: "Invalid request",
+    -1022: "Invalid request",
+    -1023: "Invalid request",
+    -1024: "Invalid request",
+    -1025: "Invalid request",
+    -1026: "Invalid request",
+    -1027: "Invalid request",
+    -1028: "Invalid request",
+    -1029: "Invalid request",
+    -1030: "Invalid request",
+    -1031: "Invalid request",
+    -1032: "Invalid request",
+    -1033: "Invalid request",
+    -1034: "Invalid request",
+    -1035: "Invalid request",
+    -1036: "Invalid request",
+    -1037: "Invalid request",
+    -1038: "Invalid request",
+    -1039: "Invalid request",
+    -1040: "Invalid request",
+    -1041: "Invalid request",
+    -1042: "Invalid request",
+    -1043: "Invalid request",
+    -1044: "Invalid request",
+    -1045: "Invalid request",
+    -1046: "Invalid request",
+    -1047: "Invalid request",
+    -1048: "Invalid request",
+    -1049: "Invalid request",
+    -1050: "Invalid request",
+    -1051: "Invalid request",
+    -1052: "Invalid request",
+    -1053: "Invalid request",
+    -1054: "Invalid request",
+    -1055: "Invalid request",
+    -1056: "Invalid request",
+    -1057: "Invalid request",
+    -1058: "Invalid request",
+    -1059: "Invalid request",
+    -1060: "Invalid request",
+    -1061: "Invalid request",
+    -1062: "Invalid request",
+    -1063: "Invalid request",
+    -1064: "Invalid request",
+    -1065: "Invalid request",
+    -1066: "Invalid request",
+    -1067: "Invalid request",
+    -1068: "Invalid request",
+    -1069: "Invalid request",
+    -1070: "Invalid request",
+    -1071: "Invalid request",
+    -1072: "Invalid request",
+    -1073: "Invalid request",
+    -1074: "Invalid request",
+    -1075: "Invalid request",
+    -1076: "Invalid request",
+    -1077: "Invalid request",
+    -1078: "Invalid request",
+    -1079: "Invalid request",
+    -1080: "Invalid request",
+    -1081: "Invalid request",
+    -1082: "Invalid request",
+    -1083: "Invalid request",
+    -1084: "Invalid request",
+    -1085: "Invalid request",
+    -1086: "Invalid request",
+    -1087: "Invalid request",
+    -1088: "Invalid request",
+    -1089: "Invalid request",
+    -1090: "Invalid request",
+    -1091: "Invalid request",
+    -1092: "Invalid request",
+    -1093: "Invalid request",
+    -1094: "Invalid request",
+    -1095: "Invalid request",
+    -1096: "Invalid request",
+    -1097: "Invalid request",
+    -1098: "Invalid request",
+    -1099: "Invalid request",
+    -1100: "Invalid request",
+    -1101: "Invalid request",
+    -1102: "Invalid request",
+    -1103: "Invalid request",
+    -1104: "Invalid request",
+    -1105: "Invalid request",
+    -1106: "Invalid request",
+    -1107: "Invalid request",
+    -1108: "Invalid request",
+    -1109: "Invalid request",
+    -1110: "Invalid request",
+    -1111: "Invalid request",
+    -1112: "Invalid request",
+    -1113: "Invalid request",
+    -1114: "Invalid request",
+    -1115: "Invalid request",
+    -1116: "Invalid request",
+    -1117: "Invalid request",
+    -1118: "Invalid request",
+    -1119: "Invalid request",
+    -1120: "Invalid request",
+    -1121: "Invalid request",
+    -1122: "Invalid request",
+    -1123: "Invalid request",
+    -1124: "Invalid request",
+    -1125: "Invalid request",
+    -1126: "Invalid request",
+    -1127: "Invalid request",
+    -1128: "Invalid request",
+    -1129: "Invalid request",
+    -1130: "Invalid request",
+    -1131: "Invalid request",
+    -1132: "Invalid request",
+    -1133: "Invalid request",
+    -1134: "Invalid request",
+    -1135: "Invalid request",
+    -1136: "Invalid request",
+    -1137: "Invalid request",
+    -1138: "Invalid request",
+    -1139: "Invalid request",
+    -1140: "Invalid request",
+    -1141: "Invalid request",
+    -1142: "Invalid request",
+    -1143: "Order not found",
+    -1144: "Order already locked",
+    -1145: "Order does not support cancel",
+    -1146: "Order Create Timeout",
+    -1147: "Order Cancel Timeout",
+    -1193: "Order quantity limit",
+    -1194: "Market order prohibited",
+    -1195: "Limit order price too low",
+    -1196: "Limit order price too high",
+    -1197: "Limit order buy price too high",
+    -1198: "Limit order sell price too low",
+    -1199: "Order buy quantity too small",
+    -1200: "Order buy quantity too large",
+    -1201: "Limit order sell price too high",
+    -1202: "Order sell quantity too small",
+    -1203: "Order sell quantity too large",
+    -1206: "Order amount too large",
+    -2010: "New order rejected",
+    -2011: "Cancel order rejected",
+    -2013: "Order does not exist",
+    -2014: "API key format invalid",
+    -2015: "API key rejected",
+    -2016: "No trading window",
 }
 
 
 def get_error_message(code: int) -> str:
-    """根据错误码获取错误信息"""
-    return ERROR_CODE_MAP.get(code, f"未知错误码: {code}")
+    """Get error information based on error code"""
+    return ERROR_CODE_MAP.get(code, f"Unknown errorCode: {code}")
 
 
 def raise_toobit_exception(code: int, message: str, response: Optional[Dict[str, Any]] = None):
-    """根据错误码抛出相应的异常"""
+    """Raise corresponding exception based on error code"""
     error_message = f"{get_error_message(code)}: {message}"
     
-    # 打印详细的错误信息
-    print(f"错误详情: {error_message}")
+    # Print detailed error information
+    print(f"Error Details: {error_message}")
     if response:
-        print(f"错误响应数据: {response}")
+        print(f"Error response data: {response}")
     
     if code in [-1001, -1002, -1003, -1006, -1007]:
         raise NetworkError(error_message, code, response)
@@ -242,7 +242,7 @@ def raise_toobit_exception(code: int, message: str, response: Optional[Dict[str,
         raise ValidationError(error_message, code, response)
     elif code in [-1143, -1144, -1145, -1146, -1147, -1193, -1194, -1195, -1196, -1197, -1198, -1199, -1200, -1201, -1202, -1203, -1206, -2010, -2011, -2013, -2016]:
         raise OrderError(error_message, code, response)
-    elif code == -1005:  # 速率限制
+    elif code == -1005:  # Rate limit
         raise RateLimitError(error_message, code, response)
     else:
         raise APIError(error_message, code, response) 

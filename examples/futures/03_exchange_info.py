@@ -1,50 +1,50 @@
 """
-TooBit 合约API SDK - 获取交易规则和交易对信息示例
-获取合约交易规则、交易对列表等 (无需API密钥)
+TooBit Futures API SDK - Get Trade Rules and Trading Pair Information Example
+Get Futures Trade Rules, Trading Pair List etc (No API key needed)
 """
 
 from open_api_sdk import TooBitClient, TooBitConfig
 
 
 def get_exchange_info():
-    """获取交易所信息"""
-    print("=== TooBit 合约API 获取交易所信息 ===\n")
+    """Get Trade All Information"""
+    print("=== TooBit Futures API Get Trade All Information ===\n")
     
     try:
-        # 创建配置 (无需API密钥)
+        # Create Configuration (No need API Key)
         config = TooBitConfig(
             api_key="test_key",
             api_secret="test_secret"
         )
         
-        # 创建客户端
+        # Create Client
         client = TooBitClient(config)
         
-        print("🔄 正在获取交易所信息...")
+        print("🔄 Getting Trade All Information...")
         
-        # 获取交易所信息
+        # Get Trade All Information
         response = client.get_exchange_info()
         
-        print("✅ 交易所信息获取成功!")
+        print("✅ Trade All Information Get Success!")
         
-        # 显示基本信息
+        # Display basic information
         if hasattr(response, 'timezone'):
-            print(f"   时区: {response.timezone}")
+            print(f"   Timezone: {response.timezone}")
         
         if hasattr(response, 'serverTime'):
-            print(f"   服务器时间: {response.serverTime}")
+            print(f"   Server Time: {response.serverTime}")
         
         if hasattr(response, 'rateLimits'):
-            print(f"   速率限制数量: {len(response.rateLimits) if response.rateLimits else 0}")
+            print(f"   Rate Limit Quantity: {len(response.rateLimits) if response.rateLimits else 0}")
         
         if hasattr(response, 'symbols'):
-            print(f"   交易对数量: {len(response.symbols) if response.symbols else 0}")
+            print(f"   Trading Pair Quantity: {len(response.symbols) if response.symbols else 0}")
         
-        print("\n🎉 交易所信息获取完成!")
+        print("\n🎉 Trade All Information Get Complete!")
         return response
         
     except Exception as e:
-        print(f"❌ 获取交易所信息失败: {e}")
+        print(f"❌ Get Trade All Information Failed: {e}")
         return None
     
     finally:
@@ -52,8 +52,8 @@ def get_exchange_info():
 
 
 if __name__ == "__main__":
-    print("=== TooBit 合约API SDK 获取交易所信息示例 ===\n")
-    print("💡 这个示例无需API密钥，可以直接运行")
+    print("=== TooBit Futures API SDK Get Trade All Information Example ===\n")
+    print("💡 This example does not need API key, can run directly")
     
-    # 运行示例
+    # Run Example
     get_exchange_info()

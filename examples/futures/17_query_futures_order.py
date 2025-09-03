@@ -1,42 +1,42 @@
 """
-TooBit 合约API SDK - 查询订单示例 (17)
-查询合约订单 (需要API密钥和签名)
-接口: GET /api/v1/futures/order
+TooBit Futures API SDK - QueryOrder Example (17)
+QueryFutures Order (Requires API key and signature)
+API: GET /api/v1/futures/order
 """
 from open_api_sdk import TooBitClient, TooBitConfig
 from open_api_sdk.models import QueryFuturesOrderResponse
 
 def query_futures_order():
-    """查询合约订单"""
-    print("=== TooBit 合约API 查询订单 ===\n")
+    """Query Futures Order"""
+    print("=== TooBit Futures API Query Order ===\n")
     try:
         config = TooBitConfig.from_env()
         client = TooBitClient(config)
         
-        # 先查询挂单列表
-        print("🔄 正在查询挂单列表...")
+        # First Query Open Orders List
+        print("🔄 Getting Query Open Orders List...")
         open_orders = client.get_futures_open_orders()
         
         if not open_orders or len(open_orders) == 0:
-            print("   ℹ️  当前没有挂单，无法查询订单详情")
+            print("   ℹ️  Currently No Open Orders, Unable to Query Order Details")
             return None
         
-        print(f"✅ 获取到 {len(open_orders)} 个挂单")
+        print(f"✅ Retrieved {len(open_orders)} Items Open Orders")
         print()
         
-        # 选择第一个挂单进行查询
+        # Select First Items Open Orders Perform Query
         first_order = open_orders[0]
         symbol = first_order.symbol
         order_id = first_order.orderId
         client_order_id = first_order.clientOrderId
         
-        print("🔄 正在查询合约订单详情...")
-        print(f"   交易对: {symbol}")
-        print(f"   订单ID: {order_id}")
-        print(f"   客户端订单ID: {client_order_id}")
+        print("🔄 Getting Query Futures Order Details...")
+        print(f"   Trading pair: {symbol}")
+        print(f"   Order ID: {order_id}")
+        print(f"   Client Order ID: {client_order_id}")
         print()
-        print("⚠️  注意: 这是真实的账户查询操作，请谨慎使用!")
-        print("⚠️  建议先在测试环境中验证")
+        print("⚠️  Note: This is a real account query operation, please use with caution!")
+        print("⚠️  It is recommended to verify in the test environment first")
         print()
         
         response = client.get_futures_order(
@@ -45,78 +45,78 @@ def query_futures_order():
             client_order_id=client_order_id
         )
         
-        print("✅ 合约订单查询成功!")
+        print("✅ Futures Order Query Success!")
         print()
         
-        # 显示订单信息
-        print("📋 订单信息:")
+        # Display Order Information
+        print("📋 Order information:")
         if hasattr(response, 'time'):
-            print(f"   ⏰ 订单生成时间: {response.time}")
+            print(f"   ⏰ Order creation time: {response.time}")
         if hasattr(response, 'updateTime'):
-            print(f"   🔄 最后更新时间: {response.updateTime}")
+            print(f"   🔄 Last update time: {response.updateTime}")
         if hasattr(response, 'orderId'):
-            print(f"   🆔 订单ID: {response.orderId}")
+            print(f"   🆔 Order ID: {response.orderId}")
         if hasattr(response, 'clientOrderId'):
-            print(f"   🔑 客户端订单ID: {response.clientOrderId}")
+            print(f"   🔑 Client Order ID: {response.clientOrderId}")
         if hasattr(response, 'symbol'):
-            print(f"   📊 交易对: {response.symbol}")
+            print(f"   📊 Trading pair: {response.symbol}")
         if hasattr(response, 'price'):
-            print(f"   💰 订单价格: {response.price}")
+            print(f"   💰 Order price: {response.price}")
         if hasattr(response, 'leverage'):
-            print(f"   📈 订单杠杆: {response.leverage}")
+            print(f"   📈 Order leverage: {response.leverage}")
         if hasattr(response, 'origQty'):
-            print(f"   📊 订单数量: {response.origQty}")
+            print(f"   📊 Order Quantity: {response.origQty}")
         if hasattr(response, 'executedQty'):
-            print(f"   ✅ 已执行数量: {response.executedQty}")
+            print(f"   ✅ Executed Quantity: {response.executedQty}")
         if hasattr(response, 'avgPrice'):
-            print(f"   📊 平均成交价格: {response.avgPrice}")
+            print(f"   📊 Average Execution Price: {response.avgPrice}")
         if hasattr(response, 'marginLocked'):
-            print(f"   🔒 锁定保证金: {response.marginLocked}")
+            print(f"   🔒 Locked Margin: {response.marginLocked}")
         if hasattr(response, 'type'):
-            print(f"   🔧 订单类型: {response.type}")
+            print(f"   🔧 Order Type: {response.type}")
         if hasattr(response, 'side'):
-            print(f"   📈 买卖方向: {response.side}")
+            print(f"   📈 Buy/Sell Side: {response.side}")
         if hasattr(response, 'timeInForce'):
-            print(f"   ⏰ 时效: {response.timeInForce}")
+            print(f"   ⏰ Time In Force: {response.timeInForce}")
         if hasattr(response, 'status'):
-            print(f"   📈 订单状态: {response.status}")
+            print(f"   📈 Order Status: {response.status}")
         if hasattr(response, 'priceType'):
-            print(f"   🏷️  价格类型: {response.priceType}")
+            print(f"   🏷️  Price Type: {response.priceType}")
         
-        print("\n🎉 合约订单查询完成!")
+        print("\n🎉 Futures Order Query Complete!")
         return response
         
     except Exception as e:
-        print(f"❌ 合约订单查询失败: {e}")
+        print(f"❌ Futures Order Query Failed: {e}")
         return None
     finally:
         client.close()
 
 if __name__ == "__main__":
-    print("=== TooBit 合约API SDK 查询订单示例 ===\n")
-    print("💡 这个示例需要API密钥，请确保配置正确")
-    print("💡 这是真实的账户查询操作，请谨慎使用!")
+    print("=== TooBit Futures API SDK Query Order Example ===\n")
+    print("💡 This example requires API key, please ensure correct configuration")
+    print("💡 This is a real account query operation, please use with caution!")
     print()
-    print("📚 接口信息:")
-    print("   - 接口: GET /api/v1/futures/order")
-    print("   - 鉴权: 需要签名 (USER_DATA)")
-    print("   - 功能: 查询合约订单")
-    print("   - 参数: symbol(必需), orderId(可选), origClientOrderId(可选)")
+    print("📚 API Information:")
+    print("   - API: GET /api/v1/futures/order")
+    print("   - Auth: Requires signature (USER_DATA)")
+    print("   - Function: Query Futures Order")
+    print("   - Parameters: symbol(Required), orderId(Optional), origClientOrderId(Optional)")
     print()
-    print("💡 查询说明:")
-    print("   - 可以通过订单ID查询")
-    print("   - 可以通过客户端订单ID查询")
-    print("   - 返回订单的详细信息")
-    print("   - 包括订单状态、执行情况等")
+    print("💡 Query description:")
+    print("   - Can through Order ID Query")
+    print("   - Can through Client Order ID Query")
+    print("   - Return Order of Detailed Information")
+    print("   - Including Order Status, execution situation etc")
     print()
-    print("📈 订单状态说明:")
-    print("   - NEW: 新订单")
-    print("   - PARTIALLY_FILLED: 部分成交")
-    print("   - FILLED: 完全成交")
-    print("   - CANCELED: 已取消")
-    print("   - REJECTED: 已拒绝")
+    print("📈 Order Status Description:")
+    print("   - NEW: New Order")
+    print("   - PARTIALLY_FILLED: Partial Execution")
+    print("   - FILLED: Fully filled")
+    print("   - CANCELED: Canceled")
+    print("   - REJECTED: Rejected")
     print()
-    print("⚠️  重要提醒:")
-    print("   - 请确保订单ID或客户端订单ID正确")
-    print("   - 建议先在测试环境中验证")
+    print("⚠️  Important reminder:")
+    print("   - Please ensure Order ID Or Client Order ID is correct")
+    print("   - It is recommended to verify in the test environment first")
     query_futures_order()

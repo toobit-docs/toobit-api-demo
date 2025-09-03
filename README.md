@@ -1,251 +1,237 @@
 # TooBit API SDK
 
-一个功能完整的TooBit加密货币交易所API SDK，支持现货交易、行情查询、账户管理等所有主要功能。
+一个全面的Python SDK，用于TooBit加密货币交易所API，支持现货和期货交易。
 
-## 特性
+> **⚠️ 免责声明**: 本SDK仅供参考。请以官方TooBit API文档为准，获取最新、最准确的信息。
 
-- 🔐 **完整鉴权支持**: 支持HMAC SHA256签名鉴权
-- 📊 **行情数据**: 实时价格、深度、K线、成交记录等
-- 💰 **交易功能**: 支持限价单、市价单、止损单等多种订单类型
-- 👤 **账户管理**: 查询余额、订单状态、成交历史等
-- 🛡️ **错误处理**: 完善的错误码映射和异常处理
-- ⚡ **性能优化**: 连接池、超时控制、重试机制
-- 📝 **类型提示**: 完整的Python类型提示支持
-- 🔧 **灵活配置**: 支持环境变量和代码配置
+## 功能特性
+
+- **现货交易**: 完整的现货交易功能
+- **期货交易**: 完整的USDT保证金期货交易支持
+- **类型安全**: 使用Pydantic构建，提供强大的数据验证
+- **易于使用**: 简单直观的API设计
+- **全面示例**: 46+个示例文件，涵盖所有主要操作
 
 ## 安装
 
 ```bash
-# 克隆项目
-git clone <repository-url>
-cd open-api-sdk
-
-# 安装依赖
 pip install -r requirements.txt
 ```
 
 ## 快速开始
 
-### 1. 配置API密钥
-
-创建 `.env` 文件并配置你的API密钥：
-
-```bash
-# 复制配置示例文件
-cp config.example .env
-
-# 编辑配置文件，填入你的API密钥
-TOOBIT_API_KEY=your_api_key_here
-TOOBIT_API_SECRET=your_api_secret_here
-```
-
-### 2. 基本使用
+### 基本配置
 
 ```python
 from open_api_sdk import TooBitClient, TooBitConfig
 
-# 从环境变量创建配置
-config = TooBitConfig.from_env()
+# 初始化配置
+config = TooBitConfig(
+    api_key="your_api_key",
+    api_secret="your_api_secret",
+    base_url="https://api.toobit.com"
+)
 
 # 创建客户端
 client = TooBitClient(config)
-
-# 测试连接
-if client.ping():
-    print("✅ 连接成功")
-
-# 获取BTC价格
-price_info = client.get_price("BTCUSDT")
-print(f"BTC价格: {price_info['price']}")
-
-# 获取账户信息
-account = client.get_account_info()
-print(f"账户类型: {account.account_type}")
-
-# 关闭客户端
-client.close()
 ```
 
-### 3. 交易示例
+### 现货交易示例
 
 ```python
-from open_api_sdk import OrderRequest, OrderSide, OrderType, TimeInForce
+from open_api_sdk.models import OrderRequest, OrderSide, OrderType, TimeInForce
 
-# 限价买入
-order_request = OrderRequest(
+# 创建限价单
+order = OrderRequest(
     symbol="BTCUSDT",
     side=OrderSide.BUY,
     type=OrderType.LIMIT,
-    quantity=0.001,
-    price=50000.0,
+    quantity=0.01,
+    price=45000.0,
     time_in_force=TimeInForce.GTC
 )
 
-response = client.create_order(order_request)
-print(f"订单创建成功! ID: {response.order_id}")
-
-# 使用便捷方法
-response = client.buy_limit("BTCUSDT", 0.001, 50000.0)
-response = client.sell_limit("BTCUSDT", 0.001, 51000.0)
+# 下单
+response = client.create_order(order)
+print(f"订单已创建: {response.order_id}")
 ```
 
-## API 接口
+### 期货交易示例
 
-### 公开接口 (无需鉴权)
+```python
+from open_api_sdk.models import CreateFuturesOrderRequest, OrderSide
 
-- `ping()` - 测试服务器连通性
-- `get_server_time()` - 获取服务器时间
-- `get_exchange_info()` - 获取交易规则和交易对信息
-- `get_order_book(symbol, limit)` - 获取深度信息
-- `get_recent_trades(symbol, limit)` - 获取最近成交
-- `get_klines(symbol, interval, limit)` - 获取K线数据
-- `get_24hr_ticker(symbol)` - 获取24小时价格变动
-- `get_price(symbol)` - 获取最新价格
-- `get_best_order_book(symbol)` - 获取当前最优挂单
+# 创建期货订单
+futures_order = CreateFuturesOrderRequest(
+    symbol="BTC-SWAP-USDT",
+    side=OrderSide.BUY_OPEN,
+    type=OrderType.LIMIT,
+    quantity=1,
+    price=50000.0,
+    leverage=10
+)
 
-### 签名接口 (需要API密钥)
+# 下期货订单
+response = client.create_futures_order(futures_order)
+print(f"期货订单已创建: {response.orderId}")
+```
 
-- `create_order(order_request)` - 下单
-- `cancel_order(cancel_request)` - 撤销订单
-- `get_order(query_request)` - 查询订单
-- `get_open_orders(symbol)` - 查询当前挂单
-- `get_all_orders(symbol, ...)` - 查询所有订单
-- `get_account_info()` - 获取账户信息
-- `get_trade_history(symbol, ...)` - 获取成交历史
+## API覆盖范围
 
-### 便捷方法
+### 现货交易API
+- 市场数据 (Ping, 服务器时间, 交易所信息, 订单簿等)
+- 账户管理 (账户信息, 子账户, API密钥类型)
+- 订单管理 (创建, 取消, 查询订单)
+- 批量操作 (批量创建/取消订单)
 
-- `buy_limit(symbol, quantity, price)` - 限价买入
-- `sell_limit(symbol, quantity, price)` - 限价卖出
-- `buy_market(symbol, quantity)` - 市价买入
-- `sell_market(symbol, quantity)` - 市价卖出
-- `cancel_order_by_id(symbol, order_id)` - 通过ID取消订单
-- `get_balance(asset)` - 获取指定资产余额
+### 期货交易API
+- 市场数据 (与现货相同 + 期货特定数据)
+- 账户管理 (余额, 持仓, 杠杆, 保证金类型)
+- 订单管理 (创建, 取消, 查询期货订单)
+- 风险管理 (止损, 止盈, 保证金调整)
+- 高级功能 (转账, 历史记录, 费率, 盈亏)
 
-## 订单类型
+## 示例
 
-- **LIMIT**: 限价单
-- **MARKET**: 市价单
-- **STOP_LOSS**: 止损单
-- **STOP_LOSS_LIMIT**: 限价止损单
-- **TAKE_PROFIT**: 止盈单
-- **TAKE_PROFIT_LIMIT**: 限价止盈单
-- **LIMIT_MAKER**: 限价挂单
+项目包含两个目录中的全面示例：
 
-## 订单有效期
+### 现货示例 (`examples/spot/`)
+- `01_24hr_ticker.py` - 获取24小时价格统计
+- `02_open_orders.py` - 查询开放订单
+- `03_all_orders.py` - 查询所有订单
+- `04_trade_history.py` - 获取交易历史
+- `05_create_order.py` - 创建新订单
+- `06_cancel_order.py` - 取消订单
+- `07_get_order.py` - 查询特定订单
+- `08_batch_create_orders.py` - 批量创建订单
+- `09_batch_cancel_orders.py` - 批量取消订单
+- `10_cancel_open_orders.py` - 取消开放订单
+- `11_get_spot_account_info.py` - 获取账户信息
+- `12_get_spot_sub_accounts.py` - 获取子账户
+- `13_get_api_key_type.py` - 获取API密钥类型
 
-- **GTC**: Good Till Canceled (一直有效直到取消)
-- **IOC**: Immediate or Cancel (立即成交或取消)
-- **FOK**: Fill or Kill (全部成交或全部取消)
+### 期货示例 (`examples/futures/`)
+- `01_ping.py` - 测试服务器连接
+- `02_server_time.py` - 获取服务器时间
+- `03_exchange_info.py` - 获取交易所信息
+- `04_order_book.py` - 获取订单簿
+- `05_recent_trades.py` - 获取最近交易
+- `06_klines.py` - 获取K线数据
+- `07_24hr_ticker.py` - 获取24小时价格
+- `08_price.py` - 获取最新价格
+- `09_best_order_book.py` - 获取最佳订单簿
+- `12_transfer_between_accounts.py` - 账户间转账
+- `13_get_transfer_history.py` - 获取转账历史
+- `14_create_futures_order.py` - 创建期货订单
+- `15_batch_create_futures_orders.py` - 批量创建期货订单
+- `16_get_futures_open_orders.py` - 获取期货开放订单
+- `17_query_futures_order.py` - 查询期货订单
+- `18_cancel_futures_order.py` - 取消期货订单
+- `19_cancel_all_orders.py` - 取消所有订单
+- `20_batch_cancel_orders.py` - 批量取消订单
+- `21_get_futures_positions.py` - 获取期货持仓
+- `22_set_position_trading_stop.py` - 设置持仓交易止损
+- `23_get_futures_history_orders.py` - 获取期货历史订单
+- `24_get_futures_balance.py` - 获取期货余额
+- `25_adjust_isolated_margin.py` - 调整逐仓保证金
+- `26_get_futures_trade_history.py` - 获取期货交易历史
+- `27_get_futures_account_flow.py` - 获取期货账户流水
+- `28_get_futures_user_fee_rate.py` - 获取期货用户费率
+- `29_get_futures_today_pnl.py` - 获取期货今日盈亏
+- `31_change_margin_type.py` - 更改保证金类型
+- `32_adjust_leverage.py` - 调整杠杆
+- `33_get_account_leverage.py` - 获取账户杠杆
+
+## 配置
+
+### 环境变量
+创建`.env`文件或设置环境变量：
+
+```bash
+TOOBIT_API_KEY=your_api_key
+TOOBIT_API_SECRET=your_api_secret
+TOOBIT_BASE_URL=https://api.toobit.com
+```
+
+或者创建`config.example`文件并复制到您的环境：
+
+```bash
+# 复制示例配置文件
+cp config.example .env
+
+# 编辑.env文件，填入您的API凭据
+nano .env
+
+# 加载环境变量（如果使用shell）
+source .env
+```
+
+### API密钥权限
+- **只读**: 用于市场数据和账户查询
+- **交易**: 用于订单创建和取消
+- **用户数据**: 用于账户信息和历史记录
 
 ## 错误处理
 
-SDK提供了完善的错误处理机制，包括：
-
-- `TooBitException`: 基础异常类
-- `AuthenticationError`: 认证错误
-- `ValidationError`: 参数验证错误
-- `OrderError`: 订单相关错误
-- `RateLimitError`: 速率限制错误
-- `NetworkError`: 网络错误
+SDK包含全面的错误处理：
 
 ```python
-from open_api_sdk import TooBitException, AuthenticationError
+from open_api_sdk.exceptions import TooBitAPIException
 
 try:
-    response = client.create_order(order_request)
-except AuthenticationError as e:
-    print(f"认证失败: {e}")
-except TooBitException as e:
-    print(f"API错误: {e}")
+    response = client.create_order(order)
+except TooBitAPIException as e:
+    print(f"API错误: {e.message}")
+    print(f"错误代码: {e.code}")
 ```
 
-## 配置选项
+## 身份验证
 
-| 配置项 | 默认值 | 说明 |
-|--------|--------|------|
-| `api_key` | - | API密钥 (必需) |
-| `api_secret` | - | API密钥 (必需) |
-| `base_url` | https://api.toobit.com | API基础URL |
-| `timeout` | 30 | 请求超时时间(秒) |
-| `recv_window` | 5000 | 接收窗口时间(毫秒) |
-| `max_retries` | 3 | 最大重试次数 |
-| `retry_delay` | 1.0 | 重试延迟时间(秒) |
+SDK使用HMAC SHA256签名身份验证：
 
-## 示例代码
+```python
+# 自动签名生成
+response = client.create_order(order)  # 自动签名
 
-查看 `examples/` 目录获取更多使用示例：
-
-### 🔌 基础功能示例 (无需API密钥)
-- `01_connection_test.py` - 连接测试示例
-- `02_market_data.py` - 市场数据查询示例
-
-### 👤 账户管理示例 (需要API密钥)
-- `03_account_info.py` - 账户信息查询示例
-
-### 💰 交易操作示例 (需要API密钥)
-- `04_basic_trading.py` - 基本交易示例
-- `05_advanced_trading.py` - 高级交易示例
-
-### 🚀 快速开始
-
-```bash
-# 1. 测试连接 (无需API密钥)
-python examples/01_connection_test.py
-
-# 2. 获取市场数据 (无需API密钥)
-python examples/02_market_data.py
-
-# 3. 设置API密钥后运行其他示例
-export TOOBIT_API_KEY='your_api_key'
-export TOOBIT_API_SECRET='your_api_secret'
-
-# 4. 查询账户信息
-python examples/03_account_info.py
-
-# 5. 基本交易操作
-python examples/04_basic_trading.py
-
-# 6. 高级交易操作
-python examples/05_advanced_trading.py
+# 手动时间戳控制
+config = TooBitConfig(
+    api_key="your_key",
+    api_secret="your_secret",
+    recv_window=5000  # 5秒窗口
+)
 ```
-
-详细说明请查看 [examples/README.md](examples/README.md)
-
-## 安全注意事项
-
-1. **永远不要泄露你的API密钥**
-2. 建议设置IP白名单限制
-3. 定期轮换API密钥
-4. 使用最小权限原则配置API权限
-5. 在生产环境中使用环境变量存储敏感信息
 
 ## 速率限制
 
-TooBit API有严格的速率限制：
-
-- 请求权重限制: 1200/分钟
-- 订单限制: 10/秒
-- 违反限制会收到429错误码
-
-建议使用WebSocket获取实时数据以减少API调用。
+- **请求权重**: 每个端点都有特定的权重
+- **订单限制**: 订单操作的速率限制
+- **IP限制**: 配置IP白名单以确保安全
 
 ## 贡献
 
-欢迎提交Issue和Pull Request！
+1. Fork仓库
+2. 创建功能分支
+3. 进行更改
+4. 如适用，添加测试
+5. 提交拉取请求
 
 ## 许可证
 
-MIT License
-
-## 免责声明
-
-本SDK仅供学习和研究使用，使用本SDK进行交易的风险由用户自行承担。作者不对任何交易损失负责。
+本项目采用MIT许可证。
 
 ## 支持
 
-如有问题，请：
+如有问题和疑问：
+- 查看examples目录了解使用模式
+- 查阅TooBit API文档
+- 在GitHub上提交问题
 
-1. 查看 [TooBit官方API文档](https://toobit-docs.github.io/apidocs/spot/v1/cn/)
-2. 提交GitHub Issue
-3. 检查错误日志和异常信息 
+## 更新日志
+
+### v1.0.0
+- 初始版本
+- 完整的现货交易支持
+- 完整的期货交易支持
+- 46+个示例文件
+- 全面的错误处理
+- 类型安全的数据模型

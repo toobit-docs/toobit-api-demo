@@ -1,57 +1,57 @@
 #!/usr/bin/env python3
 """
-TooBit API 合约查询用户手续费率示例 (28号)
-查询合约用户手续费率
+TooBit API Futures QueryUser feeFee RateExample (28Number)
+QueryFutures User feeFee Rate
 """
 
 from open_api_sdk import TooBitClient, TooBitConfig, QueryFuturesUserFeeRateRequest
 
 def get_futures_user_fee_rate():
-    """查询合约用户手续费率示例"""
-    print("=== TooBit API 合约查询用户手续费率示例 ===\n")
+    """QueryFutures User feeFee RateExample"""
+    print("=== TooBit API Futures QueryUser feeFee RateExample ===\n")
     
-    # 初始化配置
+    # Initialize configuration
     config = TooBitConfig.from_env()
     client = TooBitClient(config)
     
     try:
-        print("🔍 查询合约用户手续费率测试:")
+        print("🔍 Query Futures User Fee Rate Test:")
         print()
         
-        # 示例1: 查询BTC-SWAP-USDT手续费率
-        print("📊 示例1: 查询BTC-SWAP-USDT手续费率")
-        print("   参数: symbol='BTC-SWAP-USDT'")
+        # Example1: QueryBTC-SWAP-USDTFeeFee Rate
+        print("📊 Example 1: Query BTC-SWAP-USDT Fee Rate")
+        print("   Parameters: symbol='BTC-SWAP-USDT'")
         print("   API: GET /api/v1/futures/userFeeRate")
-        print("   说明: 查询BTC-SWAP-USDT的用户手续费率")
+        print("   Description: Query BTC-SWAP-USDT of User Fee Rate")
         print()
         
         request1 = QueryFuturesUserFeeRateRequest(symbol="BTC-SWAP-USDT")
         response1 = client.get_futures_user_fee_rate(request1)
-        print(f"   开仓挂单费率: {response1.openMakerFee}")
-        print(f"   开仓吃单费率: {response1.openTakerFee}")
-        print(f"   平仓挂单费率: {response1.closeMakerFee}")
-        print(f"   平仓吃单费率: {response1.closeTakerFee}")
+        print(f"   Open Maker Fee Rate: {response1.openMakerFee}")
+        print(f"   Open Taker Fee Rate: {response1.openTakerFee}")
+        print(f"   Close Maker Fee Rate: {response1.closeMakerFee}")
+        print(f"   Close Taker Fee Rate: {response1.closeTakerFee}")
         print()
         
-        # 示例2: 查询ETH-SWAP-USDT手续费率
-        print("📊 示例2: 查询ETH-SWAP-USDT手续费率")
-        print("   参数: symbol='ETH-SWAP-USDT'")
+        # Example2: QueryETH-SWAP-USDTFeeFee Rate
+        print("📊 Example 2: Query ETH-SWAP-USDT Fee Rate")
+        print("   Parameters: symbol='ETH-SWAP-USDT'")
         print("   API: GET /api/v1/futures/userFeeRate")
-        print("   说明: 查询ETH-SWAP-USDT的用户手续费率")
+        print("   Description: Query ETH-SWAP-USDT of User Fee Rate")
         print()
         
         request2 = QueryFuturesUserFeeRateRequest(symbol="ETH-SWAP-USDT")
         response2 = client.get_futures_user_fee_rate(request2)
-        print(f"   开仓挂单费率: {response2.openMakerFee}")
-        print(f"   开仓吃单费率: {response2.openTakerFee}")
-        print(f"   平仓挂单费率: {response2.closeMakerFee}")
-        print(f"   平仓吃单费率: {response2.closeTakerFee}")
+        print(f"   OpenOpen OrdersFee Rate: {response2.openMakerFee}")
+        print(f"   OpenTakerFee Rate: {response2.openTakerFee}")
+        print(f"   CloseOpen OrdersFee Rate: {response2.closeMakerFee}")
+        print(f"   CloseTakerFee Rate: {response2.closeTakerFee}")
         print()
         
-        # 示例3: 查询多个交易对手续费率
-        print("📊 示例3: 查询多个交易对手续费率")
+        # Example3: QueryMultipleitemsTrading pairFeeFee Rate
+        print("📊 Example 3: Query Multiple Trading pair Fee Rate")
         print("   API: GET /api/v1/futures/userFeeRate")
-        print("   说明: 查询多个交易对的用户手续费率对比")
+        print("   Description: Query Multiple Trading pair of User Fee Rate Compare")
         print()
         
         symbols = ["BTC-SWAP-USDT", "ETH-SWAP-USDT", "BNB-SWAP-USDT"]
@@ -60,17 +60,17 @@ def get_futures_user_fee_rate():
                 request = QueryFuturesUserFeeRateRequest(symbol=symbol)
                 response = client.get_futures_user_fee_rate(request)
                 print(f"   {symbol}:")
-                print(f"     开仓挂单: {response.openMakerFee}, 开仓吃单: {response.openTakerFee}")
-                print(f"     平仓挂单: {response.closeMakerFee}, 平仓吃单: {response.closeTakerFee}")
+                print(f"     Open Maker: {response.openMakerFee}, Open Taker: {response.openTakerFee}")
+                print(f"     Close Maker: {response.closeMakerFee}, Close Taker: {response.closeTakerFee}")
                 print()
             except Exception as e:
-                print(f"   {symbol}: 查询失败 - {e}")
+                print(f"   {symbol}: Query Failed - {e}")
                 print()
         
-        print("🎉 查询合约用户手续费率测试完成!")
+        print("🎉 Query Futures User Fee Rate Test Complete!")
         
     except Exception as e:
-        print(f"❌ 查询合约用户手续费率测试失败: {e}")
+        print(f"❌ Query Futures User Fee Rate Test Failed: {e}")
     
     finally:
         client.close()

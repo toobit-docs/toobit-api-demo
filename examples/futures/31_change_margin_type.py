@@ -1,62 +1,62 @@
 #!/usr/bin/env python3
 """
-TooBit API 合约变换逐全仓模式示例 (31号)
-变换逐全仓模式
+TooBit API Futures Change to Cross Mode Example (31 Number)
+Change to Cross Mode
 """
 
 from open_api_sdk import TooBitClient, TooBitConfig, ChangeMarginTypeRequest, MarginType
 
 def change_margin_type():
-    """变换逐全仓模式示例"""
-    print("=== TooBit API 合约变换逐全仓模式示例 ===\n")
+    """Change to Cross Mode Example"""
+    print("=== TooBit API Futures Change to Cross Mode Example ===\n")
     
-    # 初始化配置
+    # Initialize configuration
     config = TooBitConfig.from_env()
     client = TooBitClient(config)
     
     try:
-        print("🔍 变换逐全仓模式测试:")
+        print("🔍 Change to Cross Mode Test:")
         print()
         print("   API: POST /api/v1/futures/marginType")
-        print("   说明: 变换逐全仓模式")
+        print("   Description: Change to Cross Mode")
         print()
         
-        # 示例1: 切换到全仓模式
-        print("   📋 示例1: 切换到全仓模式")
+        # Example 1: Switch To Cross Mode
+        print("   📋 Example 1: Switch To Cross Mode")
         request1 = ChangeMarginTypeRequest(
             symbol="BTC-SWAP-USDT",
             marginType=MarginType.CROSS
         )
         
         response1 = client.change_margin_type(request1)
-        print(f"   响应码: {response1.code}")
-        print(f"   交易对: {response1.symbol}")
-        print(f"   保证金类型: {response1.marginType}")
+        print(f"   Response Code: {response1.code}")
+        print(f"   Trading pair: {response1.symbol}")
+        print(f"   Margin Type: {response1.marginType}")
         print()
         
-        # 示例2: 切换到逐仓模式
-        print("   📋 示例2: 切换到逐仓模式")
+        # Example 2: Switch To Isolated Mode
+        print("   📋 Example 2: Switch To Isolated Mode")
         request2 = ChangeMarginTypeRequest(
             symbol="BTC-SWAP-USDT",
             marginType=MarginType.ISOLATED
         )
         
         response2 = client.change_margin_type(request2)
-        print(f"   响应码: {response2.code}")
-        print(f"   交易对: {response2.symbol}")
-        print(f"   保证金类型: {response2.marginType}")
+        print(f"   ResponseCode: {response2.code}")
+        print(f"   Trading pair: {response2.symbol}")
+        print(f"   MarginType: {response2.marginType}")
         print()
         
-        # 状态说明
-        print("   💡 保证金类型说明:")
-        print("      CROSS: 全仓模式 - 所有仓位共享保证金")
-        print("      ISOLATED: 逐仓模式 - 每个仓位独立保证金")
+        # Status Description
+        print("   💡 Margin Type Description:")
+        print("      CROSS: Cross Mode - All Positions Share Total Margin")
+        print("      ISOLATED: Isolated Mode - Each Position Has Independent Margin")
         print()
         
-        print("🎉 变换逐全仓模式测试完成!")
+        print("🎉 Change to Cross Mode Test Complete!")
         
     except Exception as e:
-        print(f"❌ 变换逐全仓模式测试失败: {e}")
+        print(f"❌ Change to Cross Mode Test Failed: {e}")
     
     finally:
         client.close()

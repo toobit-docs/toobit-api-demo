@@ -1,82 +1,82 @@
 """
-TooBit API SDK - 获取24小时价格变动接口示例 (01)
-获取24小时价格变动统计
+TooBit API SDK - 24hr Ticker Example (01)
+Get 24-hour price change statistics
 """
 from open_api_sdk import TooBitClient, TooBitConfig
 
 def get_24hr_ticker():
-    """获取24小时价格变动"""
-    print("=== TooBit API 获取24小时价格变动 ===\n")
+    """Get 24-hour price change statistics"""
+    print("=== TooBit API 24hr Ticker ===\n")
     try:
         config = TooBitConfig.from_env()
         client = TooBitClient(config)
         
         symbol = "BTCUSDT"
         
-        print("🔄 正在获取24小时价格变动...")
-        print(f"   交易对: {symbol}")
+        print("🔄 Getting 24hr ticker data...")
+        print(f"   Symbol: {symbol}")
         print()
-        print("⚠️  注意: 这是真实的API调用，请确保配置正确")
+        print("⚠️  Note: This is a real API call, please ensure correct configuration")
         print()
         
         response = client.get_24hr_ticker(symbol)
         
-        print("✅ 24小时价格变动获取成功!")
+        print("✅ 24hr ticker data retrieved successfully!")
         print()
 
-        # 显示基本信息
-        print(f"🔍 调试信息: response类型={type(response)}, 长度={len(response) if response else 0}")
+        # Display basic information
+        print(f"🔍 Debug info: responseType={type(response)}, length={len(response) if response else 0}")
 
         if response and len(response) > 0:
-            ticker = response[0]  # 获取第一个元素
-            print(f"🔍 调试信息: ticker类型={type(ticker)}, ticker内容={ticker}")
-            print(f"🔍 调试信息: ticker是否有s属性={hasattr(ticker, 's')}")
+            ticker = response[0]  # Get FirstitemsElement
+            print(f"🔍 Debug info: tickerType={type(ticker)}, tickerContent={ticker}")
+            print(f"🔍 Debug info: tickerHasS={hasattr(ticker, 's')}")
 
             if hasattr(ticker, 's'):
-                print(f"📋 交易对: {ticker.s}")
+                print(f"📋 Symbol: {ticker.s}")
 
             if hasattr(ticker, 'c'):
-                print(f"💰 最新价格: {ticker.c}")
+                print(f"💰 Latest price: {ticker.c}")
 
             if hasattr(ticker, 'o'):
-                print(f"📈 开盘价格: {ticker.o}")
+                print(f"📈 Open price: {ticker.o}")
 
             if hasattr(ticker, 'h'):
-                print(f"🔺 最高价格: {ticker.h}")
+                print(f"🔺 High price: {ticker.h}")
 
             if hasattr(ticker, 'l'):
-                print(f"🔻 最低价格: {ticker.l}")
+                print(f"🔻 Low price: {ticker.l}")
 
             if hasattr(ticker, 'v'):
-                print(f"📊 成交量: {ticker.v}")
+                print(f"📊 Volume: {ticker.v}")
 
             if hasattr(ticker, 'pcp'):
-                print(f"📈 24小时涨跌幅: {ticker.pcp}%")
+                print(f"📈 24hr price change: {ticker.pcp}%")
         else:
-            print("   ℹ️  未获取到数据")
+            print("   ℹ️  No data retrieved")
 
-        print("\n🎉 24小时价格变动统计获取完成!")
+        print("\n🎉 24hr ticker statistics retrieved complete!")
         return response
         
     except Exception as e:
-        print(f"❌ 获取24小时价格变动失败: {e}")
+        print(f"❌ Get 24 hour price change failed: {e}")
         return None
     finally:
         client.close()
 
 if __name__ == "__main__":
-    print("=== TooBit API SDK 获取24小时价格变动示例 ===\n")
-    print("💡 这个示例需要API密钥，请确保配置正确")
-    print("💡 这是真实的API调用，请谨慎使用!")
+    print("=== TooBit API SDK Get 24 Hour Price Change Example ===\n")
+    print("💡 This example requires API key, please ensure correct configuration")
+    print("💡 This is a real API call, please use with caution!")
     print()
-    print("📚 接口信息:")
-    print("   - 接口: GET /quote/v1/ticker/24hr")
-    print("   - 鉴权: 不需要签名")
-    print("   - 功能: 获取24小时价格变动统计")
-    print("   - 参数: symbol")
+    print("📚 API Information:")
+    print("   - API: GET /quote/v1/ticker/24hr")
+    print("   - Auth: No signature required")
+    print("   - Function: Get 24 hour price change statistics")
+    print("   - Parameters: symbol")
     print()
-    print("⚠️  重要提醒:")
-    print("   - 建议先在测试环境中验证")
+    print("⚠️  Important reminder:")
+    print("   - It is recommended to verify in the test environment first")
     print()
     
     get_24hr_ticker() 

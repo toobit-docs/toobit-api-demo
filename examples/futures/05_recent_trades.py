@@ -1,50 +1,50 @@
 """
-TooBit 合约API SDK - 获取最近成交记录示例
-获取合约最近成交记录 (无需API密钥)
+TooBit Futures API SDK - Get Recent Trades Record Example
+Get Futures Recent Trades Record (No need API Key)
 """
 
 from open_api_sdk import TooBitClient, TooBitConfig
 
 
 def get_recent_trades():
-    """获取最近成交记录"""
-    print("=== TooBit 合约API 获取最近成交记录 ===\n")
+    """Get Recent Trades Record"""
+    print("=== TooBit Futures API Get Recent Trades Record ===\n")
     
     try:
-        # 创建配置 (无需API密钥)
+        # Create Configuration (No need API Key)
         config = TooBitConfig(
             api_key="test_key",
             api_secret="test_secret"
         )
         
-        # 创建客户端
+        # Create Client
         client = TooBitClient(config)
         
         symbol = "BTCUSDT"
-        limit = 10  # 获取数量
+        limit = 10  # Get Quantity
         
-        print(f"🔄 正在获取 {symbol} 的最近成交记录...")
+        print(f"🔄 Getting {symbol} Recent Trades Record...")
         
-        # 获取最近成交记录
+        # Get Recent Trades Record
         response = client.get_recent_trades(symbol, limit)
         
-        print("✅ 最近成交记录获取成功!")
-        print(f"   获取到 {len(response)} 笔成交")
+        print("✅ Recent Trades Record Get Success!")
+        print(f"   Retrieved {len(response)} Execution Records")
         print()
         
-        # 显示成交记录
-        print("📊 最近成交记录:")
+        # Display Execution Record
+        print("📊 Recent Trades Record:")
         for i, trade in enumerate(response):
             if hasattr(trade, 'price') and hasattr(trade, 'qty'):
                 price = float(trade.price)
                 qty = float(trade.qty)
-                print(f"   {i+1:2d}. 价格: {price:>8.2f} | 数量: {qty:>8.4f}")
+                print(f"   {i+1:2d}. Price: {price:>8.2f} | Quantity: {qty:>8.4f}")
         
-        print("\n🎉 最近成交记录获取完成!")
+        print("\n🎉 Recent Trades Record Get Complete!")
         return response
         
     except Exception as e:
-        print(f"❌ 获取最近成交记录失败: {e}")
+        print(f"❌ Get Recent Trades Record Failed: {e}")
         return None
     
     finally:
@@ -52,8 +52,8 @@ def get_recent_trades():
 
 
 if __name__ == "__main__":
-    print("=== TooBit 合约API SDK 获取最近成交记录示例 ===\n")
-    print("💡 这个示例无需API密钥，可以直接运行")
+    print("=== TooBit Futures API SDK Get Recent Trades Record Example ===\n")
+    print("💡 This example does not need API key, can run directly")
     
-    # 运行示例
+    # Run Example
     get_recent_trades()

@@ -1,55 +1,55 @@
 #!/usr/bin/env python3
 """
-TooBit API 合约查询杠杆倍数和仓位模式示例 (33号)
-查询杠杆倍数和仓位模式
+TooBit API Futures QueryLeverageMultipleAndPositionModeExample (33Number)
+QueryLeverageMultipleAndPositionMode
 """
 
 from open_api_sdk import TooBitClient, TooBitConfig, QueryLeverageRequest
 
 def get_account_leverage():
-    """查询杠杆倍数和仓位模式示例"""
-    print("=== TooBit API 合约查询杠杆倍数和仓位模式示例 ===\n")
+    """QueryLeverageMultipleAndPositionModeExample"""
+    print("=== TooBit API Futures QueryLeverageMultipleAndPositionModeExample ===\n")
     
-    # 初始化配置
+    # Initialize configuration
     config = TooBitConfig.from_env()
     client = TooBitClient(config)
     
     try:
-        print("🔍 查询杠杆倍数和仓位模式测试:")
+        print("🔍 Query Leverage Multiple And Position Mode Test:")
         print()
         print("   API: GET /api/v1/futures/accountLeverage")
-        print("   说明: 查询杠杆倍数和仓位模式")
+        print("   Description: Query Leverage Multiple And Position Mode")
         print()
         
-        # 查询BTC-SWAP-USDT的杠杆信息
+        # Query BTC-SWAP-USDT of Leverage Information
         request = QueryLeverageRequest(
             symbol="BTC-SWAP-USDT"
         )
         
         leverages = client.get_account_leverage(request)
-        print(f"   查询结果数量: {len(leverages)}")
+        print(f"   Query Result Quantity: {len(leverages)}")
         print()
         
         if leverages:
-            print("   📋 杠杆信息列表:")
+            print("   📋 Leverage Information List:")
             for i, leverage in enumerate(leverages, 1):
-                print(f"   [{i}] 交易对: {leverage.symbolId}")
-                print(f"       杠杆倍数: {leverage.leverage}")
-                print(f"       保证金类型: {leverage.marginType}")
+                print(f"   [{i}] Trading pair: {leverage.symbolId}")
+                print(f"       Leverage Multiple: {leverage.leverage}")
+                print(f"       Margin Type: {leverage.marginType}")
                 print()
         else:
-            print("   📭 暂无杠杆信息")
+            print("   📭 No Leverage Information")
         
-        # 保证金类型说明
-        print("   💡 保证金类型说明:")
-        print("      CROSS: 全仓模式 - 所有仓位共享保证金")
-        print("      ISOLATED: 逐仓模式 - 每个仓位独立保证金")
+        # Margin Type Description
+        print("   💡 Margin Type Description:")
+        print("      CROSS: Cross mode - All positions share total margin")
+        print("      ISOLATED: Isolated mode - Each position has independent margin")
         print()
         
-        print("🎉 查询杠杆倍数和仓位模式测试完成!")
+        print("🎉 Query Leverage Multiple And Position Mode Test Complete!")
         
     except Exception as e:
-        print(f"❌ 查询杠杆倍数和仓位模式测试失败: {e}")
+        print(f"❌ Query Leverage Multiple And Position Mode Test Failed: {e}")
     
     finally:
         client.close()

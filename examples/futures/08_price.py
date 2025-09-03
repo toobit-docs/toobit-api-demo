@@ -1,52 +1,52 @@
 """
-TooBit 合约API SDK - 获取最新价格示例
-获取合约最新价格 (无需API密钥)
+TooBit Futures API SDK - Get Latest Price Example
+Get Futures Latest Price (No need API Key)
 """
 
 from open_api_sdk import TooBitClient, TooBitConfig
 
 
 def get_latest_price():
-    """获取最新价格"""
-    print("=== TooBit 合约API 获取最新价格 ===\n")
+    """Get Latest Price"""
+    print("=== TooBit Futures API Get Latest Price ===\n")
     
     try:
-        # 创建配置 (无需API密钥)
+        # Create Configuration (No need API Key)
         config = TooBitConfig(
             api_key="test_key",
             api_secret="test_secret"
         )
         
-        # 创建客户端
+        # Create Client
         client = TooBitClient(config)
         
         symbol = "BTCUSDT"
         
-        print(f"🔄 正在获取 {symbol} 的最新价格...")
+        print(f"🔄 Getting {symbol} Latest Price...")
         
-        # 获取最新价格
+        # Get Latest Price
         response = client.get_latest_price(symbol)
         
-        print("✅ 最新价格获取成功!")
+        print("✅ Latest Price Get Success!")
         print()
         
-        # 显示价格信息
+        # Display Price Information
         if response and len(response) > 0:
-            ticker = response[0]  # 获取第一个元素
+            ticker = response[0]  # Get First Item Element
 
             if 's' in ticker:
-                print(f"📋 交易对: {ticker['s']}")
+                print(f"📋 Trading pair: {ticker['s']}")
             
             if 'p' in ticker:
-                print(f"💰 最新价格: {ticker['p']}")
+                print(f"💰 Latest price: {ticker['p']}")
         else:
-            print("   ℹ️  未获取到数据")
+            print("   ℹ️  No Retrieved Data")
         
-        print("\n🎉 最新价格获取完成!")
+        print("\n🎉 Latest Price Get Complete!")
         return response
         
     except Exception as e:
-        print(f"❌ 获取最新价格失败: {e}")
+        print(f"❌ Get Latest Price Failed: {e}")
         return None
     
     finally:
@@ -54,8 +54,8 @@ def get_latest_price():
 
 
 def get_all_prices():
-    """获取所有交易对的最新价格"""
-    print("\n=== 获取所有交易对的最新价格 ===\n")
+    """Get All Trading Pair of Latest Price"""
+    print("\n=== Get All Trading Pair of Latest Price ===\n")
     
     try:
         config = TooBitConfig(
@@ -64,17 +64,17 @@ def get_all_prices():
         )
         client = TooBitClient(config)
         
-        print("🔄 正在获取所有交易对的最新价格...")
+        print("🔄 Getting All Trading Pair of Latest Price...")
         
-        # 获取所有交易对的最新价格
+        # Get All Trading Pair of Latest Price
         response = client.get_all_prices()
         
         if response:
-            print(f"✅ 获取到 {len(response)} 个交易对的最新价格")
+            print(f"✅ Retrieved {len(response)} Items Trading Pair of Latest Price")
             print()
             
-            # 显示前10个交易对
-            print("📊 前10个交易对价格:")
+            # Display Before 10 Items Trading Pair
+            print("📊 Before 10 Items Trading Pair Price:")
             for i, price_info in enumerate(response[:10]):
                 if 's' in price_info and  'p' in price_info:
                     symbol = price_info['s']
@@ -84,7 +84,7 @@ def get_all_prices():
         return response
         
     except Exception as e:
-        print(f"❌ 获取所有价格失败: {e}")
+        print(f"❌ Get All Price Failed: {e}")
         return None
     
     finally:
@@ -92,10 +92,10 @@ def get_all_prices():
 
 
 if __name__ == "__main__":
-    print("=== TooBit 合约API SDK 获取最新价格示例 ===\n")
-    print("💡 这个示例无需API密钥，可以直接运行")
+    print("=== TooBit Futures API SDK Get Latest Price Example ===\n")
+    print("💡 This example does not need API key, can run directly")
     
-    # 运行示例
+    # Run Example
     get_latest_price()
     get_all_prices()
 

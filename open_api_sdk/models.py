@@ -1,5 +1,5 @@
 """
-TooBit API 数据模型
+TooBit API Data Models
 """
 
 from typing import Optional, Dict, Any, List
@@ -8,20 +8,20 @@ from enum import Enum
 
 
 class OrderSide(str, Enum):
-    """订单方向"""
-    # 现货交易方向
+    """Order side"""
+    # Spot trading directions
     BUY = "BUY"
     SELL = "SELL"
     
-    # 合约交易方向
-    BUY_OPEN = "BUY_OPEN"      # 买入开仓 (做多)
-    SELL_OPEN = "SELL_OPEN"    # 卖出开仓 (做空)
-    BUY_CLOSE = "BUY_CLOSE"    # 买入平仓 (平空)
-    SELL_CLOSE = "SELL_CLOSE"  # 卖出平仓 (平多)
+    # Futures trading directions
+    BUY_OPEN = "BUY_OPEN"      # Buy to open (long position)
+    SELL_OPEN = "SELL_OPEN"    # Sell to open (short position)
+    BUY_CLOSE = "BUY_CLOSE"    # Buy to close (close short)
+    SELL_CLOSE = "SELL_CLOSE"  # Sell to close (close long)
 
 
 class OrderType(str, Enum):
-    """订单类型"""
+    """Order type"""
     LIMIT = "LIMIT"
     MARKET = "MARKET"
     STOP_LOSS = "STOP_LOSS"
@@ -32,16 +32,16 @@ class OrderType(str, Enum):
 
 
 class TimeInForce(str, Enum):
-    """订单有效期"""
+    """Order time in force"""
     GTC = "GTC"  # Good Till Canceled
     IOC = "IOC"  # Immediate or Cancel
     FOK = "FOK"  # Fill or Kill
 
 
 class OrderStatus(str, Enum):
-    """订单状态"""
+    """Order status"""
     NEW = "NEW"
-    PENDING_NEW = "PENDING_NEW"  # 新增：等待新订单状态
+    PENDING_NEW = "PENDING_NEW"  # New: Pending new order status
     PARTIALLY_FILLED = "PARTIALLY_FILLED"
     FILLED = "FILLED"
     CANCELED = "CANCELED"
@@ -51,417 +51,417 @@ class OrderStatus(str, Enum):
 
 
 class APIResponse(BaseModel):
-    """API响应基础模型"""
-    success: bool = Field(..., description="请求是否成功")
-    data: Optional[Any] = Field(None, description="响应数据")
-    message: Optional[str] = Field(None, description="响应消息")
-    code: Optional[int] = Field(None, description="响应代码")
+    """API Response base model"""
+    success: bool = Field(..., description="Whether request is successful")
+    data: Optional[Any] = Field(None, description="Response data")
+    message: Optional[str] = Field(None, description="Response message")
+    code: Optional[int] = Field(None, description="Response code")
 
 
 class RequestConfig(BaseModel):
-    """请求配置"""
-    timeout: Optional[int] = Field(None, description="请求超时时间")
-    headers: Optional[Dict[str, str]] = Field(default_factory=dict, description="请求头")
-    params: Optional[Dict[str, Any]] = Field(default_factory=dict, description="请求参数")
+    """Request configuration"""
+    timeout: Optional[int] = Field(None, description="Request timeout time")
+    headers: Optional[Dict[str, str]] = Field(default_factory=dict, description="Request header")
+    params: Optional[Dict[str, Any]] = Field(default_factory=dict, description="Request parameters")
 
 
 class OrderRequest(BaseModel):
-    """下单请求模型"""
-    symbol: str = Field(..., description="交易对")
-    side: OrderSide = Field(..., description="订单方向")
-    type: OrderType = Field(..., description="订单类型")
-    quantity: Optional[float] = Field(None, description="数量")
-    price: Optional[float] = Field(None, description="价格")
-    time_in_force: Optional[TimeInForce] = Field(TimeInForce.GTC, description="订单有效期", alias="timeInForce")
-    stop_price: Optional[float] = Field(None, description="止损价格", alias="stopPrice")
-    iceberg_qty: Optional[float] = Field(None, description="冰山数量", alias="icebergQty")
-    new_client_order_id: Optional[str] = Field(None, description="客户端订单ID", alias="newClientOrderId")
-    recv_window: Optional[int] = Field(None, description="接收窗口", alias="recvWindow")
+    """Create Order Request model"""
+    symbol: str = Field(..., description="Symbol")
+    side: OrderSide = Field(..., description="Order Side")
+    type: OrderType = Field(..., description="Order type")
+    quantity: Optional[float] = Field(None, description="Quantity")
+    price: Optional[float] = Field(None, description="Price")
+    time_in_force: Optional[TimeInForce] = Field(TimeInForce.GTC, description="Order time in force", alias="timeInForce")
+    stop_price: Optional[float] = Field(None, description="Stop Loss Price", alias="stopPrice")
+    iceberg_qty: Optional[float] = Field(None, description="Iceberg quantity", alias="icebergQty")
+    new_client_order_id: Optional[str] = Field(None, description="Client order ID", alias="newClientOrderId")
+    recv_window: Optional[int] = Field(None, description="Receive window", alias="recvWindow")
 
     
     model_config = ConfigDict(use_enum_values=True, populate_by_name=True)
 
 
 class CreateOrderResponse(BaseModel):
-    """创建订单响应模型 - 根据实际API响应"""
-    account_id: str = Field(..., description="账户ID", alias="accountId")
-    symbol: str = Field(..., description="交易对")
-    symbol_name: str = Field(..., description="交易对名称", alias="symbolName")
-    client_order_id: str = Field(..., description="客户端订单ID", alias="clientOrderId")
-    order_id: str = Field(..., description="订单ID", alias="orderId")
-    transact_time: str = Field(..., description="交易时间", alias="transactTime")
-    price: str = Field(..., description="价格")
-    orig_qty: str = Field(..., description="原始数量", alias="origQty")
-    executed_qty: str = Field(..., description="已执行数量", alias="executedQty")
-    status: OrderStatus = Field(..., description="订单状态")
-    time_in_force: TimeInForce = Field(..., description="订单有效期", alias="timeInForce")
-    type: OrderType = Field(..., description="订单类型")
-    side: OrderSide = Field(..., description="订单方向")
+    """Create Order Response model - based on actual API response"""
+    account_id: str = Field(..., description="Account ID", alias="accountId")
+    symbol: str = Field(..., description="Symbol")
+    symbol_name: str = Field(..., description="Symbol Name", alias="symbolName")
+    client_order_id: str = Field(..., description="Client order ID", alias="clientOrderId")
+    order_id: str = Field(..., description="Order ID", alias="orderId")
+    transact_time: str = Field(..., description="Trade Time", alias="transactTime")
+    price: str = Field(..., description="Price")
+    orig_qty: str = Field(..., description="Original quantity", alias="origQty")
+    executed_qty: str = Field(..., description="Executed quantity", alias="executedQty")
+    status: OrderStatus = Field(..., description="Order status")
+    time_in_force: TimeInForce = Field(..., description="Order time in force", alias="timeInForce")
+    type: OrderType = Field(..., description="Order type")
+    side: OrderSide = Field(..., description="Order Side")
     
     model_config = ConfigDict(use_enum_values=True)
 
 
 class CreateFuturesOrderResponse(BaseModel):
-    """合约下单响应模型 - 根据实际API响应"""
-    time: str = Field(..., description="订单生成时的时间戳")
-    updateTime: str = Field(..., description="订单上次更新的时间戳")
-    orderId: str = Field(..., description="订单ID")
-    clientOrderId: str = Field(..., description="用户定义的订单ID")
-    symbol: str = Field(..., description="交易对")
-    price: str = Field(..., description="订单价格")
-    leverage: str = Field(..., description="订单杠杆")
-    origQty: str = Field(..., description="订单数量")
-    executedQty: str = Field(..., description="订单已执行数量")
-    avgPrice: str = Field(..., description="平均交易价格")
-    marginLocked: str = Field(..., description="该订单锁定的保证金")
-    type: OrderType = Field(..., description="订单类型（LIMIT和STOP）")
-    side: OrderSide = Field(..., description="订单方向")
-    timeInForce: TimeInForce = Field(..., description="时效单类型")
-    status: OrderStatus = Field(..., description="订单状态")
-    priceType: str = Field(..., description="价格类型（INPUT、OPPONENT、QUEUE、OVER、MARKET）")
+    """Futures Create Order Response model - Based on actual API response"""
+    time: str = Field(..., description="Order creation time timestamp")
+    updateTime: str = Field(..., description="Order last update time timestamp")
+    orderId: str = Field(..., description="Order ID")
+    clientOrderId: str = Field(..., description="User-defined order ID")
+    symbol: str = Field(..., description="Symbol")
+    price: str = Field(..., description="Order price")
+    leverage: str = Field(..., description="Order leverage")
+    origQty: str = Field(..., description="Order quantity")
+    executedQty: str = Field(..., description="Order Executed quantity")
+    avgPrice: str = Field(..., description="Average trade price")
+    marginLocked: str = Field(..., description="Margin locked by this order")
+    type: OrderType = Field(..., description="Order type (LIMIT and STOP)")
+    side: OrderSide = Field(..., description="Order Side")
+    timeInForce: TimeInForce = Field(..., description="Time in force order type")
+    status: OrderStatus = Field(..., description="Order status")
+    priceType: str = Field(..., description="Price type (INPUT, OPPONENT, QUEUE, OVER, MARKET)")
     
     model_config = ConfigDict(use_enum_values=True)
 
 
 class CancelFuturesOrderResponse(BaseModel):
-    """合约撤销订单响应模型 - 根据实际API响应"""
-    time: str = Field(..., description="订单生成时的时间戳")
-    updateTime: str = Field(..., description="订单上次更新的时间戳")
-    orderId: str = Field(..., description="订单ID")
-    clientOrderId: str = Field(..., description="用户定义的订单ID")
-    symbol: str = Field(..., description="交易对")
-    price: str = Field(..., description="订单价格")
-    leverage: str = Field(..., description="订单杠杆")
-    origQty: str = Field(..., description="订单数量")
-    executedQty: str = Field(..., description="订单已执行数量")
-    avgPrice: str = Field(..., description="平均交易价格")
-    marginLocked: str = Field(..., description="该订单锁定的保证金")
-    type: OrderType = Field(..., description="订单类型（LIMIT和STOP）")
-    side: OrderSide = Field(..., description="订单方向")
-    timeInForce: TimeInForce = Field(..., description="时效单类型")
-    status: OrderStatus = Field(..., description="订单状态")
-    priceType: str = Field(..., description="价格类型（INPUT、OPPONENT、QUEUE、OVER、MARKET）")
+    """Futures Cancel Order Response model - Based on actual API response"""
+    time: str = Field(..., description="Order creation time timestamp")
+    updateTime: str = Field(..., description="Order last update time timestamp")
+    orderId: str = Field(..., description="Order ID")
+    clientOrderId: str = Field(..., description="User-defined order ID")
+    symbol: str = Field(..., description="Symbol")
+    price: str = Field(..., description="Order price")
+    leverage: str = Field(..., description="Order leverage")
+    origQty: str = Field(..., description="Order quantity")
+    executedQty: str = Field(..., description="Order Executed quantity")
+    avgPrice: str = Field(..., description="Average trade price")
+    marginLocked: str = Field(..., description="Margin locked by this order")
+    type: OrderType = Field(..., description="Order type (LIMIT and STOP)")
+    side: OrderSide = Field(..., description="Order Side")
+    timeInForce: TimeInForce = Field(..., description="Time in force order type")
+    status: OrderStatus = Field(..., description="Order status")
+    priceType: str = Field(..., description="Price type (INPUT, OPPONENT, QUEUE, OVER, MARKET)")
     
     model_config = ConfigDict(use_enum_values=True)
 
 
 class QueryFuturesOrderResponse(BaseModel):
-    """合约查询订单响应模型 - 根据实际API响应"""
-    time: str = Field(..., description="订单生成时的时间戳")
-    updateTime: str = Field(..., description="订单上次更新的时间戳")
-    orderId: str = Field(..., description="订单ID")
-    clientOrderId: str = Field(..., description="用户定义的订单ID")
-    symbol: str = Field(..., description="交易对")
-    price: str = Field(..., description="订单价格")
-    leverage: str = Field(..., description="订单杠杆")
-    origQty: str = Field(..., description="订单数量")
-    executedQty: str = Field(..., description="订单已执行数量")
-    avgPrice: str = Field(..., description="平均交易价格")
-    marginLocked: str = Field(..., description="该订单锁定的保证金")
-    type: OrderType = Field(..., description="订单类型（LIMIT和STOP）")
-    side: OrderSide = Field(..., description="订单方向")
-    timeInForce: TimeInForce = Field(..., description="时效单类型")
-    status: OrderStatus = Field(..., description="订单状态")
-    priceType: str = Field(..., description="价格类型（INPUT、OPPONENT、QUEUE、OVER、MARKET）")
+    """Futures Query Order Response model - Based on actual API response"""
+    time: str = Field(..., description="Order creation time timestamp")
+    updateTime: str = Field(..., description="Order last update time timestamp")
+    orderId: str = Field(..., description="Order ID")
+    clientOrderId: str = Field(..., description="User-defined order ID")
+    symbol: str = Field(..., description="Symbol")
+    price: str = Field(..., description="Order price")
+    leverage: str = Field(..., description="Order leverage")
+    origQty: str = Field(..., description="Order quantity")
+    executedQty: str = Field(..., description="Order Executed quantity")
+    avgPrice: str = Field(..., description="Average trade price")
+    marginLocked: str = Field(..., description="Margin locked by this order")
+    type: OrderType = Field(..., description="Order type (LIMIT and STOP)")
+    side: OrderSide = Field(..., description="Order Side")
+    timeInForce: TimeInForce = Field(..., description="Time in force order type")
+    status: OrderStatus = Field(..., description="Order status")
+    priceType: str = Field(..., description="Price type (INPUT, OPPONENT, QUEUE, OVER, MARKET)")
     
     model_config = ConfigDict(use_enum_values=True)
 
 
 class FuturesOpenOrderResponse(BaseModel):
-    """合约挂单响应模型 - 根据实际API响应"""
-    time: str = Field(..., description="订单生成时的时间戳")
-    updateTime: str = Field(..., description="订单上次更新的时间戳")
-    orderId: str = Field(..., description="订单ID")
-    clientOrderId: str = Field(..., description="用户定义的订单ID")
-    symbol: str = Field(..., description="交易对")
-    price: str = Field(..., description="订单价格")
-    leverage: str = Field(..., description="订单杠杆")
-    origQty: str = Field(..., description="订单数量")
-    executedQty: str = Field(..., description="订单已执行数量")
-    avgPrice: str = Field(..., description="平均交易价格")
-    marginLocked: str = Field(..., description="该订单锁定的保证金")
-    type: OrderType = Field(..., description="订单类型（LIMIT和STOP）")
-    side: OrderSide = Field(..., description="订单方向")
-    timeInForce: TimeInForce = Field(..., description="时效单类型")
-    status: OrderStatus = Field(..., description="订单状态")
-    priceType: str = Field(..., description="价格类型（INPUT、OPPONENT、QUEUE、OVER、MARKET）")
+    """Futures Open Orders Response model - Based on actual API response"""
+    time: str = Field(..., description="Order creation time timestamp")
+    updateTime: str = Field(..., description="Order last update time timestamp")
+    orderId: str = Field(..., description="Order ID")
+    clientOrderId: str = Field(..., description="User-defined order ID")
+    symbol: str = Field(..., description="Symbol")
+    price: str = Field(..., description="Order price")
+    leverage: str = Field(..., description="Order leverage")
+    origQty: str = Field(..., description="Order quantity")
+    executedQty: str = Field(..., description="Order Executed quantity")
+    avgPrice: str = Field(..., description="Average trade price")
+    marginLocked: str = Field(..., description="Margin locked by this order")
+    type: OrderType = Field(..., description="Order type (LIMIT and STOP)")
+    side: OrderSide = Field(..., description="Order Side")
+    timeInForce: TimeInForce = Field(..., description="Time in force order type")
+    status: OrderStatus = Field(..., description="Order status")
+    priceType: str = Field(..., description="Price type (INPUT, OPPONENT, QUEUE, OVER, MARKET)")
     
     model_config = ConfigDict(use_enum_values=True)
 
 
 class CancelAllOrdersResponse(BaseModel):
-    """撤销全部订单响应模型 - 根据实际API响应"""
-    code: int = Field(..., description="响应代码")
-    message: str = Field(..., description="响应消息")
-    timestamp: int = Field(..., description="时间戳")
+    """Cancel All Order Response model - Based on actual API response"""
+    code: int = Field(..., description="Response code")
+    message: str = Field(..., description="Response message")
+    timestamp: int = Field(..., description="Time Timestamp")
     
     model_config = ConfigDict()
 
 
 class BatchCancelOrderResult(BaseModel):
-    """批量撤单结果项模型"""
-    orderId: str = Field(..., description="订单ID")
-    code: int = Field(..., description="撤单结果代码")
+    """Batch Cancel Orders Result item model"""
+    orderId: str = Field(..., description="Order ID")
+    code: int = Field(..., description="Cancel order Result Code")
     
     model_config = ConfigDict()
 
 
 class BatchCancelOrdersResponse(BaseModel):
-    """批量撤销订单响应模型 - 根据实际API响应"""
-    code: int = Field(..., description="响应代码")
-    result: list[BatchCancelOrderResult] = Field(default=[], description="撤单结果列表，空数组表示全部成功")
+    """Batch Cancel Order Response model - Based on actual API response"""
+    code: int = Field(..., description="Response code")
+    result: list[BatchCancelOrderResult] = Field(default=[], description="Cancel order Result List, Empty Array Represents All Success")
     
     model_config = ConfigDict()
 
 
 class BatchOrderResult(BaseModel):
-    """批量订单结果模型"""
-    code: int = Field(..., description="订单结果代码")
-    msg: str = Field(None, description="错误消息")
-    order: CreateOrderResponse = Field(None, description="成功创建的订单信息")
+    """Batch Order Result model"""
+    code: int = Field(..., description="Order result code")
+    msg: str = Field(None, description="Error message")
+    order: CreateOrderResponse = Field(None, description="Success Create of Order information")
     
     model_config = ConfigDict()
 
 
 class BatchCreateOrderResponse(BaseModel):
-    """批量创建订单响应模型 - 根据实际API响应"""
-    code: int = Field(..., description="响应代码")
-    result: list[BatchOrderResult] = Field(..., description="批量订单结果列表")
+    """Batch Create Order Response model - Based on actual API response"""
+    code: int = Field(..., description="Response code")
+    result: list[BatchOrderResult] = Field(..., description="Batch order result list")
     
     model_config = ConfigDict()
 
 
 class CancelOpenOrdersResponse(BaseModel):
-    """撤销挂单响应模型 - 根据实际API响应"""
-    success: bool = Field(..., description="请求是否成功")
+    """Cancel Open Orders Response model - Based on actual API response"""
+    success: bool = Field(..., description="Whether request is successful")
     
     model_config = ConfigDict()
 
 
 class FuturesOrderRequest(BaseModel):
-    """合约订单请求模型"""
-    newClientOrderId: str = Field(..., description="用户定义的订单ID")
-    symbol: str = Field(..., description="交易对")
-    side: OrderSide = Field(..., description="订单方向")
-    type: OrderType = Field(..., description="订单类型")
-    price: float = Field(..., description="订单价格")
-    quantity: float = Field(..., description="订单数量")
-    priceType: str = Field(..., description="价格类型")
+    """Futures Order Request model"""
+    newClientOrderId: str = Field(..., description="User-defined order ID")
+    symbol: str = Field(..., description="Symbol")
+    side: OrderSide = Field(..., description="Order Side")
+    type: OrderType = Field(..., description="Order type")
+    price: float = Field(..., description="Order price")
+    quantity: float = Field(..., description="Order quantity")
+    priceType: str = Field(..., description="Price type")
     
     model_config = ConfigDict(use_enum_values=True)
 
 
 class BatchFuturesOrderResult(BaseModel):
-    """批量合约下单结果项模型"""
-    code: int = Field(..., description="订单结果代码")
-    order: Optional[CreateFuturesOrderResponse] = Field(None, description="订单详情，成功时返回")
-    msg: Optional[str] = Field(None, description="失败原因，失败时返回")
+    """Batch Futures Create Order Result item model"""
+    code: int = Field(..., description="Order result code")
+    order: Optional[CreateFuturesOrderResponse] = Field(None, description="Order details, returned when successful")
+    msg: Optional[str] = Field(None, description="Failure reason, returned when failed")
     
     model_config = ConfigDict()
 
 
 class BatchCreateFuturesOrdersResponse(BaseModel):
-    """批量创建合约订单响应模型 - 根据实际API响应"""
-    code: int = Field(..., description="响应代码")
-    result: list[BatchFuturesOrderResult] = Field(..., description="批量下单结果列表")
+    """Batch Create Futures Order Response model - Based on actual API response"""
+    code: int = Field(..., description="Response code")
+    result: list[BatchFuturesOrderResult] = Field(..., description="Batch Create Order Result List")
     
     model_config = ConfigDict()
 
 
 class FuturesPosition(BaseModel):
-    """合约持仓模型 - 根据实际API响应"""
-    symbol: str = Field(..., description="交易对")
-    side: str = Field(..., description="仓位方向")
-    avgPrice: str = Field(..., description="平均开仓价格")
-    position: str = Field(..., description="开仓数量（张）")
-    available: str = Field(..., description="可平仓数量（张）")
-    leverage: str = Field(..., description="仓位现在杠杆")
-    lastPrice: str = Field(..., description="合约最新市场成交价")
-    positionValue: str = Field(..., description="仓位价值")
-    flp: str = Field(..., description="强制平仓价格")
-    margin: str = Field(..., description="仓位保证金")
-    marginRate: str = Field(..., description="当前仓位的保证金率")
-    unrealizedPnL: str = Field(..., description="当前仓位的未实现盈亏")
-    profitRate: str = Field(..., description="当前仓位的盈利率")
-    realizedPnL: str = Field(..., description="当前合约的已实现盈亏")
-    maxNotionalValue: str = Field(..., description="当前杠杆倍数最大可持仓张数")
-    markPrice: str = Field(..., description="标记价格")
+    """Futures Position model - Based on actual API response"""
+    symbol: str = Field(..., description="Symbol")
+    side: str = Field(..., description="Position Side")
+    avgPrice: str = Field(..., description="Average open price")
+    position: str = Field(..., description="Open Quantity (Contract)")
+    available: str = Field(..., description="Available close quantity (contract)")
+    leverage: str = Field(..., description="Current position leverage")
+    lastPrice: str = Field(..., description="Latest futures market execution price")
+    positionValue: str = Field(..., description="Position value")
+    flp: str = Field(..., description="Forced close price")
+    margin: str = Field(..., description="Position Margin")
+    marginRate: str = Field(..., description="Current Position of Margin Rate")
+    unrealizedPnL: str = Field(..., description="Current Position of Not Implementation PnL")
+    profitRate: str = Field(..., description="Current position profit rate")
+    realizedPnL: str = Field(..., description="Current Futures of Already Implementation PnL")
+    maxNotionalValue: str = Field(..., description="Maximum position contract number with current leverage multiple")
+    markPrice: str = Field(..., description="Mark price")
     
     model_config = ConfigDict()
 
 
 class SetPositionTradingStopRequest(BaseModel):
-    """设置持仓止盈止损请求模型"""
-    symbol: str = Field(..., description="交易对")
-    side: str = Field(..., description="仓位方向, LONG(多仓)或者 SHORT(空仓)")
-    takeProfit: Optional[str] = Field(None, description="止盈价格")
-    stopLoss: Optional[str] = Field(None, description="止损价格")
-    tpTriggerBy: Optional[str] = Field(None, description="止盈条件单参数.触发类型:MARK_PRICE(标记价格),CONTRACT_PRICE(合约最新价).默认 CONTRACT_PRICE")
-    slTriggerBy: Optional[str] = Field(None, description="止损条件单参数.触发类型:MARK_PRICE(标记价格),CONTRACT_PRICE(合约最新价).默认 CONTRACT_PRICE")
+    """Set Position Take Profit Stop Loss Request model"""
+    symbol: str = Field(..., description="Symbol")
+    side: str = Field(..., description="Position side, LONG (Long) or SHORT (Short)")
+    takeProfit: Optional[str] = Field(None, description="Take Profit Price")
+    stopLoss: Optional[str] = Field(None, description="Stop Loss Price")
+    tpTriggerBy: Optional[str] = Field(None, description="Take profit conditional order parameters. Trigger type: MARK_PRICE (mark price), CONTRACT_PRICE (latest futures price). Default CONTRACT_PRICE")
+    slTriggerBy: Optional[str] = Field(None, description="Stop loss conditional order parameters. Trigger type: MARK_PRICE (mark price), CONTRACT_PRICE (latest futures price). Default CONTRACT_PRICE")
     
     model_config = ConfigDict()
 
 
 class SetPositionTradingStopResponse(BaseModel):
-    """设置持仓止盈止损响应模型 - 根据实际API响应"""
-    symbol: str = Field(..., description="交易对")
-    side: str = Field(..., description="仓位方向")
-    takeProfit: Optional[str] = Field(None, description="止盈价格")
-    stopLoss: Optional[str] = Field(None, description="止损价格")
-    tpTriggerBy: Optional[str] = Field(None, description="止盈触发类型")
-    slTriggerBy: Optional[str] = Field(None, description="止损触发类型")
+    """Set Position Take Profit Stop Loss Response model - Based on actual API response"""
+    symbol: str = Field(..., description="Symbol")
+    side: str = Field(..., description="Position Side")
+    takeProfit: Optional[str] = Field(None, description="Take Profit Price")
+    stopLoss: Optional[str] = Field(None, description="Stop Loss Price")
+    tpTriggerBy: Optional[str] = Field(None, description="Take Profit Trigger Type")
+    slTriggerBy: Optional[str] = Field(None, description="Stop Loss Trigger Type")
     
     model_config = ConfigDict()
 
 
 class QueryFuturesHistoryOrdersRequest(BaseModel):
-    """查询历史订单请求模型"""
-    symbol: Optional[str] = Field(None, description="交易对")
-    orderId: Optional[str] = Field(None, description="订单ID")
-    type: Optional[OrderType] = Field(None, description="订单类型 (LIMIT, STOP)")
-    startTime: Optional[int] = Field(None, description="开始时间戳 默认值:三天前")
-    endTime: Optional[int] = Field(None, description="截止时间戳")
-    limit: Optional[int] = Field(20, description="返回条数 默认20 最小1 最大1000")
+    """Query historical orders request model"""
+    symbol: Optional[str] = Field(None, description="Symbol")
+    orderId: Optional[str] = Field(None, description="Order ID")
+    type: Optional[OrderType] = Field(None, description="Order type (LIMIT, STOP)")
+    startTime: Optional[int] = Field(None, description="Start time timestamp, default value: three days before")
+    endTime: Optional[int] = Field(None, description="End time timestamp")
+    limit: Optional[int] = Field(20, description="Number of returned records, default 20, minimum 1, maximum 1000")
     
     model_config = ConfigDict()
 
 
 class FuturesBalance(BaseModel):
-    """合约账户余额模型"""
-    asset: str = Field(..., description="资产")
-    balance: str = Field(..., description="总余额")
-    availableBalance: str = Field(..., description="可用保证金，包含未实现盈亏")
-    positionMargin: str = Field(..., description="仓位保证金")
-    orderMargin: str = Field(..., description="委托保证金（下单锁定）")
-    crossUnRealizedPnl: str = Field(..., description="全仓未实现盈亏")
+    """Futures account balance model"""
+    asset: str = Field(..., description="Asset")
+    balance: str = Field(..., description="Total Balance")
+    availableBalance: str = Field(..., description="Available margin, contains unrealized PnL")
+    positionMargin: str = Field(..., description="Position Margin")
+    orderMargin: str = Field(..., description="Order margin (locked when creating order)")
+    crossUnRealizedPnl: str = Field(..., description="Cross Not Implementation PnL")
     
     model_config = ConfigDict()
 
 
 class AdjustIsolatedMarginRequest(BaseModel):
-    """调整逐仓保证金请求模型"""
-    symbol: str = Field(..., description="交易对")
-    side: str = Field(..., description="仓位方向，LONG（多仓）或者SHORT（空仓）")
-    amount: str = Field(..., description="增加（正值）或者减少（负值）保证金的数量")
+    """Adjust isolated margin request model"""
+    symbol: str = Field(..., description="Symbol")
+    side: str = Field(..., description="Position side, LONG (Long) or SHORT (Short)")
+    amount: str = Field(..., description="Increase (positive value) or decrease (negative value) margin quantity")
     
     model_config = ConfigDict()
 
 
 class AdjustIsolatedMarginResponse(BaseModel):
-    """调整逐仓保证金响应模型"""
-    code: int = Field(..., description="响应码 200 = 成功")
-    msg: str = Field(..., description="响应消息")
-    symbol: str = Field(..., description="交易对")
-    margin: str = Field(..., description="更新后的仓位保证金")
-    timestamp: int = Field(..., description="更新时间戳")
+    """Adjust isolated margin response model"""
+    code: int = Field(..., description="Response code 200 = Success")
+    msg: str = Field(..., description="Response message")
+    symbol: str = Field(..., description="Symbol")
+    margin: str = Field(..., description="Update After of Position Margin")
+    timestamp: int = Field(..., description="Update Time Timestamp")
     
     model_config = ConfigDict()
 
 
 class QueryFuturesTradeHistoryRequest(BaseModel):
-    """查询合约账户成交历史请求模型"""
-    symbol: str = Field(..., description="交易对")
-    fromId: Optional[int] = Field(None, description="从TradeId开始（用来查询成交订单）")
-    toId: Optional[int] = Field(None, description="到TradeId结束（用来查询成交订单）")
-    startTime: Optional[int] = Field(None, description="开始时间戳")
-    endTime: Optional[int] = Field(None, description="截止时间戳")
-    limit: Optional[int] = Field(20, description="返回条数 默认20 最小1 最大1000")
+    """Query futures account trade history request model"""
+    symbol: str = Field(..., description="Symbol")
+    fromId: Optional[int] = Field(None, description="Start from trade ID (used to query execution order)")
+    toId: Optional[int] = Field(None, description="End at trade ID (used to query execution order)")
+    startTime: Optional[int] = Field(None, description="Start time timestamp")
+    endTime: Optional[int] = Field(None, description="End time timestamp")
+    limit: Optional[int] = Field(20, description="Number of returned records, default 20, minimum 1, maximum 1000")
     
     model_config = ConfigDict()
 
 
 class FuturesTrade(BaseModel):
-    """合约成交记录模型"""
-    time: str = Field(..., description="成交时间")
-    id: str = Field(..., description="成交ID")
-    orderId: str = Field(..., description="订单ID")
-    symbol: str = Field(..., description="交易对")
-    price: str = Field(..., description="成交价格")
-    qty: str = Field(..., description="成交数量")
-    commissionAsset: str = Field(..., description="手续费类型（Token名称）")
-    commission: str = Field(..., description="实际手续费")
-    makerRebate: str = Field(..., description="负maker返佣")
-    type: str = Field(..., description="订单类型（LIMIT、MARKET)")
-    isMaker: bool = Field(..., description="是否是maker")
-    side: str = Field(..., description="订单方向（BUY_OPEN、SELL_OPEN、BUY_CLOSE、SELL_CLOSE）")
-    realizedPnl: str = Field(..., description="成交盈亏")
+    """Futures execution record model"""
+    time: str = Field(..., description="Execution Time")
+    id: str = Field(..., description="Execution ID")
+    orderId: str = Field(..., description="Order ID")
+    symbol: str = Field(..., description="Symbol")
+    price: str = Field(..., description="Execution Price")
+    qty: str = Field(..., description="Execution Quantity")
+    commissionAsset: str = Field(..., description="Fee Type (Token Name)")
+    commission: str = Field(..., description="Actual fee")
+    makerRebate: str = Field(..., description="Negative maker rebate")
+    type: str = Field(..., description="Order type (LIMIT, MARKET)")
+    isMaker: bool = Field(..., description="Whether is maker")
+    side: str = Field(..., description="Order Side (BUY_OPEN, SELL_OPEN, BUY_CLOSE, SELL_CLOSE)")
+    realizedPnl: str = Field(..., description="Execution PnL")
     ticketId: str = Field(..., description="ticketId")
     
     model_config = ConfigDict()
 
 
 class QueryFuturesAccountFlowRequest(BaseModel):
-    """查询合约账户流水请求模型"""
-    symbol: Optional[str] = Field(None, description="资产")
-    flowType: Optional[int] = Field(None, description="流水类型")
-    fromId: Optional[int] = Field(None, description="顺向查询数据")
-    endId: Optional[int] = Field(None, description="反向查询数据")
-    startTime: Optional[int] = Field(None, description="开始时间")
-    endTime: Optional[int] = Field(None, description="结束时间")
-    limit: Optional[int] = Field(None, description="每页记录数")
+    """Query futures account flow request model"""
+    symbol: Optional[str] = Field(None, description="Asset")
+    flowType: Optional[int] = Field(None, description="Flow type")
+    fromId: Optional[int] = Field(None, description="Forward query data")
+    endId: Optional[int] = Field(None, description="Reverse query data")
+    startTime: Optional[int] = Field(None, description="Start time")
+    endTime: Optional[int] = Field(None, description="End time")
+    limit: Optional[int] = Field(None, description="Number of records per page")
     
     model_config = ConfigDict()
 
 
 class FuturesAccountFlow(BaseModel):
-    """合约账户流水模型"""
-    id: int = Field(..., description="流水ID")
-    accountId: int = Field(..., description="账户ID")
-    coin: str = Field(..., description="资产")
-    coinId: str = Field(..., description="资产ID")
-    coinName: str = Field(..., description="资产名称")
-    symbol: str = Field(..., description="交易对名称")
-    symbolId: str = Field(..., description="交易对ID")
-    flowTypeValue: int = Field(..., description="流水类型值")
-    flowType: str = Field(..., description="流水类型名称")
-    flowName: str = Field(..., description="流水类型说明")
-    change: str = Field(..., description="变动值")
-    total: str = Field(..., description="变动后当前tokenId总资产")
-    created: int = Field(..., description="创建时间")
+    """Futures account flow model"""
+    id: int = Field(..., description="Flow ID")
+    accountId: int = Field(..., description="Account ID")
+    coin: str = Field(..., description="Asset")
+    coinId: str = Field(..., description="Asset ID")
+    coinName: str = Field(..., description="Asset Name")
+    symbol: str = Field(..., description="Symbol Name")
+    symbolId: str = Field(..., description="Symbol ID")
+    flowTypeValue: int = Field(..., description="Flow type value")
+    flowType: str = Field(..., description="Flow type Name")
+    flowName: str = Field(..., description="Flow type Description")
+    change: str = Field(..., description="Change value")
+    total: str = Field(..., description="Change After Current token Id Total Asset")
+    created: int = Field(..., description="Create time")
     
     model_config = ConfigDict()
 
 
 class QueryFuturesUserFeeRateRequest(BaseModel):
-    """查询合约用户手续费率请求模型"""
-    symbol: str = Field(..., description="交易对")
+    """Query futures user fee rate request model"""
+    symbol: str = Field(..., description="Symbol")
     
     model_config = ConfigDict()
 
 
 class FuturesUserFeeRate(BaseModel):
-    """合约用户手续费率模型"""
-    openMakerFee: str = Field(..., description="开仓挂单的手续费费率")
-    openTakerFee: str = Field(..., description="开仓吃单的手续费费率")
-    closeMakerFee: str = Field(..., description="平仓挂单的手续费费率")
-    closeTakerFee: str = Field(..., description="平仓吃单的手续费费率")
+    """Futures user fee rate model"""
+    openMakerFee: str = Field(..., description="Open Open Orders of Fee Fee Rate")
+    openTakerFee: str = Field(..., description="Open Taker of Fee Fee Rate")
+    closeMakerFee: str = Field(..., description="Close Open Orders of Fee Fee Rate")
+    closeTakerFee: str = Field(..., description="Close Taker of Fee Fee Rate")
     
     model_config = ConfigDict()
 
 
 class FuturesTodayPnL(BaseModel):
-    """合约今日盈亏模型"""
-    dayProfit: str = Field(..., description="今日盈亏 UTC+0 时区")
-    dayProfitRate: str = Field(..., description="今日盈亏率 UTC+0 时区")
+    """Futures today PnL model"""
+    dayProfit: str = Field(..., description="Today PnL UTC+0 timezone")
+    dayProfitRate: str = Field(..., description="Today PnL rate UTC+0 timezone")
     
     model_config = ConfigDict()
 
 
 class MarginType(str, Enum):
-    """保证金类型枚举"""
-    CROSS = "CROSS"  # 全仓
-    ISOLATED = "ISOLATED"  # 逐仓
+    """Margin type enumeration"""
+    CROSS = "CROSS"  # Cross
+    ISOLATED = "ISOLATED"  # Isolated
 
 
 class ChangeMarginTypeRequest(BaseModel):
-    """变换逐全仓模式请求模型"""
-    symbol: str = Field(..., description="交易对")
-    marginType: MarginType = Field(..., description="保证金类型: CROSS=全仓, ISOLATED=逐仓")
+    """Change to cross mode request model"""
+    symbol: str = Field(..., description="Symbol")
+    marginType: MarginType = Field(..., description="Margin Type: CROSS=Cross, ISOLATED=Isolated")
     
     model_config = ConfigDict()
     
     def model_dump(self, **kwargs):
-        """重写model_dump方法，确保枚举字段使用name值"""
+        """Override model_dump method to ensure enum fields use name values"""
         data = super().model_dump(**kwargs)
         if 'marginType' in data and isinstance(data['marginType'], MarginType):
             data['marginType'] = data['marginType'].name
@@ -469,208 +469,208 @@ class ChangeMarginTypeRequest(BaseModel):
 
 
 class ChangeMarginTypeResponse(BaseModel):
-    """变换逐全仓模式响应模型"""
-    code: int = Field(..., description="响应码 200=成功")
-    symbol: str = Field(..., description="交易对")
-    marginType: str = Field(..., description="保证金类型: CROSS=全仓, ISOLATED=逐仓")
+    """Change to cross mode response model"""
+    code: int = Field(..., description="Response code 200=Success")
+    symbol: str = Field(..., description="Symbol")
+    marginType: str = Field(..., description="Margin Type: CROSS=Cross, ISOLATED=Isolated")
     
     model_config = ConfigDict()
 
 
 class AdjustLeverageRequest(BaseModel):
-    """调整开仓杠杆请求模型"""
-    symbol: str = Field(..., description="交易对")
-    leverage: int = Field(..., description="杠杆倍数")
+    """Adjust open leverage request model"""
+    symbol: str = Field(..., description="Symbol")
+    leverage: int = Field(..., description="Leverage Multiple")
     
     model_config = ConfigDict()
 
 
 class AdjustLeverageResponse(BaseModel):
-    """调整开仓杠杆响应模型"""
-    code: int = Field(..., description="响应码 200=成功")
-    symbolId: str = Field(..., description="交易对")
-    leverage: str = Field(..., description="杠杆倍数")
+    """Adjust open leverage response model"""
+    code: int = Field(..., description="Response code 200=Success")
+    symbolId: str = Field(..., description="Symbol")
+    leverage: str = Field(..., description="Leverage Multiple")
     
     model_config = ConfigDict()
 
 
 class QueryLeverageRequest(BaseModel):
-    """查询杠杆倍数和仓位模式请求模型"""
-    symbol: str = Field(..., description="交易对")
+    """Query leverage multiple and position mode request model"""
+    symbol: str = Field(..., description="Symbol")
     
     model_config = ConfigDict()
 
 
 class AccountLeverage(BaseModel):
-    """账户杠杆信息模型"""
-    symbolId: str = Field(..., description="交易对")
-    leverage: str = Field(..., description="杠杆倍数")
-    marginType: str = Field(..., description="保证金类型: CROSS=全仓, ISOLATED=逐仓")
+    """Account leverage information model"""
+    symbolId: str = Field(..., description="Symbol")
+    leverage: str = Field(..., description="Leverage Multiple")
+    marginType: str = Field(..., description="Margin Type: CROSS=Cross, ISOLATED=Isolated")
     
     model_config = ConfigDict()
 
 
 class SpotBalance(BaseModel):
-    """现货账户余额模型"""
-    asset: str = Field(..., description="资产")
-    assetId: str = Field(..., description="资产id")
-    assetName: str = Field(..., description="资产名称")
-    total: str = Field(..., description="总数量")
-    free: str = Field(..., description="可用数")
-    locked: str = Field(..., description="冻结数")
+    """Spot account balance model"""
+    asset: str = Field(..., description="Asset")
+    assetId: str = Field(..., description="Asset ID")
+    assetName: str = Field(..., description="Asset Name")
+    total: str = Field(..., description="Total Quantity")
+    free: str = Field(..., description="Available amount")
+    locked: str = Field(..., description="Locked amount")
     
     model_config = ConfigDict()
 
 
 class SpotAccountInfo(BaseModel):
-    """现货账户信息模型"""
-    balances: list[SpotBalance] = Field(..., description="余额列表")
+    """Spot account information model"""
+    balances: list[SpotBalance] = Field(..., description="Balance List")
     
     model_config = ConfigDict()
 
 
 class SpotSubAccount(BaseModel):
-    """现货子账户模型"""
-    accountId: str = Field(..., description="账户ID")
-    accountName: str = Field(..., description="子账户名称")
-    accountType: int = Field(..., description="子账户类型: 1=币币账户, 3=合约账户")
-    accountIndex: int = Field(..., description="账户index: 0=默认账户, >0=创建的子账户")
+    """Spot sub account model"""
+    accountId: str = Field(..., description="Account ID")
+    accountName: str = Field(..., description="Sub Account Name")
+    accountType: int = Field(..., description="Sub account type: 1=spot account, 3=futures account")
+    accountIndex: int = Field(..., description="Account index: 0=default account, >0=created sub account")
     
     model_config = ConfigDict()
 
 
 class ApiKeyType(BaseModel):
-    """API Key类型模型"""
-    accountType: str = Field(..., description="账户类型: master=主账户, sub=子账户")
+    """API key type model"""
+    accountType: str = Field(..., description="Account Type: master=Main Account, sub=Sub Account")
     
     model_config = ConfigDict()
 
 
 class OrderResponse(BaseModel):
-    """查询订单响应模型 - 查询挂单、订单状态时返回"""
-    symbol: str = Field(..., description="交易对")
-    order_id: str = Field(..., description="订单ID", alias="orderId")
-    client_order_id: str = Field(..., description="客户端订单ID", alias="clientOrderId")
-    price: str = Field(..., description="价格")
-    orig_qty: str = Field(..., description="原始数量", alias="origQty")
-    executed_qty: str = Field(..., description="已执行数量", alias="executedQty")
-    cummulative_quote_qty: str = Field(..., description="累计成交金额", alias="cummulativeQuoteQty")
-    status: OrderStatus = Field(..., description="订单状态")
-    time_in_force: TimeInForce = Field(..., description="订单有效期", alias="timeInForce")
-    type: OrderType = Field(..., description="订单类型")
-    side: OrderSide = Field(..., description="订单方向")
-    stop_price: str = Field(..., description="止损价格", alias="stopPrice")
-    iceberg_qty: str = Field(..., description="冰山数量", alias="icebergQty")
-    time: str = Field(..., description="订单时间", alias="time")
-    update_time: str = Field(..., description="更新时间", alias="updateTime")
-    is_working: bool = Field(..., description="是否在工作", alias="isWorking")
+    """Query order response model - Returned when querying open orders and order status"""
+    symbol: str = Field(..., description="Symbol")
+    order_id: str = Field(..., description="Order ID", alias="orderId")
+    client_order_id: str = Field(..., description="Client order ID", alias="clientOrderId")
+    price: str = Field(..., description="Price")
+    orig_qty: str = Field(..., description="Original quantity", alias="origQty")
+    executed_qty: str = Field(..., description="Executed quantity", alias="executedQty")
+    cummulative_quote_qty: str = Field(..., description="Cumulative execution amount", alias="cummulativeQuoteQty")
+    status: OrderStatus = Field(..., description="Order status")
+    time_in_force: TimeInForce = Field(..., description="Order time in force", alias="timeInForce")
+    type: OrderType = Field(..., description="Order type")
+    side: OrderSide = Field(..., description="Order Side")
+    stop_price: str = Field(..., description="Stop Loss Price", alias="stopPrice")
+    iceberg_qty: str = Field(..., description="Iceberg quantity", alias="icebergQty")
+    time: str = Field(..., description="Order Time", alias="time")
+    update_time: str = Field(..., description="Update Time", alias="updateTime")
+    is_working: bool = Field(..., description="Whether is working", alias="isWorking")
     
     model_config = ConfigDict(use_enum_values=True, populate_by_name=True)
 
 
 class CancelOrderRequest(BaseModel):
-    """取消订单请求模型"""
-    symbol: str = Field(..., description="交易对")
-    order_id: Optional[str] = Field(None, description="订单ID", alias="orderId")
-    orig_client_order_id: Optional[str] = Field(None, description="原始客户端订单ID", alias="origClientOrderId")
-    new_client_order_id: Optional[str] = Field(None, description="新客户端订单ID", alias="newClientOrderId")
-    recv_window: Optional[int] = Field(None, description="接收窗口", alias="recvWindow")
+    """Cancel order request model"""
+    symbol: str = Field(..., description="Symbol")
+    order_id: Optional[str] = Field(None, description="Order ID", alias="orderId")
+    orig_client_order_id: Optional[str] = Field(None, description="Original client order ID", alias="origClientOrderId")
+    new_client_order_id: Optional[str] = Field(None, description="New client order ID", alias="newClientOrderId")
+    recv_window: Optional[int] = Field(None, description="Receive window", alias="recvWindow")
     
     model_config = ConfigDict(populate_by_name=True)
 
 
 class CancelOrderResponse(BaseModel):
-    """取消订单响应模型 - 根据实际API响应"""
-    symbol: str = Field(..., description="交易对")
-    order_id: str = Field(..., description="订单ID", alias="orderId")
-    client_order_id: str = Field(..., description="客户端订单ID", alias="clientOrderId")
-    price: str = Field(..., description="价格")
-    orig_qty: str = Field(..., description="原始数量", alias="origQty")
-    executed_qty: str = Field(..., description="已执行数量", alias="executedQty")
-    status: OrderStatus = Field(..., description="订单状态")
-    time_in_force: TimeInForce = Field(..., description="订单有效期", alias="timeInForce")
-    type: OrderType = Field(..., description="订单类型")
-    side: OrderSide = Field(..., description="订单方向")
-    transact_time: str = Field(..., description="交易时间", alias="transactTime")
+    """Cancel order response model - Based on actual API response"""
+    symbol: str = Field(..., description="Symbol")
+    order_id: str = Field(..., description="Order ID", alias="orderId")
+    client_order_id: str = Field(..., description="Client order ID", alias="clientOrderId")
+    price: str = Field(..., description="Price")
+    orig_qty: str = Field(..., description="Original quantity", alias="origQty")
+    executed_qty: str = Field(..., description="Executed quantity", alias="executedQty")
+    status: OrderStatus = Field(..., description="Order status")
+    time_in_force: TimeInForce = Field(..., description="Order time in force", alias="timeInForce")
+    type: OrderType = Field(..., description="Order type")
+    side: OrderSide = Field(..., description="Order Side")
+    transact_time: str = Field(..., description="Trade Time", alias="transactTime")
     
     model_config = ConfigDict(use_enum_values=True, populate_by_name=True)
 
 
 class OrderQueryRequest(BaseModel):
-    """查询订单请求模型"""
-    symbol: str = Field(..., description="交易对")
-    orderId: Optional[int] = Field(None, description="订单ID")
-    origClientOrderId: Optional[str] = Field(None, description="原始客户端订单ID")
-    recvWindow: Optional[int] = Field(None, description="接收窗口")
+    """Query order request model"""
+    symbol: str = Field(..., description="Symbol")
+    orderId: Optional[int] = Field(None, description="Order ID")
+    origClientOrderId: Optional[str] = Field(None, description="Original client order ID")
+    recvWindow: Optional[int] = Field(None, description="Receive window")
     
     model_config = ConfigDict()
 
 
 class Trade(BaseModel):
-    """成交记录模型"""
-    id: int = Field(..., description="成交ID")
-    price: float = Field(..., description="成交价格")
-    qty: float = Field(..., description="成交数量")
-    commission: float = Field(..., description="手续费")
-    commissionAsset: str = Field(..., description="手续费资产")
-    time: int = Field(..., description="成交时间")
-    isBuyer: bool = Field(..., description="是否买方")
-    isMaker: bool = Field(..., description="是否挂单方")
-    isBestMatch: bool = Field(..., description="是否最佳匹配")
+    """Execution record model"""
+    id: int = Field(..., description="Execution ID")
+    price: float = Field(..., description="Execution Price")
+    qty: float = Field(..., description="Execution Quantity")
+    commission: float = Field(..., description="Fee")
+    commissionAsset: str = Field(..., description="Fee Asset")
+    time: int = Field(..., description="Execution Time")
+    isBuyer: bool = Field(..., description="Whether is buyer")
+    isMaker: bool = Field(..., description="Whether is maker")
+    isBestMatch: bool = Field(..., description="Whether is best match")
     
     model_config = ConfigDict()
 
 
 class ExchangeInfo(BaseModel):
-    """交易所信息模型"""
-    timezone: Optional[str] = Field(None, description="时区")
-    serverTime: Optional[int] = Field(None, description="服务器时间")
-    rateLimits: Optional[List[Dict[str, Any]]] = Field(default_factory=list, description="速率限制")
-    brokerFilters: Optional[List[Dict[str, Any]]] = Field(default_factory=list, description="交易所过滤器")
-    symbols: Optional[List[Dict[str, Any]]] = Field(default_factory=list, description="交易对列表")
+    """Trade all information model"""
+    timezone: Optional[str] = Field(None, description="Timezone")
+    serverTime: Optional[int] = Field(None, description="Server Time")
+    rateLimits: Optional[List[Dict[str, Any]]] = Field(default_factory=list, description="Rate limit")
+    brokerFilters: Optional[List[Dict[str, Any]]] = Field(default_factory=list, description="Trading filters")
+    symbols: Optional[List[Dict[str, Any]]] = Field(default_factory=list, description="Symbol List")
     
     model_config = ConfigDict()
 
 
 class Ticker24hr(BaseModel):
-    """24小时价格变动模型"""
-    t: int = Field(..., description="时间")
-    a: str = Field(..., description="最高卖价")
-    b: str = Field(..., description="最高买价")
-    s: str = Field(..., description="交易对")
-    c: str = Field(..., description="最新成交价")
-    o: str = Field(..., description="开盘价")
-    h: str = Field(..., description="最高价")
-    l: str = Field(..., description="最低价")
-    v: str = Field(..., description="成交量")
-    qv: str = Field(..., description="成交额")
-    pc: str = Field(..., description="24小时价格变动")
-    pcp: str = Field(..., description="24小时价格变动百分比")
+    """24 hour price change model"""
+    t: int = Field(..., description="Time")
+    a: str = Field(..., description="Highest ask price")
+    b: str = Field(..., description="Highest bid price")
+    s: str = Field(..., description="Symbol")
+    c: str = Field(..., description="Latest execution price")
+    o: str = Field(..., description="Open price")
+    h: str = Field(..., description="Highest price")
+    l: str = Field(..., description="Lowest price")
+    v: str = Field(..., description="Volume")
+    qv: str = Field(..., description="Amount")
+    pc: str = Field(..., description="24 Hour Price Change")
+    pcp: str = Field(..., description="24 Hour Price Change Percentage")
     
     model_config = ConfigDict()
 
 
 class OrderBook(BaseModel):
-    """订单簿模型"""
-    t: Optional[int] = Field(None, description="最后更新ID")
-    b: Optional[List[List[float]]] = Field(default_factory=list, description="买单 [价格, 数量]")
-    a: Optional[List[List[float]]] = Field(default_factory=list, description="卖单 [价格, 数量]")
+    """Order book model"""
+    t: Optional[int] = Field(None, description="Most After Update ID")
+    b: Optional[List[List[float]]] = Field(default_factory=list, description="Buy order [Price, Quantity]")
+    a: Optional[List[List[float]]] = Field(default_factory=list, description="Sell order [Price, Quantity]")
     
     model_config = ConfigDict()
 
 
 class Kline(BaseModel):
-    """K线模型"""
-    openTime: int = Field(..., description="开盘时间")
-    open: float = Field(..., description="开盘价")
-    high: float = Field(..., description="最高价")
-    low: float = Field(..., description="最低价")
-    close: float = Field(..., description="收盘价")
-    volume: float = Field(..., description="成交量")
-    closeTime: int = Field(..., description="收盘时间")
-    quoteAssetVolume: float = Field(..., description="成交额")
-    numberOfTrades: int = Field(..., description="成交笔数")
-    takerBuyBaseAssetVolume: float = Field(..., description="主动买入成交量")
-    takerBuyQuoteAssetVolume: float = Field(..., description="主动买入成交额")
+    """K-line model"""
+    openTime: int = Field(..., description="Open Time")
+    open: float = Field(..., description="Open price")
+    high: float = Field(..., description="Highest price")
+    low: float = Field(..., description="Lowest price")
+    close: float = Field(..., description="Close price")
+    volume: float = Field(..., description="Volume")
+    closeTime: int = Field(..., description="Close time")
+    quoteAssetVolume: float = Field(..., description="Amount")
+    numberOfTrades: int = Field(..., description="Number of trades")
+    takerBuyBaseAssetVolume: float = Field(..., description="Main active buy volume")
+    takerBuyQuoteAssetVolume: float = Field(..., description="Main active buy amount")
     
     model_config = ConfigDict() 

@@ -1,75 +1,75 @@
 #!/usr/bin/env python3
 """
-TooBit API 现货撤销挂单示例
-撤销指定交易对和方向的全部挂单
+TooBit API Spot Cancel Open Orders Example
+Cancel Specified Trading Pair And Side of All Open Orders
 """
 
 from open_api_sdk import TooBitClient, TooBitConfig, OrderSide
 
 def cancel_open_orders():
-    """撤销挂单示例"""
-    print("=== TooBit API 现货撤销挂单示例 ===\n")
+    """Cancel Open OrdersExample"""
+    print("=== TooBit API Spot Cancel Open Orders Example ===\n")
     
-    # 初始化配置
+    # Initialize configuration
     config = TooBitConfig.from_env()
     client = TooBitClient(config)
     
     try:
-        print("🔍 撤销挂单测试:")
+        print("🔍 Cancel Open OrdersTest:")
         print()
         
-        # 示例1: 撤销所有挂单
-        print("📊 示例1: 撤销所有挂单")
-        print("   参数: 无")
+        # Example1: Cancel All Open Orders
+        print("📊 Example1: Cancel All Open Orders")
+        print("   Parameters: None")
         print("   API: DELETE /api/v1/spot/openOrders")
-        print("   说明: 撤销账户下所有现货挂单")
+        print("   Description: Cancel all spot open orders under account")
         print()
         
         response1 = client.cancel_open_orders()
-        print(f"   响应: {response1.model_dump()}")
-        print(f"   成功: {response1.success}")
+        print(f"   Response: {response1.model_dump()}")
+        print(f"   Success: {response1.success}")
         print()
         
-        # 示例2: 撤销指定交易对的所有挂单
-        print("📊 示例2: 撤销指定交易对的所有挂单")
-        print("   参数: symbol='BTCUSDT'")
+        # Example2: Cancel Specified Trading pair of All Open Orders
+        print("📊 Example2: Cancel Specified Trading pair of All Open Orders")
+        print("   Parameters: symbol='BTCUSDT'")
         print("   API: DELETE /api/v1/spot/openOrders?symbol=BTCUSDT")
-        print("   说明: 撤销BTCUSDT交易对的所有挂单")
+        print("   Description: Cancel BTCUSDT Trading pair of All Open Orders")
         print()
         
         response2 = client.cancel_open_orders(symbol='BTCUSDT')
-        print(f"   响应: {response2.model_dump()}")
-        print(f"   成功: {response2.success}")
+        print(f"   Response: {response2.model_dump()}")
+        print(f"   Success: {response2.success}")
         print()
         
-        # 示例3: 撤销指定交易对和方向的挂单
-        print("📊 示例3: 撤销指定交易对和方向的挂单")
-        print("   参数: symbol='BTCUSDT', side='BUY'")
+        # Example3: Cancel Specified Trading pair And Side of Open Orders
+        print("📊 Example3: Cancel Specified Trading pair And Side of Open Orders")
+        print("   Parameters: symbol='BTCUSDT', side='BUY'")
         print("   API: DELETE /api/v1/spot/openOrders?symbol=BTCUSDT&side=BUY")
-        print("   说明: 撤销BTCUSDT交易对的所有买单")
+        print("   Description: Cancel BTCUSDT Trading pair of All Buy order")
         print()
         
         response3 = client.cancel_open_orders(symbol='BTCUSDT', side=OrderSide.BUY)
-        print(f"   响应: {response3.model_dump()}")
-        print(f"   成功: {response3.success}")
+        print(f"   Response: {response3.model_dump()}")
+        print(f"   Success: {response3.success}")
         print()
         
-        # 示例4: 撤销指定方向的所有挂单
-        print("📊 示例4: 撤销指定方向的所有挂单")
-        print("   参数: side='SELL'")
+        # Example4: Cancel Specified Side of All Open Orders
+        print("📊 Example4: Cancel Specified Side of All Open Orders")
+        print("   Parameters: side='SELL'")
         print("   API: DELETE /api/v1/spot/openOrders?side=SELL")
-        print("   说明: 撤销所有卖单")
+        print("   Description: Cancel All Sell order")
         print()
         
         response4 = client.cancel_open_orders(side=OrderSide.SELL)
-        print(f"   响应: {response4.model_dump()}")
-        print(f"   成功: {response4.success}")
+        print(f"   Response: {response4.model_dump()}")
+        print(f"   Success: {response4.success}")
         print()
         
-        print("🎉 撤销挂单测试完成!")
+        print("🎉 Cancel Open Orders Test Complete!")
         
     except Exception as e:
-        print(f"❌ 撤销挂单测试失败: {e}")
+        print(f"❌ Cancel Open Orders Test Failed: {e}")
     
     finally:
         client.close()

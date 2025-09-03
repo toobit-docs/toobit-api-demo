@@ -1,62 +1,62 @@
 """
-TooBit 合约API SDK - 获取最优挂单示例
-获取合约最优挂单信息 (无需API密钥)
+TooBit Futures API SDK - Get Best Open Orders Example
+Get Futures Best Open Orders Information (No need API Key)
 """
 
 from open_api_sdk import TooBitClient, TooBitConfig
 
 
 def get_best_order_book():
-    """获取最优挂单信息"""
-    print("=== TooBit 合约API 获取最优挂单信息 ===\n")
+    """Get Best Open Orders Information"""
+    print("=== TooBit Futures API Get Best Open Orders Information ===\n")
     
     try:
-        # 创建配置 (无需API密钥)
+        # Create Configuration (No need API Key)
         config = TooBitConfig(
             api_key="test_key",
             api_secret="test_secret"
         )
         
-        # 创建客户端
+        # Create Client
         client = TooBitClient(config)
         
         symbol = "BTCUSDT"
         
-        print(f"🔄 正在获取 {symbol} 的最优挂单信息...")
+        print(f"🔄 Getting {symbol} Best Open Orders Information...")
         
-        # 获取最优挂单信息
+        # Get Best Open Orders Information
         response = client.get_best_order_book(symbol)
         
-        print("✅ 最优挂单信息获取成功!")
+        print("✅ Best Open Orders Information Get Success!")
         print()
         
-        # 显示基本信息
+        # Display basic information
         if response and len(response) > 0:
-            ticker = response[0]  # 获取第一个元素
+            ticker = response[0]  # Get First Item Element
             
             if 's' in ticker:
-                print(f"📋 交易对: {ticker['s']}")
+                print(f"📋 Trading pair: {ticker['s']}")
             
             if 't' in ticker:
-                print(f"⏰ 时间: {ticker['t']}")
+                print(f"⏰ Time: {ticker['t']}")
             
-            # 显示买单信息
+            # Display Buy Order Information
             if 'b' in ticker and 'bq' in ticker:
-                print(f"\n📈 买单信息:")
-                print(f"   价格: {ticker['b']} | 数量: {ticker['bq']}")
+                print(f"\n📈 Buy Order Information:")
+                print(f"   Price: {ticker['b']} | Quantity: {ticker['bq']}")
             
-            # 显示卖单信息
+            # Display Sell Order Information
             if 'a' in ticker and 'aq' in ticker:
-                print(f"\n📉 卖单信息:")
-                print(f"   价格: {ticker['a']} | 数量: {ticker['aq']}")
+                print(f"\n📉 Sell Order Information:")
+                print(f"   Price: {ticker['a']} | Quantity: {ticker['aq']}")
         else:
-            print("   ℹ️  未获取到数据")
+            print("   ℹ️  No Retrieved Data")
         
-        print("\n🎉 最优挂单信息获取完成!")
+        print("\n🎉 Best Open Orders Information Get Complete!")
         return response
         
     except Exception as e:
-        print(f"❌ 获取最优挂单信息失败: {e}")
+        print(f"❌ Get Best Open Orders Information Failed: {e}")
         return None
     
     finally:
@@ -64,8 +64,8 @@ def get_best_order_book():
 
 
 if __name__ == "__main__":
-    print("=== TooBit 合约API SDK 获取最优挂单示例 ===\n")
-    print("💡 这个示例无需API密钥，可以直接运行")
+    print("=== TooBit Futures API SDK Get Best Open Orders Example ===\n")
+    print("💡 This example does not need API key, can run directly")
     
-    # 运行示例
+    # Run Example
     get_best_order_book()

@@ -1,71 +1,71 @@
 """
-TooBit 合约API SDK - 获取24小时价格变动示例
-获取合约24小时价格变动统计 (无需API密钥)
+TooBit Futures API SDK - Get 24 Hour Price Change Example
+Get Futures 24 Hour Price Change statistics (No need API Key)
 """
 
 from open_api_sdk import TooBitClient, TooBitConfig
 
 
 def get_24hr_ticker():
-    """获取24小时价格变动统计"""
-    print("=== TooBit 合约API 获取24小时价格变动统计 ===\n")
+    """Get 24 Hour Price Change statistics"""
+    print("=== TooBit Futures API Get 24 Hour Price Change statistics ===\n")
     
     try:
-        # 创建配置 (无需API密钥)
+        # Create Configuration (No need API Key)
         config = TooBitConfig(
             api_key="test_key",
             api_secret="test_secret"
         )
         
-        # 创建客户端
+        # Create Client
         client = TooBitClient(config)
         
         symbol = "BTCUSDT"
         
-        print(f"🔄 正在获取 {symbol} 的24小时价格变动统计...")
+        print(f"🔄 Getting {symbol} 24 Hour Price Change statistics...")
         
-        # 获取24小时价格变动统计
+        # Get 24 Hour Price Change statistics
         response = client.get_24hr_ticker(symbol)
         
-        print("✅ 24小时价格变动统计获取成功!")
+        print("✅ 24 Hour Price Change statistics Get Success!")
         print()
         
-        # 显示基本信息
-        print(f"🔍 调试信息: response类型={type(response)}, 长度={len(response) if response else 0}")
+        # Display basic information
+        print(f"🔍 Debug info: responseType={type(response)}, length={len(response) if response else 0}")
         
         if response and len(response) > 0:
-            ticker = response[0]  # 获取第一个元素
-            print(f"🔍 调试信息: ticker类型={type(ticker)}, ticker内容={ticker}")
-            print(f"🔍 调试信息: ticker是否有s属性={hasattr(ticker, 's')}")
+            ticker = response[0]  # Get First item Element
+            print(f"🔍 Debug info: tickerType={type(ticker)}, ticker content={ticker}")
+            print(f"🔍 Debug info: ticker has s attribute={hasattr(ticker, 's')}")
             
             if hasattr(ticker, 's'):
-                print(f"📋 交易对: {ticker.s}")
+                print(f"📋 Trading pair: {ticker.s}")
 
             if hasattr(ticker, 'c'):
-                print(f"💰 最新价格: {ticker.c}")
+                print(f"💰 Latest price: {ticker.c}")
 
             if hasattr(ticker, 'o'):
-                print(f"📈 开盘价格: {ticker.o}")
+                print(f"📈 Open price: {ticker.o}")
 
             if hasattr(ticker, 'h'):
-                print(f"🔺 最高价格: {ticker.h}")
+                print(f"🔺 High price: {ticker.h}")
 
             if hasattr(ticker, 'l'):
-                print(f"🔻 最低价格: {ticker.l}")
+                print(f"🔻 Low price: {ticker.l}")
 
             if hasattr(ticker, 'v'):
-                print(f"📊 成交量: {ticker.v}")
+                print(f"📊 Volume: {ticker.v}")
 
             if hasattr(ticker, 'pcp'):
-                print(f"📈 24小时涨跌幅: {ticker.pcp}%")
+                print(f"📈 24hr price change: {ticker.pcp}%")
         else:
-            print("   ℹ️  未获取到数据")
+            print("   ℹ️  No Retrieved Data")
         
-        print("\n🎉 24小时价格变动统计获取完成!")
+        print("\n🎉 24 Hour Price Change statistics Get Complete!")
         return response
         
     except Exception as e:
-        print(f"❌ 获取24小时价格变动统计失败: {e}")
+        print(f"❌ Get 24 Hour Price Change statistics Failed: {e}")
         return None
     
     finally:
@@ -73,8 +73,8 @@ def get_24hr_ticker():
 
 
 if __name__ == "__main__":
-    print("=== TooBit 合约API SDK 获取24小时价格变动示例 ===\n")
-    print("💡 这个示例无需API密钥，可以直接运行")
+    print("=== TooBit Futures API SDK Get 24 Hour Price Change Example ===\n")
+    print("💡 This example does not need API key, can run directly")
     
-    # 运行示例
+    # Run Example
     get_24hr_ticker()

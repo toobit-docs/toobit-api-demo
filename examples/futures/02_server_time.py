@@ -1,38 +1,38 @@
 """
-TooBit 合约API SDK - 获取服务器时间接口示例
-获取服务器时间 (无需API密钥)
+TooBit Futures API SDK - Get Server Time API Example
+Get Server Time (No need API Key)
 """
 
 from open_api_sdk import TooBitClient, TooBitConfig
 
 
 def get_server_time():
-    """获取服务器时间"""
-    print("=== TooBit 合约API 获取服务器时间 ===\n")
+    """Get Server Time"""
+    print("=== TooBit Futures API Get Server Time ===\n")
     
     try:
-        # 创建配置 (无需API密钥)
+        # Create Configuration (No need API Key)
         config = TooBitConfig(
             api_key="test_key",
             api_secret="test_secret"
         )
         
-        # 创建客户端
+        # Create Client
         client = TooBitClient(config)
         
-        print("🔄 正在获取服务器时间...")
+        print("🔄 Getting Server Time...")
         
-        # 获取服务器时间
+        # Get Server Time
         response = client.get_server_time()
         
-        print("✅ 服务器时间获取成功!")
-        print(f"   服务器时间: {response}")
+        print("✅ Server Time Get Success!")
+        print(f"   Server Time: {response}")
         
-        print("\n🎉 服务器时间获取完成!")
+        print("\n🎉 Server Time Get Complete!")
         return response
         
     except Exception as e:
-        print(f"❌ 获取服务器时间失败: {e}")
+        print(f"❌ Get Server Time Failed: {e}")
         return None
     
     finally:
@@ -40,8 +40,8 @@ def get_server_time():
 
 
 if __name__ == "__main__":
-    print("=== TooBit 合约API SDK 获取服务器时间示例 ===\n")
-    print("💡 这个示例无需API密钥，可以直接运行")
+    print("=== TooBit Futures API SDK Get Server Time Example ===\n")
+    print("💡 This example does not need API key, can run directly")
     
-    # 运行示例
+    # Run Example
     get_server_time()

@@ -1,56 +1,56 @@
 """
-TooBit 合约API SDK - 获取K线数据示例
-获取合约K线数据 (无需API密钥)
+TooBit Futures API SDK - Get KLine Data Example
+Get Futures KLine Data (No need API Key)
 """
 
 from open_api_sdk import TooBitClient, TooBitConfig
 
 
 def get_klines():
-    """获取K线数据"""
-    print("=== TooBit 合约API 获取K线数据 ===\n")
+    """Get KLine Data"""
+    print("=== TooBit Futures API Get KLine Data ===\n")
     
     try:
-        # 创建配置 (无需API密钥)
+        # Create Configuration (No need API Key)
         config = TooBitConfig(
             api_key="test_key",
             api_secret="test_secret"
         )
         
-        # 创建客户端
+        # Create Client
         client = TooBitClient(config)
         
         symbol = "BTCUSDT"
-        interval = "1h"  # 时间间隔
-        limit = 10  # 获取数量
+        interval = "1h"  # Time interval
+        limit = 10  # Get Quantity
         
-        print(f"🔄 正在获取 {symbol} 的K线数据...")
-        print(f"   时间间隔: {interval}")
-        print(f"   数量: {limit}")
+        print(f"🔄 Getting {symbol} KLine Data...")
+        print(f"   Time interval: {interval}")
+        print(f"   Quantity: {limit}")
         print()
         
-        # 获取K线数据
+        # Get KLine Data
         response = client.get_klines(symbol, interval, limit)
         
-        print("✅ K线数据获取成功!")
-        print(f"   获取到 {len(response)} 根K线")
+        print("✅ KLine Data Get Success!")
+        print(f"   Retrieved {len(response)} KLine records")
         print()
         
-        # 显示K线数据
-        print("📊 K线数据详情:")
-        for i, kline in enumerate(response[-5:]):  # 显示最后5根K线
+        # Display KLine Data
+        print("📊 KLine Data Details:")
+        for i, kline in enumerate(response[-5:]):  # Display Most Recent 5 KLine records
             if hasattr(kline, 'open') and hasattr(kline, 'high') and hasattr(kline, 'low') and hasattr(kline, 'close'):
                 open_price = float(kline.open)
                 high_price = float(kline.high)
                 low_price = float(kline.low)
                 close_price = float(kline.close)
-                print(f"   {i+1:2d}. 开盘: {open_price:>8.2f} | 最高: {high_price:>8.2f} | 最低: {low_price:>8.2f} | 收盘: {close_price:>8.2f}")
+                print(f"   {i+1:2d}. Open: {open_price:>8.2f} | High: {high_price:>8.2f} | Low: {low_price:>8.2f} | Close: {close_price:>8.2f}")
         
-        print("\n🎉 K线数据获取完成!")
+        print("\n🎉 KLine Data Get Complete!")
         return response
         
     except Exception as e:
-        print(f"❌ 获取K线数据失败: {e}")
+        print(f"❌ Get KLine Data Failed: {e}")
         return None
     
     finally:
@@ -58,8 +58,8 @@ def get_klines():
 
 
 if __name__ == "__main__":
-    print("=== TooBit 合约API SDK 获取K线数据示例 ===\n")
-    print("💡 这个示例无需API密钥，可以直接运行")
+    print("=== TooBit Futures API SDK Get KLine Data Example ===\n")
+    print("💡 This example does not need API key, can run directly")
     
-    # 运行示例
+    # Run Example
     get_klines()

@@ -383,6 +383,38 @@ class FuturesTrade(BaseModel):
     model_config = ConfigDict()
 
 
+class QueryFuturesAccountFlowRequest(BaseModel):
+    """查询合约账户流水请求模型"""
+    symbol: Optional[str] = Field(None, description="资产")
+    flowType: Optional[int] = Field(None, description="流水类型")
+    fromId: Optional[int] = Field(None, description="顺向查询数据")
+    endId: Optional[int] = Field(None, description="反向查询数据")
+    startTime: Optional[int] = Field(None, description="开始时间")
+    endTime: Optional[int] = Field(None, description="结束时间")
+    limit: Optional[int] = Field(None, description="每页记录数")
+    
+    model_config = ConfigDict()
+
+
+class FuturesAccountFlow(BaseModel):
+    """合约账户流水模型"""
+    id: int = Field(..., description="流水ID")
+    accountId: int = Field(..., description="账户ID")
+    coin: str = Field(..., description="资产")
+    coinId: str = Field(..., description="资产ID")
+    coinName: str = Field(..., description="资产名称")
+    symbol: str = Field(..., description="交易对名称")
+    symbolId: str = Field(..., description="交易对ID")
+    flowTypeValue: int = Field(..., description="流水类型值")
+    flowType: str = Field(..., description="流水类型名称")
+    flowName: str = Field(..., description="流水类型说明")
+    change: str = Field(..., description="变动值")
+    total: str = Field(..., description="变动后当前tokenId总资产")
+    created: int = Field(..., description="创建时间")
+    
+    model_config = ConfigDict()
+
+
 class OrderResponse(BaseModel):
     """查询订单响应模型 - 查询挂单、订单状态时返回"""
     symbol: str = Field(..., description="交易对")

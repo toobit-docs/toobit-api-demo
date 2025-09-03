@@ -19,7 +19,7 @@ from .models import (
     FuturesOpenOrderResponse, CancelAllOrdersResponse, BatchCancelOrderResult, BatchCancelOrdersResponse,
     BatchCreateOrderResponse, CancelOpenOrdersResponse, FuturesOrderRequest, BatchFuturesOrderResult,
     BatchCreateFuturesOrdersResponse, FuturesPosition, SetPositionTradingStopRequest, SetPositionTradingStopResponse,
-    QueryFuturesHistoryOrdersRequest, FuturesBalance,     AdjustIsolatedMarginRequest, AdjustIsolatedMarginResponse, QueryFuturesTradeHistoryRequest, FuturesTrade
+    QueryFuturesHistoryOrdersRequest, FuturesBalance,     AdjustIsolatedMarginRequest, AdjustIsolatedMarginResponse,     QueryFuturesTradeHistoryRequest, FuturesTrade, QueryFuturesAccountFlowRequest, FuturesAccountFlow
 )
 
 
@@ -422,6 +422,12 @@ class TooBitClient:
         params = request.model_dump(exclude_none=True, by_alias=True)
         response = self._make_request('GET', '/api/v1/futures/userTrades', params, signed=True)
         return [FuturesTrade(**trade) for trade in response]
+
+    def get_futures_account_flow(self, request: QueryFuturesAccountFlowRequest) -> list[FuturesAccountFlow]:
+        """查询合约账户流水 (USER_DATA)"""
+        params = request.model_dump(exclude_none=True, by_alias=True)
+        response = self._make_request('GET', '/api/v1/futures/balanceFlow', params, signed=True)
+        return [FuturesAccountFlow(**flow) for flow in response]
     
 
     

@@ -22,7 +22,8 @@ from .models import (
     QueryFuturesHistoryOrdersRequest, FuturesBalance,     AdjustIsolatedMarginRequest, AdjustIsolatedMarginResponse,     QueryFuturesTradeHistoryRequest, FuturesTrade, QueryFuturesAccountFlowRequest, FuturesAccountFlow,
     QueryFuturesUserFeeRateRequest, FuturesUserFeeRate, FuturesTodayPnL,
     ChangeMarginTypeRequest, ChangeMarginTypeResponse,
-    AdjustLeverageRequest, AdjustLeverageResponse
+    AdjustLeverageRequest, AdjustLeverageResponse,
+    QueryLeverageRequest, AccountLeverage
 )
 
 
@@ -450,6 +451,12 @@ class TooBitClient:
         params = request.model_dump(exclude_none=True, by_alias=True)
         response = self._make_request('POST', '/api/v1/futures/leverage', params, signed=True)
         return AdjustLeverageResponse(**response)
+
+    def get_account_leverage(self, request: QueryLeverageRequest) -> list[AccountLeverage]:
+        """查询杠杆倍数和仓位模式 (USER_DATA)"""
+        params = request.model_dump(exclude_none=True, by_alias=True)
+        response = self._make_request('GET', '/api/v1/futures/accountLeverage', params, signed=True)
+        return [AccountLeverage(**leverage) for leverage in response]
     
 
     

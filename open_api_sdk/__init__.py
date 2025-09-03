@@ -16,7 +16,7 @@ from .models import (
     QueryFuturesHistoryOrdersRequest, FuturesBalance, AdjustIsolatedMarginRequest, AdjustIsolatedMarginResponse,
     QueryFuturesTradeHistoryRequest, FuturesTrade, QueryFuturesAccountFlowRequest, FuturesAccountFlow,
     QueryFuturesUserFeeRateRequest, FuturesUserFeeRate, ChangeMarginTypeRequest, ChangeMarginTypeResponse,
-    FuturesTodayPnL, MarginType, AdjustLeverageRequest, AdjustLeverageResponse
+    FuturesTodayPnL, MarginType, AdjustLeverageRequest, AdjustLeverageResponse, QueryLeverageRequest, AccountLeverage
 )
 
 __version__ = "1.0.0"
@@ -75,5 +75,7 @@ __all__ = [
     "ChangeMarginTypeRequest",
     "ChangeMarginTypeResponse",
     "AdjustLeverageRequest",
-    "AdjustLeverageResponse"
+    "AdjustLeverageResponse",
+    "QueryLeverageRequest",
+    "AccountLeverage"
 ] 

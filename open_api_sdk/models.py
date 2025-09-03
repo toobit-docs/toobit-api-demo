@@ -487,6 +487,22 @@ class AdjustLeverageResponse(BaseModel):
     model_config = ConfigDict()
 
 
+class QueryLeverageRequest(BaseModel):
+    """查询杠杆倍数和仓位模式请求模型"""
+    symbol: str = Field(..., description="交易对")
+    
+    model_config = ConfigDict()
+
+
+class AccountLeverage(BaseModel):
+    """账户杠杆信息模型"""
+    symbolId: str = Field(..., description="交易对")
+    leverage: str = Field(..., description="杠杆倍数")
+    marginType: str = Field(..., description="保证金类型: CROSS=全仓, ISOLATED=逐仓")
+    
+    model_config = ConfigDict()
+
+
 class OrderResponse(BaseModel):
     """查询订单响应模型 - 查询挂单、订单状态时返回"""
     symbol: str = Field(..., description="交易对")

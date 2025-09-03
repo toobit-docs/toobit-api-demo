@@ -17,7 +17,8 @@ from .models import (
     OrderQueryRequest, ExchangeInfo, Ticker24hr, OrderBook, Kline, OrderSide, OrderType,
     CreateFuturesOrderResponse, CancelFuturesOrderResponse, QueryFuturesOrderResponse,
     FuturesOpenOrderResponse, CancelAllOrdersResponse, BatchCancelOrderResult, BatchCancelOrdersResponse,
-    BatchCreateOrderResponse, CancelOpenOrdersResponse
+    BatchCreateOrderResponse, CancelOpenOrdersResponse, FuturesOrderRequest, BatchFuturesOrderResult,
+    BatchCreateFuturesOrdersResponse, FuturesPosition
 )
 
 
@@ -330,6 +331,23 @@ class TooBitClient:
         params = order_request.model_dump(exclude_none=True, by_alias=True)
         response = self._make_request('POST', '/api/v1/futures/order', params, signed=True)
         return CreateFuturesOrderResponse(**response)
+
+    def batch_create_futures_orders(self, order_requests: list[FuturesOrderRequest]) -> BatchCreateFuturesOrdersResponse:
+        """合约批量下单 (TRADE)"""
+        # 将多个订单请求转换为参数列表
+        orders_data = []
+        for order_request in order_requests:
+            order_data = order_request.model_dump(exclude_none=True, by_alias=True)
+            orders_data.append(order_data)
+        
+        # 构建request body - 直接是订单数组
+        request_body = json.dumps(orders_data)
+        
+        # 构建query string - 只包含认证相关参数
+        params = {}
+        
+        response = self._make_request('POST', '/api/v1/futures/batchOrders', params, data=request_body, signed=True)
+        return BatchCreateFuturesOrdersResponse(**response)
     
 
     
@@ -363,6 +381,17 @@ class TooBitClient:
         
         response = self._make_request('GET', '/api/v1/futures/openOrders', params, signed=True)
         return [FuturesOpenOrderResponse(**order) for order in response]
+
+    def get_futures_positions(self, symbol: Optional[str] = None, side: Optional[str] = None) -> list[FuturesPosition]:
+        """查询当前持仓 (USER_DATA)"""
+        params = {}
+        if symbol:
+            params['symbol'] = symbol
+        if side:
+            params['side'] = side
+        
+        response = self._make_request('GET', '/api/v1/futures/positions', params, signed=True)
+        return [FuturesPosition(**position) for position in response]
     
 
     

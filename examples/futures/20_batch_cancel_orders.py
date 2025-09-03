@@ -1,5 +1,5 @@
 """
-TooBit 合约API SDK - 批量撤销订单示例 (19)
+TooBit 合约API SDK - 批量撤销订单示例 (20)
 批量撤销订单 (需要API密钥和签名)
 接口: DELETE /api/v1/futures/batchOrders
 """

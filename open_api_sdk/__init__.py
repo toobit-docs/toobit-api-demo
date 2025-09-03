@@ -11,7 +11,8 @@ from .models import (
     OrderBook, Kline, OrderSide, OrderType, TimeInForce, OrderStatus, 
     CreateFuturesOrderResponse, CancelFuturesOrderResponse, QueryFuturesOrderResponse,
     FuturesOpenOrderResponse, CancelAllOrdersResponse, BatchCancelOrderResult, BatchCancelOrdersResponse,
-    BatchCreateOrderResponse, CancelOpenOrdersResponse
+    BatchCreateOrderResponse, CancelOpenOrdersResponse, FuturesOrderRequest, BatchFuturesOrderResult,
+    BatchCreateFuturesOrdersResponse, FuturesPosition
 )
 
 __version__ = "1.0.0"
@@ -49,5 +50,9 @@ __all__ = [
     "BatchCancelOrderResult",
     "BatchCancelOrdersResponse",
     "BatchCreateOrderResponse",
-    "CancelOpenOrdersResponse"
+    "CancelOpenOrdersResponse",
+    "FuturesOrderRequest",
+    "BatchFuturesOrderResult",
+    "BatchCreateFuturesOrdersResponse",
+    "FuturesPosition"
 ] 

@@ -231,6 +231,58 @@ class CancelOpenOrdersResponse(BaseModel):
     model_config = ConfigDict()
 
 
+class FuturesOrderRequest(BaseModel):
+    """合约订单请求模型"""
+    newClientOrderId: str = Field(..., description="用户定义的订单ID")
+    symbol: str = Field(..., description="交易对")
+    side: OrderSide = Field(..., description="订单方向")
+    type: OrderType = Field(..., description="订单类型")
+    price: float = Field(..., description="订单价格")
+    quantity: float = Field(..., description="订单数量")
+    priceType: str = Field(..., description="价格类型")
+    
+    model_config = ConfigDict(use_enum_values=True)
+
+
+class BatchFuturesOrderResult(BaseModel):
+    """批量合约下单结果项模型"""
+    code: int = Field(..., description="订单结果代码")
+    order: Optional[CreateFuturesOrderResponse] = Field(None, description="订单详情，成功时返回")
+    msg: Optional[str] = Field(None, description="失败原因，失败时返回")
+    
+    model_config = ConfigDict()
+
+
+class BatchCreateFuturesOrdersResponse(BaseModel):
+    """批量创建合约订单响应模型 - 根据实际API响应"""
+    code: int = Field(..., description="响应代码")
+    result: list[BatchFuturesOrderResult] = Field(..., description="批量下单结果列表")
+    
+    model_config = ConfigDict()
+
+
+class FuturesPosition(BaseModel):
+    """合约持仓模型 - 根据实际API响应"""
+    symbol: str = Field(..., description="交易对")
+    side: str = Field(..., description="仓位方向")
+    avgPrice: str = Field(..., description="平均开仓价格")
+    position: str = Field(..., description="开仓数量（张）")
+    available: str = Field(..., description="可平仓数量（张）")
+    leverage: str = Field(..., description="仓位现在杠杆")
+    lastPrice: str = Field(..., description="合约最新市场成交价")
+    positionValue: str = Field(..., description="仓位价值")
+    flp: str = Field(..., description="强制平仓价格")
+    margin: str = Field(..., description="仓位保证金")
+    marginRate: str = Field(..., description="当前仓位的保证金率")
+    unrealizedPnL: str = Field(..., description="当前仓位的未实现盈亏")
+    profitRate: str = Field(..., description="当前仓位的盈利率")
+    realizedPnL: str = Field(..., description="当前合约的已实现盈亏")
+    maxNotionalValue: str = Field(..., description="当前杠杆倍数最大可持仓张数")
+    markPrice: str = Field(..., description="标记价格")
+    
+    model_config = ConfigDict()
+
+
 class OrderResponse(BaseModel):
     """查询订单响应模型 - 查询挂单、订单状态时返回"""
     symbol: str = Field(..., description="交易对")

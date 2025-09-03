@@ -19,7 +19,8 @@ from .models import (
     FuturesOpenOrderResponse, CancelAllOrdersResponse, BatchCancelOrderResult, BatchCancelOrdersResponse,
     BatchCreateOrderResponse, CancelOpenOrdersResponse, FuturesOrderRequest, BatchFuturesOrderResult,
     BatchCreateFuturesOrdersResponse, FuturesPosition, SetPositionTradingStopRequest, SetPositionTradingStopResponse,
-    QueryFuturesHistoryOrdersRequest, FuturesBalance,     AdjustIsolatedMarginRequest, AdjustIsolatedMarginResponse,     QueryFuturesTradeHistoryRequest, FuturesTrade, QueryFuturesAccountFlowRequest, FuturesAccountFlow
+    QueryFuturesHistoryOrdersRequest, FuturesBalance,     AdjustIsolatedMarginRequest, AdjustIsolatedMarginResponse,     QueryFuturesTradeHistoryRequest, FuturesTrade, QueryFuturesAccountFlowRequest, FuturesAccountFlow,
+    QueryFuturesUserFeeRateRequest, FuturesUserFeeRate, FuturesTodayPnL
 )
 
 
@@ -428,6 +429,17 @@ class TooBitClient:
         params = request.model_dump(exclude_none=True, by_alias=True)
         response = self._make_request('GET', '/api/v1/futures/balanceFlow', params, signed=True)
         return [FuturesAccountFlow(**flow) for flow in response]
+
+    def get_futures_user_fee_rate(self, request: QueryFuturesUserFeeRateRequest) -> FuturesUserFeeRate:
+        """查询合约用户手续费率 (USER_DATA)"""
+        params = request.model_dump(exclude_none=True, by_alias=True)
+        response = self._make_request('GET', '/api/v1/futures/commissionRate', params, signed=True)
+        return FuturesUserFeeRate(**response)
+
+    def get_futures_today_pnl(self) -> FuturesTodayPnL:
+        """查询合约今日盈亏 (USER_DATA)"""
+        response = self._make_request('GET', '/api/v1/futures/todayPnL', {}, signed=True)
+        return FuturesTodayPnL(**response)
     
 
     

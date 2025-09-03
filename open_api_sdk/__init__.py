@@ -77,5 +77,7 @@ __all__ = [
     "AdjustLeverageRequest",
     "AdjustLeverageResponse",
     "QueryLeverageRequest",
-    "AccountLeverage"
+    "AccountLeverage",
+    "SpotBalance",
+    "SpotAccountInfo"
 ] 

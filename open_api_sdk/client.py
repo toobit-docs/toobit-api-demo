@@ -23,7 +23,8 @@ from .models import (
     QueryFuturesUserFeeRateRequest, FuturesUserFeeRate, FuturesTodayPnL,
     ChangeMarginTypeRequest, ChangeMarginTypeResponse,
     AdjustLeverageRequest, AdjustLeverageResponse,
-    QueryLeverageRequest, AccountLeverage
+    QueryLeverageRequest, AccountLeverage,
+    SpotBalance, SpotAccountInfo
 )
 
 
@@ -457,6 +458,11 @@ class TooBitClient:
         params = request.model_dump(exclude_none=True, by_alias=True)
         response = self._make_request('GET', '/api/v1/futures/accountLeverage', params, signed=True)
         return [AccountLeverage(**leverage) for leverage in response]
+
+    def get_spot_account_info(self) -> SpotAccountInfo:
+        """查询现货账户信息 (USER_DATA)"""
+        response = self._make_request('GET', '/api/v1/account', {}, signed=True)
+        return SpotAccountInfo(**response)
     
 
     

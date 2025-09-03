@@ -503,6 +503,25 @@ class AccountLeverage(BaseModel):
     model_config = ConfigDict()
 
 
+class SpotBalance(BaseModel):
+    """现货账户余额模型"""
+    asset: str = Field(..., description="资产")
+    assetId: str = Field(..., description="资产id")
+    assetName: str = Field(..., description="资产名称")
+    total: str = Field(..., description="总数量")
+    free: str = Field(..., description="可用数")
+    locked: str = Field(..., description="冻结数")
+    
+    model_config = ConfigDict()
+
+
+class SpotAccountInfo(BaseModel):
+    """现货账户信息模型"""
+    balances: list[SpotBalance] = Field(..., description="余额列表")
+    
+    model_config = ConfigDict()
+
+
 class OrderResponse(BaseModel):
     """查询订单响应模型 - 查询挂单、订单状态时返回"""
     symbol: str = Field(..., description="交易对")

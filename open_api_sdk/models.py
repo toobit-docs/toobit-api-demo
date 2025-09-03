@@ -470,6 +470,23 @@ class ChangeMarginTypeResponse(BaseModel):
     model_config = ConfigDict()
 
 
+class AdjustLeverageRequest(BaseModel):
+    """调整开仓杠杆请求模型"""
+    symbol: str = Field(..., description="交易对")
+    leverage: int = Field(..., description="杠杆倍数")
+    
+    model_config = ConfigDict()
+
+
+class AdjustLeverageResponse(BaseModel):
+    """调整开仓杠杆响应模型"""
+    code: int = Field(..., description="响应码 200=成功")
+    symbolId: str = Field(..., description="交易对")
+    leverage: str = Field(..., description="杠杆倍数")
+    
+    model_config = ConfigDict()
+
+
 class OrderResponse(BaseModel):
     """查询订单响应模型 - 查询挂单、订单状态时返回"""
     symbol: str = Field(..., description="交易对")

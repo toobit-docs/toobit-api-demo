@@ -21,7 +21,8 @@ from .models import (
     BatchCreateFuturesOrdersResponse, FuturesPosition, SetPositionTradingStopRequest, SetPositionTradingStopResponse,
     QueryFuturesHistoryOrdersRequest, FuturesBalance,     AdjustIsolatedMarginRequest, AdjustIsolatedMarginResponse,     QueryFuturesTradeHistoryRequest, FuturesTrade, QueryFuturesAccountFlowRequest, FuturesAccountFlow,
     QueryFuturesUserFeeRateRequest, FuturesUserFeeRate, FuturesTodayPnL,
-    ChangeMarginTypeRequest, ChangeMarginTypeResponse
+    ChangeMarginTypeRequest, ChangeMarginTypeResponse,
+    AdjustLeverageRequest, AdjustLeverageResponse
 )
 
 
@@ -443,6 +444,12 @@ class TooBitClient:
         params = request.model_dump(exclude_none=True, by_alias=True)
         response = self._make_request('POST', '/api/v1/futures/marginType', params, signed=True)
         return ChangeMarginTypeResponse(**response)
+
+    def adjust_leverage(self, request: AdjustLeverageRequest) -> AdjustLeverageResponse:
+        """调整开仓杠杆 (TRADE)"""
+        params = request.model_dump(exclude_none=True, by_alias=True)
+        response = self._make_request('POST', '/api/v1/futures/leverage', params, signed=True)
+        return AdjustLeverageResponse(**response)
     
 
     

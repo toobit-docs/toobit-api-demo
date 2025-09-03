@@ -17,7 +17,7 @@ from .models import (
     OrderQueryRequest, ExchangeInfo, Ticker24hr, OrderBook, Kline, OrderSide, OrderType,
     CreateFuturesOrderResponse, CancelFuturesOrderResponse, QueryFuturesOrderResponse,
     FuturesOpenOrderResponse, CancelAllOrdersResponse, BatchCancelOrderResult, BatchCancelOrdersResponse,
-    BatchCreateOrderResponse
+    BatchCreateOrderResponse, CancelOpenOrdersResponse
 )
 
 
@@ -298,6 +298,17 @@ class TooBitClient:
         
         response = self._make_request('DELETE', '/api/v1/spot/cancelOrderByIds', params, signed=True)
         return BatchCancelOrdersResponse(**response)
+
+    def cancel_open_orders(self, symbol: Optional[str] = None, side: Optional[OrderSide] = None) -> CancelOpenOrdersResponse:
+        """撤销挂单 - 可指定交易对和方向"""
+        params = {}
+        if symbol:
+            params['symbol'] = symbol
+        if side:
+            params['side'] = side.value
+        
+        response = self._make_request('DELETE', '/api/v1/spot/openOrders', params, signed=True)
+        return CancelOpenOrdersResponse(**response)
 
     def cancel_order(self, symbol: str, order_id: Optional[str] = None, client_order_id: Optional[str] = None) -> CancelOrderResponse:
         """撤销订单"""

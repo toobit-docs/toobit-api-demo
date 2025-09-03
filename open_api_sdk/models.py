@@ -209,8 +209,6 @@ class BatchCancelOrderResult(BaseModel):
 class BatchCancelOrdersResponse(BaseModel):
     """批量撤销订单响应模型 - 根据实际API响应"""
     code: int = Field(..., description="响应代码")
-    message: str = Field(..., description="响应消息")
-    timestamp: int = Field(..., description="时间戳")
     result: list[BatchCancelOrderResult] = Field(default=[], description="撤单结果列表，空数组表示全部成功")
     
     model_config = ConfigDict()

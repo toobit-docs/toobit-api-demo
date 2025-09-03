@@ -73,7 +73,7 @@ class TooBitClient:
         
         # 如果是签名请求，添加认证参数
         if signed:
-            params = self._add_auth_params(params, data)
+            params = self._add_auth_params(params)
             # 添加API Key到请求头
             headers = kwargs.get('headers', {})
             headers['X-BB-APIKEY'] = self.config.api_key
@@ -289,6 +289,16 @@ class TooBitClient:
         response = self._make_request('POST', '/api/v1/spot/batchOrders', params, data=request_body, signed=True)
         return BatchCreateOrderResponse(**response)
     
+    def batch_cancel_spot_orders(self, order_ids: list[str]) -> BatchCancelOrdersResponse:
+        """现货批量撤单"""
+        # 构建批量撤单参数
+        params = {
+            'ids': ','.join(order_ids)
+        }
+        
+        response = self._make_request('DELETE', '/api/v1/spot/cancelOrderByIds', params, signed=True)
+        return BatchCancelOrdersResponse(**response)
+
     def cancel_order(self, symbol: str, order_id: Optional[str] = None, client_order_id: Optional[str] = None) -> CancelOrderResponse:
         """撤销订单"""
         # 创建取消订单请求对象

@@ -18,7 +18,8 @@ from .models import (
     CreateFuturesOrderResponse, CancelFuturesOrderResponse, QueryFuturesOrderResponse,
     FuturesOpenOrderResponse, CancelAllOrdersResponse, BatchCancelOrderResult, BatchCancelOrdersResponse,
     BatchCreateOrderResponse, CancelOpenOrdersResponse, FuturesOrderRequest, BatchFuturesOrderResult,
-    BatchCreateFuturesOrdersResponse, FuturesPosition, SetPositionTradingStopRequest, SetPositionTradingStopResponse
+    BatchCreateFuturesOrdersResponse, FuturesPosition, SetPositionTradingStopRequest, SetPositionTradingStopResponse,
+    QueryFuturesHistoryOrdersRequest
 )
 
 
@@ -398,6 +399,12 @@ class TooBitClient:
         params = request.model_dump(exclude_none=True, by_alias=True)
         response = self._make_request('POST', '/api/v1/futures/position/trading-stop', params, signed=True)
         return SetPositionTradingStopResponse(**response)
+
+    def get_futures_history_orders(self, request: QueryFuturesHistoryOrdersRequest) -> list[QueryFuturesOrderResponse]:
+        """查询历史订单 (USER_DATA)"""
+        params = request.model_dump(exclude_none=True, by_alias=True)
+        response = self._make_request('GET', '/api/v1/futures/historyOrders', params, signed=True)
+        return [QueryFuturesOrderResponse(**order) for order in response]
     
 
     

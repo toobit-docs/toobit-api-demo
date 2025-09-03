@@ -307,6 +307,18 @@ class SetPositionTradingStopResponse(BaseModel):
     model_config = ConfigDict()
 
 
+class QueryFuturesHistoryOrdersRequest(BaseModel):
+    """查询历史订单请求模型"""
+    symbol: Optional[str] = Field(None, description="交易对")
+    orderId: Optional[str] = Field(None, description="订单ID")
+    type: Optional[OrderType] = Field(None, description="订单类型 (LIMIT, STOP)")
+    startTime: Optional[int] = Field(None, description="开始时间戳 默认值:三天前")
+    endTime: Optional[int] = Field(None, description="截止时间戳")
+    limit: Optional[int] = Field(20, description="返回条数 默认20 最小1 最大1000")
+    
+    model_config = ConfigDict()
+
+
 class OrderResponse(BaseModel):
     """查询订单响应模型 - 查询挂单、订单状态时返回"""
     symbol: str = Field(..., description="交易对")

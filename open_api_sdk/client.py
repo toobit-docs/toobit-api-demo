@@ -20,7 +20,8 @@ from .models import (
     BatchCreateOrderResponse, CancelOpenOrdersResponse, FuturesOrderRequest, BatchFuturesOrderResult,
     BatchCreateFuturesOrdersResponse, FuturesPosition, SetPositionTradingStopRequest, SetPositionTradingStopResponse,
     QueryFuturesHistoryOrdersRequest, FuturesBalance,     AdjustIsolatedMarginRequest, AdjustIsolatedMarginResponse,     QueryFuturesTradeHistoryRequest, FuturesTrade, QueryFuturesAccountFlowRequest, FuturesAccountFlow,
-    QueryFuturesUserFeeRateRequest, FuturesUserFeeRate, FuturesTodayPnL
+    QueryFuturesUserFeeRateRequest, FuturesUserFeeRate, FuturesTodayPnL,
+    ChangeMarginTypeRequest, ChangeMarginTypeResponse
 )
 
 
@@ -112,14 +113,10 @@ class TooBitClient:
                         **kwargs
                     )
                 else:
-                    # 否则参数放在URL后面，使用form格式
-                    headers = kwargs.get('headers', {})
-                    headers['Content-Type'] = 'application/x-www-form-urlencoded'
-                    kwargs['headers'] = headers
-                    
+                    # TooBit API的POST请求通常把参数放在URL后面，而不是请求体中
                     response = self.session.post(
-                        url, 
-                        params=params,
+                        url,
+                        params=params,  # 改为params，参数放在URL后面
                         timeout=self.config.timeout,
                         **kwargs
                     )
@@ -440,6 +437,12 @@ class TooBitClient:
         """查询合约今日盈亏 (USER_DATA)"""
         response = self._make_request('GET', '/api/v1/futures/todayPnL', {}, signed=True)
         return FuturesTodayPnL(**response)
+
+    def change_margin_type(self, request: ChangeMarginTypeRequest) -> ChangeMarginTypeResponse:
+        """变换逐全仓模式 (TRADE)"""
+        params = request.model_dump(exclude_none=True, by_alias=True)
+        response = self._make_request('POST', '/api/v1/futures/marginType', params, signed=True)
+        return ChangeMarginTypeResponse(**response)
     
 
     

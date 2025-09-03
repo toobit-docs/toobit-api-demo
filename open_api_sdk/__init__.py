@@ -15,7 +15,8 @@ from .models import (
     BatchCreateFuturesOrdersResponse, FuturesPosition, SetPositionTradingStopRequest, SetPositionTradingStopResponse,
     QueryFuturesHistoryOrdersRequest, FuturesBalance, AdjustIsolatedMarginRequest, AdjustIsolatedMarginResponse,
     QueryFuturesTradeHistoryRequest, FuturesTrade, QueryFuturesAccountFlowRequest, FuturesAccountFlow,
-    QueryFuturesUserFeeRateRequest, FuturesUserFeeRate
+    QueryFuturesUserFeeRateRequest, FuturesUserFeeRate, ChangeMarginTypeRequest, ChangeMarginTypeResponse,
+    FuturesTodayPnL, MarginType
 )
 
 __version__ = "1.0.0"
@@ -69,5 +70,8 @@ __all__ = [
     "FuturesAccountFlow",
     "QueryFuturesUserFeeRateRequest",
     "FuturesUserFeeRate",
-    "FuturesTodayPnL"
+    "FuturesTodayPnL",
+    "MarginType",
+    "ChangeMarginTypeRequest",
+    "ChangeMarginTypeResponse"
 ] 

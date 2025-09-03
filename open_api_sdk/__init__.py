@@ -10,7 +10,8 @@ from .models import (
     OrderQueryRequest, Trade, ExchangeInfo, Ticker24hr,
     OrderBook, Kline, OrderSide, OrderType, TimeInForce, OrderStatus, 
     CreateFuturesOrderResponse, CancelFuturesOrderResponse, QueryFuturesOrderResponse,
-    FuturesOpenOrderResponse, CancelAllOrdersResponse, BatchCancelOrderResult, BatchCancelOrdersResponse
+    FuturesOpenOrderResponse, CancelAllOrdersResponse, BatchCancelOrderResult, BatchCancelOrdersResponse,
+    BatchCreateOrderResponse
 )
 
 __version__ = "1.0.0"
@@ -46,5 +47,6 @@ __all__ = [
     "FuturesOpenOrderResponse",
     "CancelAllOrdersResponse",
     "BatchCancelOrderResult",
-    "BatchCancelOrdersResponse"
+    "BatchCancelOrdersResponse",
+    "BatchCreateOrderResponse"
 ] 

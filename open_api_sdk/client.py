@@ -4,6 +4,7 @@ TooBit API 核心客户端
 
 import hashlib
 import hmac
+import json
 import time
 import urllib.parse
 from typing import Dict, Any, Optional, Union
@@ -15,7 +16,8 @@ from .models import (
     OrderRequest, OrderResponse, CreateOrderResponse, CancelOrderRequest, CancelOrderResponse,
     OrderQueryRequest, ExchangeInfo, Ticker24hr, OrderBook, Kline, OrderSide, OrderType,
     CreateFuturesOrderResponse, CancelFuturesOrderResponse, QueryFuturesOrderResponse,
-    FuturesOpenOrderResponse, CancelAllOrdersResponse, BatchCancelOrderResult, BatchCancelOrdersResponse
+    FuturesOpenOrderResponse, CancelAllOrdersResponse, BatchCancelOrderResult, BatchCancelOrdersResponse,
+    BatchCreateOrderResponse
 )
 
 
@@ -28,8 +30,7 @@ class TooBitClient:
         self.config.validate()
         self.session = requests.Session()
         self.session.headers.update({
-            "User-Agent": "TooBit-SDK/1.0.0",
-            "Content-Type": "application/x-www-form-urlencoded"
+            "User-Agent": "TooBit-SDK/1.0.0"
         })
     
     def _generate_signature(self, params: Dict[str, Any]) -> str:
@@ -60,6 +61,7 @@ class TooBitClient:
         method: str, 
         endpoint: str, 
         params: Optional[Dict[str, Any]] = None,
+        data: Optional[str] = None,
         signed: bool = False,
         **kwargs
     ) -> Dict[str, Any]:
@@ -71,7 +73,7 @@ class TooBitClient:
         
         # 如果是签名请求，添加认证参数
         if signed:
-            params = self._add_auth_params(params)
+            params = self._add_auth_params(params, data)
             # 添加API Key到请求头
             headers = kwargs.get('headers', {})
             headers['X-BB-APIKEY'] = self.config.api_key
@@ -86,13 +88,38 @@ class TooBitClient:
                     **kwargs
                 )
             elif method.upper() == 'POST':
-                # TooBit API的POST请求通常把参数放在URL后面，而不是请求体中
-                response = self.session.post(
-                    url, 
-                    params=params,  # 改为params，参数放在URL后面
-                    timeout=self.config.timeout,
-                    **kwargs
-                )
+                # TooBit API的POST请求支持参数放在URL后面或请求体中
+                if data:
+                    # 如果有request body，使用JSON格式
+                    headers = kwargs.get('headers', {})
+                    headers['Content-Type'] = 'application/json'
+                    kwargs['headers'] = headers
+                    
+                    # 如果data是字符串，解析为JSON对象
+                    if isinstance(data, str):
+                        json_data = json.loads(data)
+                    else:
+                        json_data = data
+                    
+                    response = self.session.post(
+                        url, 
+                        params=params,
+                        json=json_data,  # 使用json参数
+                        timeout=self.config.timeout,
+                        **kwargs
+                    )
+                else:
+                    # 否则参数放在URL后面，使用form格式
+                    headers = kwargs.get('headers', {})
+                    headers['Content-Type'] = 'application/x-www-form-urlencoded'
+                    kwargs['headers'] = headers
+                    
+                    response = self.session.post(
+                        url, 
+                        params=params,
+                        timeout=self.config.timeout,
+                        **kwargs
+                    )
             elif method.upper() == 'DELETE':
                 response = self.session.delete(
                     url, 
@@ -128,7 +155,7 @@ class TooBitClient:
                 raise TooBitException(error_msg)
             
             # 检查API错误
-            if 'code' in data and data['code'] != 200:
+            if 'code' in data and data['code'] != 200 and data['code'] != 0:
                 error_msg = f"API错误: 错误码 {data['code']}, 错误信息: {data.get('msg', '')}"
                 print(f"请求失败: {error_msg}")
                 print(f"完整错误响应: {data}")
@@ -243,6 +270,24 @@ class TooBitClient:
         params = order_request.model_dump(exclude_none=True, by_alias=True)
         response = self._make_request('POST', '/api/v1/spot/order', params, signed=True)
         return CreateOrderResponse(**response)
+    
+    def batch_create_orders(self, order_requests: list[OrderRequest]) -> BatchCreateOrderResponse:
+        """批量下单"""
+        # 将多个订单请求转换为参数列表
+        orders_data = []
+        for order_request in order_requests:
+            order_data = order_request.model_dump(exclude_none=True, by_alias=True)
+            orders_data.append(order_data)
+        
+        # 构建request body
+        import json
+        request_body = json.dumps(orders_data)
+        
+        # 构建query string - 只包含认证相关参数
+        params = {}
+        
+        response = self._make_request('POST', '/api/v1/spot/batchOrders', params, data=request_body, signed=True)
+        return BatchCreateOrderResponse(**response)
     
     def cancel_order(self, symbol: str, order_id: Optional[str] = None, client_order_id: Optional[str] = None) -> CancelOrderResponse:
         """撤销订单"""

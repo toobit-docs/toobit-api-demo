@@ -216,6 +216,16 @@ class BatchCancelOrdersResponse(BaseModel):
     model_config = ConfigDict()
 
 
+class BatchCreateOrderResponse(BaseModel):
+    """批量创建订单响应模型 - 根据实际API响应"""
+    code: int = Field(..., description="响应代码")
+    message: str = Field(..., description="响应消息")
+    timestamp: int = Field(..., description="时间戳")
+    result: list[CreateOrderResponse] = Field(..., description="创建订单结果列表")
+    
+    model_config = ConfigDict()
+
+
 class OrderResponse(BaseModel):
     """查询订单响应模型 - 查询挂单、订单状态时返回"""
     symbol: str = Field(..., description="交易对")

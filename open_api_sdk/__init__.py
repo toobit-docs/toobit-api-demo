@@ -8,11 +8,11 @@ from .exceptions import TooBitException, APIError, ConfigurationError, Authentic
 from .models import (
     OrderRequest, CreateOrderResponse, OrderResponse, CancelOrderRequest, CancelOrderResponse,
     OrderQueryRequest, Trade, ExchangeInfo, Ticker24hr,
-    OrderBook, Kline, OrderSide, OrderType, TimeInForce, OrderStatus, 
+    OrderBook, Kline, OrderSide, OrderType, TimeInForce, OrderStatus,
     CreateFuturesOrderResponse, CancelFuturesOrderResponse, QueryFuturesOrderResponse,
     FuturesOpenOrderResponse, CancelAllOrdersResponse, BatchCancelOrderResult, BatchCancelOrdersResponse,
     BatchCreateOrderResponse, CancelOpenOrdersResponse, FuturesOrderRequest, BatchFuturesOrderResult,
-    BatchCreateFuturesOrdersResponse, FuturesPosition
+    BatchCreateFuturesOrdersResponse, FuturesPosition, SetPositionTradingStopRequest, SetPositionTradingStopResponse
 )
 
 __version__ = "1.0.0"
@@ -33,7 +33,6 @@ __all__ = [
     "CancelOrderResponse",
     "OrderQueryRequest",
     "Trade",
-    "AccountInfo",
     "ExchangeInfo",
     "Ticker24hr",
     "OrderBook",
@@ -54,5 +53,7 @@ __all__ = [
     "FuturesOrderRequest",
     "BatchFuturesOrderResult",
     "BatchCreateFuturesOrdersResponse",
-    "FuturesPosition"
+    "FuturesPosition",
+    "SetPositionTradingStopRequest",
+    "SetPositionTradingStopResponse"
 ] 

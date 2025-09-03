@@ -18,7 +18,7 @@ from .models import (
     CreateFuturesOrderResponse, CancelFuturesOrderResponse, QueryFuturesOrderResponse,
     FuturesOpenOrderResponse, CancelAllOrdersResponse, BatchCancelOrderResult, BatchCancelOrdersResponse,
     BatchCreateOrderResponse, CancelOpenOrdersResponse, FuturesOrderRequest, BatchFuturesOrderResult,
-    BatchCreateFuturesOrdersResponse, FuturesPosition
+    BatchCreateFuturesOrdersResponse, FuturesPosition, SetPositionTradingStopRequest, SetPositionTradingStopResponse
 )
 
 
@@ -392,6 +392,12 @@ class TooBitClient:
         
         response = self._make_request('GET', '/api/v1/futures/positions', params, signed=True)
         return [FuturesPosition(**position) for position in response]
+
+    def set_position_trading_stop(self, request: SetPositionTradingStopRequest) -> SetPositionTradingStopResponse:
+        """设置持仓止盈止损 (TRADE)"""
+        params = request.model_dump(exclude_none=True, by_alias=True)
+        response = self._make_request('POST', '/api/v1/futures/position/trading-stop', params, signed=True)
+        return SetPositionTradingStopResponse(**response)
     
 
     

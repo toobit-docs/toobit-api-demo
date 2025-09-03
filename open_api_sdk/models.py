@@ -283,6 +283,30 @@ class FuturesPosition(BaseModel):
     model_config = ConfigDict()
 
 
+class SetPositionTradingStopRequest(BaseModel):
+    """设置持仓止盈止损请求模型"""
+    symbol: str = Field(..., description="交易对")
+    side: str = Field(..., description="仓位方向, LONG(多仓)或者 SHORT(空仓)")
+    takeProfit: Optional[str] = Field(None, description="止盈价格")
+    stopLoss: Optional[str] = Field(None, description="止损价格")
+    tpTriggerBy: Optional[str] = Field(None, description="止盈条件单参数.触发类型:MARK_PRICE(标记价格),CONTRACT_PRICE(合约最新价).默认 CONTRACT_PRICE")
+    slTriggerBy: Optional[str] = Field(None, description="止损条件单参数.触发类型:MARK_PRICE(标记价格),CONTRACT_PRICE(合约最新价).默认 CONTRACT_PRICE")
+    
+    model_config = ConfigDict()
+
+
+class SetPositionTradingStopResponse(BaseModel):
+    """设置持仓止盈止损响应模型 - 根据实际API响应"""
+    symbol: str = Field(..., description="交易对")
+    side: str = Field(..., description="仓位方向")
+    takeProfit: Optional[str] = Field(None, description="止盈价格")
+    stopLoss: Optional[str] = Field(None, description="止损价格")
+    tpTriggerBy: Optional[str] = Field(None, description="止盈触发类型")
+    slTriggerBy: Optional[str] = Field(None, description="止损触发类型")
+    
+    model_config = ConfigDict()
+
+
 class OrderResponse(BaseModel):
     """查询订单响应模型 - 查询挂单、订单状态时返回"""
     symbol: str = Field(..., description="交易对")

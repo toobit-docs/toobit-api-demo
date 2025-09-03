@@ -24,7 +24,7 @@ from .models import (
     ChangeMarginTypeRequest, ChangeMarginTypeResponse,
     AdjustLeverageRequest, AdjustLeverageResponse,
     QueryLeverageRequest, AccountLeverage,
-    SpotBalance, SpotAccountInfo
+    SpotBalance, SpotAccountInfo, SpotSubAccount
 )
 
 
@@ -463,6 +463,11 @@ class TooBitClient:
         """查询现货账户信息 (USER_DATA)"""
         response = self._make_request('GET', '/api/v1/account', {}, signed=True)
         return SpotAccountInfo(**response)
+
+    def get_spot_sub_accounts(self) -> list[SpotSubAccount]:
+        """查询现货子账户 (USER_DATA)"""
+        response = self._make_request('GET', '/api/v1/account/subAccount', {}, signed=True)
+        return [SpotSubAccount(**account) for account in response]
     
 
     

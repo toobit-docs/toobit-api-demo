@@ -522,6 +522,16 @@ class SpotAccountInfo(BaseModel):
     model_config = ConfigDict()
 
 
+class SpotSubAccount(BaseModel):
+    """现货子账户模型"""
+    accountId: str = Field(..., description="账户ID")
+    accountName: str = Field(..., description="子账户名称")
+    accountType: int = Field(..., description="子账户类型: 1=币币账户, 3=合约账户")
+    accountIndex: int = Field(..., description="账户index: 0=默认账户, >0=创建的子账户")
+    
+    model_config = ConfigDict()
+
+
 class OrderResponse(BaseModel):
     """查询订单响应模型 - 查询挂单、订单状态时返回"""
     symbol: str = Field(..., description="交易对")

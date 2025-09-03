@@ -319,6 +319,18 @@ class QueryFuturesHistoryOrdersRequest(BaseModel):
     model_config = ConfigDict()
 
 
+class FuturesBalance(BaseModel):
+    """合约账户余额模型"""
+    asset: str = Field(..., description="资产")
+    balance: str = Field(..., description="总余额")
+    availableBalance: str = Field(..., description="可用保证金，包含未实现盈亏")
+    positionMargin: str = Field(..., description="仓位保证金")
+    orderMargin: str = Field(..., description="委托保证金（下单锁定）")
+    crossUnRealizedPnl: str = Field(..., description="全仓未实现盈亏")
+    
+    model_config = ConfigDict()
+
+
 class OrderResponse(BaseModel):
     """查询订单响应模型 - 查询挂单、订单状态时返回"""
     symbol: str = Field(..., description="交易对")

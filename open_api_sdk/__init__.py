@@ -57,5 +57,6 @@ __all__ = [
     "FuturesPosition",
     "SetPositionTradingStopRequest",
     "SetPositionTradingStopResponse",
-    "QueryFuturesHistoryOrdersRequest"
+    "QueryFuturesHistoryOrdersRequest",
+    "FuturesBalance"
 ] 

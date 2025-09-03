@@ -351,6 +351,38 @@ class AdjustIsolatedMarginResponse(BaseModel):
     model_config = ConfigDict()
 
 
+class QueryFuturesTradeHistoryRequest(BaseModel):
+    """查询合约账户成交历史请求模型"""
+    symbol: str = Field(..., description="交易对")
+    fromId: Optional[int] = Field(None, description="从TradeId开始（用来查询成交订单）")
+    toId: Optional[int] = Field(None, description="到TradeId结束（用来查询成交订单）")
+    startTime: Optional[int] = Field(None, description="开始时间戳")
+    endTime: Optional[int] = Field(None, description="截止时间戳")
+    limit: Optional[int] = Field(20, description="返回条数 默认20 最小1 最大1000")
+    
+    model_config = ConfigDict()
+
+
+class FuturesTrade(BaseModel):
+    """合约成交记录模型"""
+    time: str = Field(..., description="成交时间")
+    id: str = Field(..., description="成交ID")
+    orderId: str = Field(..., description="订单ID")
+    symbol: str = Field(..., description="交易对")
+    price: str = Field(..., description="成交价格")
+    qty: str = Field(..., description="成交数量")
+    commissionAsset: str = Field(..., description="手续费类型（Token名称）")
+    commission: str = Field(..., description="实际手续费")
+    makerRebate: str = Field(..., description="负maker返佣")
+    type: str = Field(..., description="订单类型（LIMIT、MARKET)")
+    isMaker: bool = Field(..., description="是否是maker")
+    side: str = Field(..., description="订单方向（BUY_OPEN、SELL_OPEN、BUY_CLOSE、SELL_CLOSE）")
+    realizedPnl: str = Field(..., description="成交盈亏")
+    ticketId: str = Field(..., description="ticketId")
+    
+    model_config = ConfigDict()
+
+
 class OrderResponse(BaseModel):
     """查询订单响应模型 - 查询挂单、订单状态时返回"""
     symbol: str = Field(..., description="交易对")

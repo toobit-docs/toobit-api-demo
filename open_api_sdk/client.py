@@ -19,7 +19,7 @@ from .models import (
     FuturesOpenOrderResponse, CancelAllOrdersResponse, BatchCancelOrderResult, BatchCancelOrdersResponse,
     BatchCreateOrderResponse, CancelOpenOrdersResponse, FuturesOrderRequest, BatchFuturesOrderResult,
     BatchCreateFuturesOrdersResponse, FuturesPosition, SetPositionTradingStopRequest, SetPositionTradingStopResponse,
-    QueryFuturesHistoryOrdersRequest, FuturesBalance, AdjustIsolatedMarginRequest, AdjustIsolatedMarginResponse
+    QueryFuturesHistoryOrdersRequest, FuturesBalance,     AdjustIsolatedMarginRequest, AdjustIsolatedMarginResponse, QueryFuturesTradeHistoryRequest, FuturesTrade
 )
 
 
@@ -416,6 +416,12 @@ class TooBitClient:
         params = request.model_dump(exclude_none=True, by_alias=True)
         response = self._make_request('POST', '/api/v1/futures/positionMargin', params, signed=True)
         return AdjustIsolatedMarginResponse(**response)
+
+    def get_futures_trade_history(self, request: QueryFuturesTradeHistoryRequest) -> list[FuturesTrade]:
+        """查询合约账户成交历史 (USER_DATA)"""
+        params = request.model_dump(exclude_none=True, by_alias=True)
+        response = self._make_request('GET', '/api/v1/futures/userTrades', params, signed=True)
+        return [FuturesTrade(**trade) for trade in response]
     
 
     

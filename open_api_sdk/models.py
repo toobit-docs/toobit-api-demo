@@ -331,6 +331,26 @@ class FuturesBalance(BaseModel):
     model_config = ConfigDict()
 
 
+class AdjustIsolatedMarginRequest(BaseModel):
+    """调整逐仓保证金请求模型"""
+    symbol: str = Field(..., description="交易对")
+    side: str = Field(..., description="仓位方向，LONG（多仓）或者SHORT（空仓）")
+    amount: str = Field(..., description="增加（正值）或者减少（负值）保证金的数量")
+    
+    model_config = ConfigDict()
+
+
+class AdjustIsolatedMarginResponse(BaseModel):
+    """调整逐仓保证金响应模型"""
+    code: int = Field(..., description="响应码 200 = 成功")
+    msg: str = Field(..., description="响应消息")
+    symbol: str = Field(..., description="交易对")
+    margin: str = Field(..., description="更新后的仓位保证金")
+    timestamp: int = Field(..., description="更新时间戳")
+    
+    model_config = ConfigDict()
+
+
 class OrderResponse(BaseModel):
     """查询订单响应模型 - 查询挂单、订单状态时返回"""
     symbol: str = Field(..., description="交易对")

@@ -19,7 +19,7 @@ from .models import (
     FuturesOpenOrderResponse, CancelAllOrdersResponse, BatchCancelOrderResult, BatchCancelOrdersResponse,
     BatchCreateOrderResponse, CancelOpenOrdersResponse, FuturesOrderRequest, BatchFuturesOrderResult,
     BatchCreateFuturesOrdersResponse, FuturesPosition, SetPositionTradingStopRequest, SetPositionTradingStopResponse,
-    QueryFuturesHistoryOrdersRequest, FuturesBalance
+    QueryFuturesHistoryOrdersRequest, FuturesBalance, AdjustIsolatedMarginRequest, AdjustIsolatedMarginResponse
 )
 
 
@@ -410,6 +410,12 @@ class TooBitClient:
         """查询合约账户余额 (USER_DATA)"""
         response = self._make_request('GET', '/api/v1/futures/balance', {}, signed=True)
         return [FuturesBalance(**balance) for balance in response]
+
+    def adjust_isolated_margin(self, request: AdjustIsolatedMarginRequest) -> AdjustIsolatedMarginResponse:
+        """调整逐仓保证金 (TRADE)"""
+        params = request.model_dump(exclude_none=True, by_alias=True)
+        response = self._make_request('POST', '/api/v1/futures/positionMargin', params, signed=True)
+        return AdjustIsolatedMarginResponse(**response)
     
 
     

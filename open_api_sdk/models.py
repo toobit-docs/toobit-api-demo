@@ -286,6 +286,7 @@ class FuturesPosition(BaseModel):
     realizedPnL: str = Field(..., description="Current Futures of Already Implementation PnL")
     maxNotionalValue: str = Field(..., description="Maximum position contract number with current leverage multiple")
     markPrice: str = Field(..., description="Mark price")
+    marginType: str = Field(..., description="Margin type")
     
     model_config = ConfigDict()
 

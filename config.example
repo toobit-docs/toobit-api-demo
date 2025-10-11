@@ -1,0 +1,21 @@
+# TooBit API configuration example
+# Please copy this file to .env and fill in your actual API keys
+
+# API keys (required)
+TOOBIT_API_KEY=your_api_key_here
+TOOBIT_API_SECRET=your_api_secret_here
+
+# API base URL (optional, defaults to official address)
+TOOBIT_BASE_URL=https://api.toobit.com
+
+# Request timeout time, unit: seconds (optional, default 30 seconds)
+TOOBIT_TIMEOUT=30
+
+# Receive window time, unit: milliseconds (optional, default 5000ms, maximum 60000ms)
+TOOBIT_RECV_WINDOW=5000
+
+# Maximum retry count (optional, default 3 times)
+TOOBIT_MAX_RETRIES=3
+
+# Retry delay time, unit: seconds (optional, default 1.0 seconds)
+TOOBIT_RETRY_DELAY=1.0 

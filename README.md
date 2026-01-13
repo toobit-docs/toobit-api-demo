@@ -25,12 +25,15 @@ pip install -r requirements.txt
 ```python
 from open_api_sdk import TooBitClient, TooBitConfig
 
-# Initialize configuration
-config = TooBitConfig(
-    api_key="your_api_key",
-    api_secret="your_api_secret",
-    base_url="https://api.toobit.com"
-)
+# Initialize configuration (Recommended: loads from environment variables)
+config = TooBitConfig.from_env()
+
+# Or initialize manually
+# config = TooBitConfig(
+#     api_key="your_api_key",
+#     api_secret="your_api_secret",
+#     base_url="https://api.toobit.com"
+# )
 
 # Create client
 client = TooBitClient(config)
@@ -96,51 +99,51 @@ print(f"Futures order created: {response.orderId}")
 The project includes comprehensive examples in two directories:
 
 ### Spot Examples (`examples/spot/`)
-- `01_24hr_ticker.py` - Get 24hr ticker statistics
-- `02_open_orders.py` - Query open orders
-- `03_all_orders.py` - Query all orders
-- `04_trade_history.py` - Get trade history
-- `05_create_order.py` - Create a new order
-- `06_cancel_order.py` - Cancel an order
-- `07_get_order.py` - Query specific order
-- `08_batch_create_orders.py` - Batch create orders
-- `09_batch_cancel_orders.py` - Batch cancel orders
-- `10_cancel_open_orders.py` - Cancel open orders
-- `11_get_spot_account_info.py` - Get account information
-- `12_get_spot_sub_accounts.py` - Get sub-accounts
-- `13_get_api_key_type.py` - Get API key type
+- `24hr_ticker.py` - Get 24hr ticker statistics
+- `open_orders.py` - Query open orders
+- `all_orders.py` - Query all orders
+- `trade_history.py` - Get trade history
+- `create_order.py` - Create a new order
+- `cancel_order.py` - Cancel an order
+- `get_order.py` - Query specific order
+- `batch_create_orders.py` - Batch create orders
+- `batch_cancel_orders.py` - Batch cancel orders
+- `cancel_open_orders.py` - Cancel open orders
+- `get_spot_account_info.py` - Get account information
+- `get_spot_sub_accounts.py` - Get sub-accounts
+- `get_api_key_type.py` - Get API key type
 
 ### Futures Examples (`examples/futures/`)
-- `01_ping.py` - Test server connectivity
-- `02_server_time.py` - Get server time
-- `03_exchange_info.py` - Get exchange information
-- `04_order_book.py` - Get order book
-- `05_recent_trades.py` - Get recent trades
-- `06_klines.py` - Get kline data
-- `07_24hr_ticker.py` - Get 24hr ticker
-- `08_price.py` - Get latest price
-- `09_best_order_book.py` - Get best order book
-- `12_transfer_between_accounts.py` - Transfer between accounts
-- `13_get_transfer_history.py` - Get transfer history
-- `14_create_futures_order.py` - Create futures order
-- `15_batch_create_futures_orders.py` - Batch create futures orders
-- `16_get_futures_open_orders.py` - Get futures open orders
-- `17_query_futures_order.py` - Query futures order
-- `18_cancel_futures_order.py` - Cancel futures order
-- `19_cancel_all_orders.py` - Cancel all orders
-- `20_batch_cancel_orders.py` - Batch cancel orders
-- `21_get_futures_positions.py` - Get futures positions
-- `22_set_position_trading_stop.py` - Set position trading stop
-- `23_get_futures_history_orders.py` - Get futures history orders
-- `24_get_futures_balance.py` - Get futures balance
-- `25_adjust_isolated_margin.py` - Adjust isolated margin
-- `26_get_futures_trade_history.py` - Get futures trade history
-- `27_get_futures_account_flow.py` - Get futures account flow
-- `28_get_futures_user_fee_rate.py` - Get futures user fee rate
-- `29_get_futures_today_pnl.py` - Get futures today PnL
-- `31_change_margin_type.py` - Change margin type
-- `32_adjust_leverage.py` - Adjust leverage
-- `33_get_account_leverage.py` - Get account leverage
+- `ping.py` - Test server connectivity
+- `server_time.py` - Get server time
+- `exchange_info.py` - Get exchange information
+- `order_book.py` - Get order book
+- `recent_trades.py` - Get recent trades
+- `klines.py` - Get kline data
+- `24hr_ticker.py` - Get 24hr ticker
+- `price.py` - Get latest price
+- `best_order_book.py` - Get best order book
+- `transfer_between_accounts.py` - Transfer between accounts
+- `get_transfer_history.py` - Get transfer history
+- `create_futures_order.py` - Create futures order
+- `batch_create_futures_orders.py` - Batch create futures orders
+- `get_futures_open_orders.py` - Get futures open orders
+- `query_futures_order.py` - Query futures order
+- `cancel_futures_order.py` - Cancel futures order
+- `cancel_all_orders.py` - Cancel all orders
+- `batch_cancel_orders.py` - Batch cancel orders
+- `get_futures_positions.py` - Get futures positions
+- `set_position_trading_stop.py` - Set position trading stop
+- `get_futures_history_orders.py` - Get futures history orders
+- `get_futures_balance.py` - Get futures balance
+- `adjust_isolated_margin.py` - Adjust isolated margin
+- `get_futures_trade_history.py` - Get futures trade history
+- `get_futures_account_flow.py` - Get futures account flow
+- `get_futures_user_fee_rate.py` - Get futures user fee rate
+- `get_futures_today_pnl.py` - Get futures today PnL
+- `change_margin_type.py` - Change margin type
+- `adjust_leverage.py` - Adjust leverage
+- `get_account_leverage.py` - Get account leverage
 
 ## Configuration
 
@@ -193,12 +196,10 @@ The SDK uses HMAC SHA256 signature authentication:
 # Automatic signature generation
 response = client.create_order(order)  # Signs automatically
 
-# Manual timestamp control
-config = TooBitConfig(
-    api_key="your_key",
-    api_secret="your_secret",
-    recv_window=5000  # 5 second window
-)
+# Manual configuration control
+config = TooBitConfig.from_env()
+# You can also customize specific fields
+config.recv_window = 5000  # 5 second window
 ```
 
 ## Rate Limits

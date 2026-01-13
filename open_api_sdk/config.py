@@ -35,9 +35,9 @@ class TooBitConfig(BaseModel):
     def from_env(cls) -> "TooBitConfig":
         """Create configuration from environment variables"""
         return cls(
-            api_key=os.getenv("TOOBIT_API_KEY", ""),
-            api_secret=os.getenv("TOOBIT_API_SECRET", ""),
-            base_url=os.getenv("TOOBIT_BASE_URL", ""),
+            api_key=os.getenv("TOOBIT_API_KEY", "your apiKey"),
+            api_secret=os.getenv("TOOBIT_API_SECRET", "your apiSecret"),
+            base_url=os.getenv("TOOBIT_BASE_URL", "https://api.toobit.com"),
             timeout=int(os.getenv("TOOBIT_TIMEOUT", "30")),
             recv_window=int(os.getenv("TOOBIT_RECV_WINDOW", "5000")),
             max_retries=int(os.getenv("TOOBIT_MAX_RETRIES", "3")),

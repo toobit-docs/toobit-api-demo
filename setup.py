@@ -4,7 +4,14 @@ TooBit API SDK Installation Configuration
 
 from setuptools import setup, find_packages
 
-with open("README_ZH.md", "r", encoding="utf-8") as fh:
+import os
+
+# Read long description from README.md
+readme_path = "README.md"
+if not os.path.exists(readme_path):
+    readme_path = "README.md" # Fallback or handle error
+
+with open(readme_path, "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 with open("requirements.txt", "r", encoding="utf-8") as fh:

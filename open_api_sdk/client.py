@@ -186,8 +186,103 @@ class TooBitClient:
             print(f"Request Failed: {error_msg}")
             raise TooBitException(error_msg)
     
-    # ==================== Spot Signature API ====================
+    # ==================== Market Data API ====================
     
+    def ping(self) -> Dict[str, Any]:
+        """Test Server Connectivity"""
+        return self._make_request('GET', '/quote/v1/ping')
+    
+    def get_server_time(self) -> Dict[str, Any]:
+        """Get Server Time"""
+        return self._make_request('GET', '/quote/v1/time')
+    
+    def get_exchange_info(self) -> ExchangeInfo:
+        """Get Trade All Information"""
+        response = self._make_request('GET', '/api/v1/exchangeInfo')
+        return ExchangeInfo(**response)
+    
+    def get_order_book(self, symbol: str, limit: int = 100) -> OrderBook:
+        """Get Order Book Depth Information"""
+        params = {
+            'symbol': symbol,
+            'limit': limit
+        }
+        response = self._make_request('GET', '/quote/v1/depth', params)
+        return OrderBook(**response)
+    
+    def get_recent_trades(self, symbol: str, limit: int = 100) -> list:
+        """Get Recent Trades Record"""
+        params = {
+            'symbol': symbol,
+            'limit': limit
+        }
+        response = self._make_request('GET', '/quote/v1/trades', params)
+        # Map p to price, q to qty for compatibility with examples
+        class RecentTrade:
+            def __init__(self, data):
+                self.price = data.get('p')
+                self.qty = data.get('q')
+                self.time = data.get('t')
+                self.isBuyerMaker = data.get('ibm')
+        return [RecentTrade(item) for item in response]
+    
+    def get_klines(self, symbol: str, interval: str, limit: int = 500) -> list[Kline]:
+        """Get KLine Data"""
+        params = {
+            'symbol': symbol,
+            'interval': interval,
+            'limit': limit
+        }
+        response = self._make_request('GET', '/quote/v1/klines', params)
+        # TooBit klines return list of lists:
+        # [OpenTime, Open, High, Low, Close, Volume, CloseTime, QuoteAssetVolume, NumberOfTrades, TakerBuyBaseAssetVolume, TakerBuyQuoteAssetVolume]
+        klines = []
+        for item in response:
+            if isinstance(item, list):
+                kline_dict = {
+                    'openTime': item[0],
+                    'open': float(item[1]),
+                    'high': float(item[2]),
+                    'low': float(item[3]),
+                    'close': float(item[4]),
+                    'volume': float(item[5]),
+                    'closeTime': item[6],
+                    'quoteAssetVolume': float(item[7]),
+                    'numberOfTrades': int(item[8]),
+                    'takerBuyBaseAssetVolume': float(item[9]),
+                    'takerBuyQuoteAssetVolume': float(item[10])
+                }
+                klines.append(Kline(**kline_dict))
+            else:
+                klines.append(Kline(**item))
+        return klines
+    
+    def get_24hr_ticker(self, symbol: Optional[str] = None) -> list[Ticker24hr]:
+        """Get 24-hour price change statistics"""
+        params = {}
+        if symbol:
+            params['symbol'] = symbol
+        response = self._make_request('GET', '/quote/v1/ticker/24hr', params)
+        return [Ticker24hr(**item) for item in response]
+    
+    def get_latest_price(self, symbol: Optional[str] = None) -> list:
+        """Get Latest Price"""
+        params = {}
+        if symbol:
+            params['symbol'] = symbol
+        return self._make_request('GET', '/quote/v1/ticker/price', params)
+    
+    def get_all_prices(self) -> list:
+        """Get All Trading Pair of Latest Price"""
+        return self.get_latest_price()
+    
+    def get_best_order_book(self, symbol: Optional[str] = None) -> list:
+        """Get Best Open Orders Information (bookTicker)"""
+        params = {}
+        if symbol:
+            params['symbol'] = symbol
+        return self._make_request('GET', '/quote/v1/ticker/bookTicker', params)
+
     # ==================== Spot Signature API ====================
     
     def create_order(self, order_request: OrderRequest) -> CreateOrderResponse:

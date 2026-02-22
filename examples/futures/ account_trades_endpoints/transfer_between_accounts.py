@@ -10,18 +10,22 @@ def transfer_between_accounts():
         config = TooBitConfig.from_env()
         client = TooBitClient(config)
         
-        from_account_type = "SPOT"
+        from_account_type = "MAIN"
         to_account_type = "FUTURES"
         asset = "USDT"
         quantity = "100"
+        from_uid = None # Optional: transfer from specific UID
+        to_uid = None   # Optional: transfer to specific UID
         
-        print(f"Request Parameters: from_account_type={from_account_type}, to_account_type={to_account_type}, asset={asset}, quantity={quantity}")
+        print(f"Request Parameters: from_account_type={from_account_type}, to_account_type={to_account_type}, asset={asset}, quantity={quantity}, from_uid={from_uid}, to_uid={to_uid}")
         
         response = client.transfer_between_accounts(
             from_account_type=from_account_type,
             to_account_type=to_account_type,
             asset=asset,
-            quantity=quantity
+            quantity=quantity,
+            from_uid=from_uid,
+            to_uid=to_uid
         )
         
         print(f"Response: {response}")

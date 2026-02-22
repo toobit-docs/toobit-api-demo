@@ -11,15 +11,15 @@ def batch_create_futures_orders():
         config = TooBitConfig.from_env()
         client = TooBitClient(config)
         
-        symbol = "BTC-SWAP-USDT"
+        symbol = "DOGE-SWAP-USDT"
         
         order_requests = [
             FuturesOrderRequest(
                 symbol=symbol,
                 side=OrderSide.BUY_OPEN,
                 type=OrderType.LIMIT,
-                quantity=10,
-                price=16500,
+                quantity=100,
+                price=0.11,
                 priceType="INPUT",
                 newClientOrderId=f"order_{uuid.uuid4().hex[:8]}"
             ),
@@ -27,8 +27,8 @@ def batch_create_futures_orders():
                 symbol=symbol,
                 side=OrderSide.BUY_OPEN,
                 type=OrderType.LIMIT,
-                quantity=10,
-                price=16000,
+                quantity=200,
+                price=0.1,
                 priceType="INPUT",
                 newClientOrderId=f"order_{uuid.uuid4().hex[:8]}"
             )

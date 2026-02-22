@@ -10,10 +10,19 @@ def get_futures_positions():
         config = TooBitConfig.from_env()
         client = TooBitClient(config)
         
-        symbol = "BTC-SWAP-USDT"
-        print(f"Request Parameters: symbol={symbol}")
+        symbol = "DOGE-SWAP-USDT"
+        side = "LONG"      # Optional: Position side (LONG, SHORT)
+        category = "USDT"  # Optional: Category (USDC, USDT)
+        recv_window = 5000 # Optional: Receive window
         
-        response = client.get_futures_positions(symbol)
+        print(f"Request Parameters: symbol={symbol}, side={side}, category={category}, recv_window={recv_window}")
+        
+        response = client.get_futures_positions(
+            symbol=symbol,
+            side=side,
+            category=category,
+            recv_window=recv_window
+        )
         
         print(f"Response: {response}")
         return response

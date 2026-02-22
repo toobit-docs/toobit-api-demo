@@ -1,20 +1,20 @@
 """
-TooBit Futures API SDK - Cancel Order
+TooBit Futures API SDK - Batch Cancel Order
 """
 
 from open_api_sdk import TooBitClient, TooBitConfig
 
-def cancel_futures_order():
-    """Cancel Futures Order"""
+def batch_cancel_orders():
+    """Batch Cancel Order"""
     try:
         config = TooBitConfig.from_env()
         client = TooBitClient(config)
         
-        symbol = "BTC-SWAP-USDT"
-        order_id = "12345678"
-        print(f"Request Parameters: symbol={symbol}, order_id={order_id}")
+        symbol = "DOGE-SWAP-USDT"
+        order_ids = ["2127765434027497728", "87654321"]
+        print(f"Request Parameters: symbol={symbol}, order_ids={order_ids}")
         
-        response = client.cancel_futures_order(symbol, order_id=order_id)
+        response = client.batch_cancel_orders(symbol, order_ids)
         
         print(f"Response: {response}")
         return response
@@ -26,4 +26,4 @@ def cancel_futures_order():
         client.close()
 
 if __name__ == "__main__":
-    cancel_futures_order()
+    batch_cancel_orders()

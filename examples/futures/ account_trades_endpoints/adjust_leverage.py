@@ -1,23 +1,23 @@
 """
-TooBit API Futures Change Margin Type
+TooBit API Futures Adjust Open Leverage
 """
 
-from open_api_sdk import TooBitClient, TooBitConfig, ChangeMarginTypeRequest, MarginType
+from open_api_sdk import TooBitClient, TooBitConfig, AdjustLeverageRequest
 
-def change_margin_type():
-    """Change Margin Type"""
+def adjust_leverage():
+    """Adjust Open Leverage"""
     try:
         config = TooBitConfig.from_env()
         client = TooBitClient(config)
         
-        request = ChangeMarginTypeRequest(
-            symbol="BTC-SWAP-USDT",
-            marginType=MarginType.CROSS
+        request = AdjustLeverageRequest(
+            symbol="DOGE-SWAP-USDT",
+            leverage=10
         )
         
         print(f"Request Parameters: {request}")
         
-        response = client.change_margin_type(request)
+        response = client.adjust_leverage(request)
         
         print(f"Response: {response}")
         return response
@@ -29,4 +29,4 @@ def change_margin_type():
         client.close()
 
 if __name__ == "__main__":
-    change_margin_type()
+    adjust_leverage()

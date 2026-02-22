@@ -11,10 +11,10 @@ def set_position_trading_stop():
         client = TooBitClient(config)
         
         request = SetPositionTradingStopRequest(
-            symbol="BTC-SWAP-USDT",
+            symbol="DOGE-SWAP-USDT",
             side="LONG",
-            takeProfit="60000",
-            stopLoss="40000"
+            takeProfit="2",
+            stopLoss="0.09"
         )
         
         print(f"Request Parameters: {request}")

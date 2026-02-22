@@ -1,20 +1,22 @@
 """
-TooBit Futures API SDK - Query Order
+TooBit API Query Sub Accounts Example
 """
 
 from open_api_sdk import TooBitClient, TooBitConfig
 
-def query_futures_order():
-    """Query Futures Order"""
+def get_sub_accounts():
+    """Query Sub Account List"""
     try:
         config = TooBitConfig.from_env()
         client = TooBitClient(config)
         
-        symbol = "BTC-SWAP-USDT"
-        order_id = "12345678"
-        print(f"Request Parameters: symbol={symbol}, order_id={order_id}")
+        # Optional: filter by userId or email
+        # params = {"userId": 123456, "email": "test@example.com"}
+        params = {}
         
-        response = client.get_futures_order(symbol, order_id=order_id)
+        print(f"Request Parameters: {params}")
+        
+        response = client.get_sub_accounts(**params)
         
         print(f"Response: {response}")
         return response
@@ -26,4 +28,4 @@ def query_futures_order():
         client.close()
 
 if __name__ == "__main__":
-    query_futures_order()
+    get_sub_accounts()

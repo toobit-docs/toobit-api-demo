@@ -10,7 +10,7 @@ def get_account_leverage():
         config = TooBitConfig.from_env()
         client = TooBitClient(config)
         
-        request = QueryLeverageRequest(symbol="BTC-SWAP-USDT")
+        request = QueryLeverageRequest(symbol="DOGE-SWAP-USDT")
         
         print(f"Request Parameters: {request}")
         

@@ -1,20 +1,19 @@
 """
-TooBit Futures API SDK - Get Transfer History
+TooBit Futures API SDK - Cancel All Order
 """
 
 from open_api_sdk import TooBitClient, TooBitConfig
 
-def get_transfer_history():
-    """Get Transfer History"""
+def cancel_all_orders():
+    """Cancel All Order"""
     try:
         config = TooBitConfig.from_env()
         client = TooBitClient(config)
         
-        asset = "USDT"
-        limit = 10
-        print(f"Request Parameters: asset={asset}, limit={limit}")
+        symbol = "DOGE-SWAP-USDT"
+        print(f"Request Parameters: symbol={symbol}")
         
-        response = client.get_transfer_history(asset=asset, limit=limit)
+        response = client.cancel_all_orders(symbol)
         
         print(f"Response: {response}")
         return response
@@ -26,4 +25,4 @@ def get_transfer_history():
         client.close()
 
 if __name__ == "__main__":
-    get_transfer_history()
+    cancel_all_orders()
